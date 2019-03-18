@@ -1,0 +1,8 @@
+name: tcs-discord-bot
+channels:
+  - conda-forge
+dependencies:
+  - python=3.5
+  - pip
+  - pip:
+    - discord.py

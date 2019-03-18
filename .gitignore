@@ -1,0 +1,7 @@
+__pycache__
+.vscode
+testing
+secret.py
+tcs-discord-bot.bat
+com/__pycache__
+logs/*
