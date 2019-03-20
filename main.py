@@ -21,6 +21,12 @@ async def uploadww2(ctx):
 async def on_message(message):
     if client.user in message.mentions:
         await client.add_reaction(message, '\U0001f5de')
+    msg = str(message.content)
+    msg = msg.replace(" ", "")
+    if msg.startswith('<:') and \
+        msg.endswith('>') and \
+        message.author.id == '206380629523300352':
+        await client.delete_message(message)
     await client.process_commands(message)
 
 client.run(TOKEN)
