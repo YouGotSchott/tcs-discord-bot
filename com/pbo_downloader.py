@@ -17,7 +17,8 @@ class PBODownloader:
                 }
             return attachment
         else:
-            await client.say('ERROR: Invalid File Type')
+            await client.send_message(ctx.message.channel,
+            'ERROR: Invalid File Type')
             await client.add_reaction(ctx.message, '👎')
 
     async def status_check(self, ctx, attachment):
@@ -28,7 +29,8 @@ class PBODownloader:
                     await self.writer(ctx, path, r)
                     return
                 else:
-                    await client.say('ERROR: Network Error')
+                    await client.send_message(ctx.message.channel,
+                    'ERROR: Network Error')
                     await client.add_reaction(ctx.message, '👎')
                     return
 
