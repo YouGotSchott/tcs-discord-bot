@@ -1,10 +1,13 @@
 import discord
 from discord.ext import commands
 from com.pbo_downloader import PBODownloader
+from com.role_selector import RoleSelector
 from com.data.cues import cue_message
 from config import client, TOKEN, main_path, ww2_path
 
 client.remove_command('help')
+
+msgs = []
 
 @client.command(pass_context=True)
 @commands.has_any_role('upload', 'admin', 'moderator')
@@ -21,6 +24,11 @@ async def uploadww2(ctx):
 @client.command(pass_context=True)
 async def tism(ctx):
     await client.send_message(ctx.message.channel, cue_message)
+
+@client.command(pass_context=True)
+async def embed(ctx):
+    role = RoleSelector()
+    await role.rotation(ctx, msgs)
 
 @client.event
 async def on_message(message):
