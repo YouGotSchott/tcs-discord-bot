@@ -1,7 +1,7 @@
 __pycache__
 .vscode
 testing
-secret.py
+config.py
 tcs-discord-bot.bat
 com/__pycache__
 logs/*

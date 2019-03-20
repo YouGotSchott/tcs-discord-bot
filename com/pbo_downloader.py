@@ -1,6 +1,6 @@
 import discord
 import aiohttp
-from secret import client
+from config import client
 
 class PBODownloader:
     async def downloader(self, ctx, file_path):
