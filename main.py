@@ -4,6 +4,7 @@ from com.pbo_downloader import PBODownloader
 from com.role_selector import RoleSelector
 from com.data.cues import cue_message
 from com.briefer import Briefer
+from com.deploy import batch_exec
 from config import client, TOKEN, main_path, ww2_path
 
 client.remove_command('help')
@@ -21,6 +22,12 @@ async def upload(ctx):
 async def uploadww2(ctx):
     pbo = PBODownloader()
     await pbo.downloader(ctx, ww2_path)
+
+@client.command(pass_context=True)
+@commands.has_role('admin')
+async def deploy(ctx):
+    await client.delete_message(ctx.message)
+    await batch_exec()
 
 @client.command(pass_context=True)
 async def tism(ctx):
