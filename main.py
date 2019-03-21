@@ -3,6 +3,7 @@ from discord.ext import commands
 from com.pbo_downloader import PBODownloader
 from com.role_selector import RoleSelector
 from com.data.cues import cue_message
+from com.briefer import Briefer
 from config import client, TOKEN, main_path, ww2_path
 
 client.remove_command('help')
@@ -31,6 +32,11 @@ async def embed(ctx):
     await client.delete_message(ctx.message)
     role = RoleSelector()
     await role.rotation(ctx, msgs)
+
+@client.command(pass_context=True)
+async def briefing(ctx):
+    br = Briefer()
+    await br.rotation(ctx)
 
 @client.event
 async def on_message(message):
