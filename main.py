@@ -23,10 +23,12 @@ async def uploadww2(ctx):
 
 @client.command(pass_context=True)
 async def tism(ctx):
+    await client.delete_message(ctx.message)
     await client.send_message(ctx.message.channel, cue_message)
 
 @client.command(pass_context=True)
 async def embed(ctx):
+    await client.delete_message(ctx.message)
     role = RoleSelector()
     await role.rotation(ctx, msgs)
 
