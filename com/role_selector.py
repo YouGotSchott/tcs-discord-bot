@@ -9,6 +9,7 @@ class RoleSelector:
         em = discord.Embed(title=msg_data['title'], description=msg_data['description'], colour=0xDEADBF)
         em.set_author(name=msg_data['name'], icon_url=client.user.avatar_url)
         msg = await client.send_message(client.get_channel('557248486324699176'), embed=em)
+        client.add_reaction(ctx.message, '👍')
         return msg
 
     async def dict_creator(self, title, description, name):

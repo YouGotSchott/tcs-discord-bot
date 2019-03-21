@@ -46,6 +46,14 @@ async def briefing(ctx):
     await br.rotation(ctx)
 
 @client.event
+async def on_reaction_add(reaction, user):
+    roleChannelId = '557248486324699176'
+    if reaction.message.channel.id != roleChannelId:
+        return
+    if reaction.emoji == "👍":
+        await client.add_roles(user, '558351518831607831')
+
+@client.event
 async def on_message(message):
     if client.user in message.mentions:
         await client.add_reaction(message, '\U0001f5de')
