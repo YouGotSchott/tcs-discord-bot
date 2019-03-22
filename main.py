@@ -58,11 +58,15 @@ async def on_message(message):
     if client.user in message.mentions:
         await client.add_reaction(message, '\U0001f5de')
     msg = str(message.content)
+    com_msg = msg.split(" ", 2)
     msg = msg.replace(" ", "")
     if message.author.id == '206380629523300352' \
         and msg.startswith('<:') \
         and msg.endswith('>'):
         await client.delete_message(message)
+    if com_msg[0].lower().startswith('!nextnext') \
+        and com_msg[0].lower().endswith('op'):
+        pass
     await client.process_commands(message)
 
 client.run(TOKEN)
