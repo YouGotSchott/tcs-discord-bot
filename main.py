@@ -1,4 +1,5 @@
 import discord
+import random
 from discord.ext import commands
 from com.pbo_downloader import PBODownloader
 from com.role_selector import RoleSelector
@@ -44,6 +45,14 @@ async def embed(ctx):
 async def briefing(ctx):
     br = Briefer()
     await br.rotation(ctx)
+
+@client.command(pass_context=True)
+async def eject(ctx):
+    await client.say("*has kicked " + ctx.message.author.name + " from the server!*")
+    luck = random.randint(1, 20)
+    if luck == 20:
+        await client.say("*" + ctx.message.author.name + " has hit the canopy!*")
+        await client.kick(ctx.message.author.id)
 
 @client.event
 async def on_reaction_add(reaction, user):
