@@ -1,11 +1,12 @@
 import discord
-import random
+from random import randint
 from discord.ext import commands
 from com.pbo_downloader import PBODownloader
 from com.role_selector import RoleSelector
 from com.data.cues import cue_message
 from com.briefer import Briefer
 from com.deploy import batch_exec
+from com.next_next_op import next_next_main
 from config import client, TOKEN, main_path, ww2_path
 
 client.remove_command('help')
@@ -49,7 +50,7 @@ async def briefing(ctx):
 @client.command(pass_context=True)
 async def eject(ctx):
     await client.say("*has kicked " + ctx.message.author.name + " from the server!*")
-    luck = random.randint(1, 20)
+    luck = randint(1, 20)
     if luck == 20:
         await client.say("*" + ctx.message.author.name + " has hit the canopy!*")
         await client.kick(ctx.message.author.id)
@@ -75,7 +76,7 @@ async def on_message(message):
         await client.delete_message(message)
     if com_msg[0].lower().startswith('!nextnext') \
         and com_msg[0].lower().endswith('op'):
-        pass
+        await next_next_main(com_msg[0], message.channel)
     await client.process_commands(message)
 
 client.run(TOKEN)
