@@ -29,11 +29,14 @@ async def counter(date, index):
 
 async def output(out, index, date, channel):
     if date.weekday() == 2:
-        await client.send_message(channel, ("Next " * index) + "Operation: Wednesday Wars!  Starts in " + str(out.days) + " days, " + str(out.seconds // 3600) + " hours, and " + str((out.seconds // 60) % 60) + " minutes. Every Wednesday at 9PM EST/EDT.")
+        out_text = ("Next " * index) + "Operation: Wednesday Wars!  Starts in " + str(out.days) + " days, " + str(out.seconds // 3600) + " hours, and " + str((out.seconds // 60) % 60) + " minutes. Every Wednesday at 9PM EST/EDT."
     elif date.weekday() == 4:
-        await client.send_message(channel, ("Next " * index) + "Operation: Training Ops.  Starts in " + str(out.days) + " days, " + str(out.seconds // 3600) + " hours, and " + str((out.seconds // 60) % 60) + " minutes. Every Friday at 9PM EST/EDT.")
+        out_text = ("Next " * index) + "Operation: Training Ops.  Starts in " + str(out.days) + " days, " + str(out.seconds // 3600) + " hours, and " + str((out.seconds // 60) % 60) + " minutes. Every Friday at 9PM EST/EDT."
     elif date.weekday() == 5:
-        await client.send_message(channel, ("Next " * index) + "Operation: Saturday Night Ops!  Starts in " + str(out.days) + " days, " + str(out.seconds // 3600) + " hours, and " + str((out.seconds // 60) % 60) + " minutes. Every Saturday at 9PM EST/EDT with signups starting at 8PM EST/EDT.")
+        out_text = ("Next " * index) + "Operation: Saturday Night Ops!  Starts in " + str(out.days) + " days, " + str(out.seconds // 3600) + " hours, and " + str((out.seconds // 60) % 60) + " minutes. Every Saturday at 9PM EST/EDT with signups starting at 8PM EST/EDT."
+    msgs = [out_text[i:i+2000] for i in range(0, len(out_text), 2000)]
+    for msg in msgs:
+        await client.send_message(channel, msg)
 
 
 async def next_next_main(nextop, channel):
