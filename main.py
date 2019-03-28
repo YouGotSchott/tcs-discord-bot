@@ -7,6 +7,7 @@ from com.data.cues import cue_message
 from com.briefer import Briefer
 from com.deploy import batch_exec
 from com.next_next_op import next_next_main
+from com.data.amazon_embed import amazon_embed
 from config import client, TOKEN, main_path, ww2_path
 
 client.remove_command('help')
@@ -55,13 +56,18 @@ async def eject(ctx):
         user_id = ctx.message.server.get_member(ctx.message.author.id)
         await client.kick(user_id)
 
+@client.command(pass_context=True)
+async def amazon(ctx):
+    await client.send_message(ctx.message.channel, embed=amazon_embed)
+
 @client.event
-async def on_reaction_add(reaction, user):
+async def on_reaction_add(reaction, ctx):
     roleChannelId = '557248486324699176'
     if reaction.message.channel.id != roleChannelId:
         return
     if reaction.emoji == "👍":
-        await client.add_roles(user, '558351518831607831')
+        user_id = ctx.reaction.server.get_member(ctx.message.author.id)
+        await client.add_roles(user_id, '558351518831607831')
 
 @client.event
 async def on_message(message):
