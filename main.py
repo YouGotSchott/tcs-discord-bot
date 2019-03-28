@@ -4,6 +4,7 @@ from discord.ext import commands
 from com.pbo_downloader import PBODownloader
 from com.role_selector import RoleSelector
 from com.data.cues import cue_message
+from com.data.cues import reading_message
 from com.briefer import Briefer
 from com.deploy import batch_exec
 from com.next_next_op import next_next_main
@@ -35,6 +36,11 @@ async def deploy(ctx):
 async def tism(ctx):
     await client.delete_message(ctx.message)
     await client.send_message(ctx.message.channel, cue_message)
+
+@client.command(pass_context=True)
+async def booktism(ctx):
+    await client.delete_message(ctx.message)
+    await client.send_message(ctx.message.channel, reading_message)
 
 @client.command(pass_context=True)
 async def embed(ctx):
