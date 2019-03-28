@@ -10,7 +10,6 @@ from com.next_next_op import next_next_main
 from config import client, TOKEN, main_path, ww2_path
 
 client.remove_command('help')
-
 msgs = []
 
 @client.command(pass_context=True)
@@ -53,7 +52,8 @@ async def eject(ctx):
     luck = randint(1, 20)
     if luck == 20:
         await client.say("*" + ctx.message.author.name + " has hit the canopy!*")
-        await client.kick(ctx.message.author.id)
+        user_id = ctx.message.server.get_member(ctx.message.author.id)
+        await client.kick(user_id)
 
 @client.event
 async def on_reaction_add(reaction, user):
