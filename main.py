@@ -55,10 +55,10 @@ async def briefing(ctx):
 
 @client.command(pass_context=True)
 async def eject(ctx):
-    await client.say("*has kicked " + ctx.message.author.name + " from the server!*")
+    await client.say("*has kicked " + ctx.message.author.display_name + " from the server!*")
     luck = randint(1, 20)
     if luck == 20:
-        await client.say("*" + ctx.message.author.name + " has hit the canopy!*")
+        await client.say("*" + ctx.message.author.display_name + " has hit the canopy!*")
         user_id = ctx.message.server.get_member(ctx.message.author.id)
         await client.kick(user_id)
 
