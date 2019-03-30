@@ -1,6 +1,7 @@
 import discord
 from config import client
 from datetime import datetime, timedelta, date
+from textwrap import wrap
 
 
 async def date_converter():
@@ -34,7 +35,7 @@ async def output(out, index, date, channel):
         out_text = ("Next " * index) + "Operation: Training Ops.  Starts in " + str(out.days) + " days, " + str(out.seconds // 3600) + " hours, and " + str((out.seconds // 60) % 60) + " minutes. Every Friday at 9PM EST/EDT."
     elif date.weekday() == 5:
         out_text = ("Next " * index) + "Operation: Saturday Night Ops!  Starts in " + str(out.days) + " days, " + str(out.seconds // 3600) + " hours, and " + str((out.seconds // 60) % 60) + " minutes. Every Saturday at 9PM EST/EDT with signups starting at 8PM EST/EDT."
-    msgs = [out_text[i:i+2000] for i in range(0, len(out_text), 2000)]
+    msgs = wrap(out_text, 2000)
     for msg in msgs:
         await client.send_message(channel, msg)
 
