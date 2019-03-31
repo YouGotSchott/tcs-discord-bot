@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 import aiohttp
 from config import main_path, ww2_path
+from pathlib import Path
 
 
 class Downloader:
@@ -16,7 +17,7 @@ class Downloader:
     @commands.command(pass_context=True)
     @commands.has_any_role('upload', 'admin', 'moderator')
     async def ww2upload(self, ctx):
-        await self.downloader(ctx, main_path)
+        await self.downloader(ctx, ww2_path)
 
     async def downloader(self, ctx, file_path):
         await self.status_check(ctx, await self.ingest(ctx, file_path))
@@ -25,7 +26,8 @@ class Downloader:
         url = ctx.message.attachments[0]['url']
         filename = url.split("/")
         if filename[-1].endswith('.pbo'):
-            path = str(file_path) + "\\" + str(filename[-1])
+            end_file = Path(filename[-1])
+            path = str(file_path / end_file)
             attachment = {
                 "url": url,
                 "path": path
