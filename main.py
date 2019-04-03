@@ -14,7 +14,8 @@ extensions = [
     'cogs.swatter',
     'cogs.roleselector',
     'cogs.links',
-    'cogs.deploy'
+    'cogs.deploy',
+    'cogs.whichrepo'
 ]
 
 if __name__ == '__main__':
