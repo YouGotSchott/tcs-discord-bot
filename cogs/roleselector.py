@@ -2,11 +2,12 @@ import discord
 from pathlib import Path
 import json
 
-# role_msg = str(Path('data/role_msg.json'))
+messages_path = str(Path('cogs/data/messages.json'))
 
 msg_embed = {
     'title' : '@mission-maker',
     'description' : '''
+    
     This role gives access to the mission making channels. Everyone is free to give mission making a try.
     **__Requirements__**
     *> Attend at least 1 Saturday Op*
@@ -21,13 +22,25 @@ class RoleSelector:
     
     async def on_ready(self):
         channel = self.client.get_channel('557248486324699176')
+        with open(messages_path, 'r') as f:
+            messages = json.load(f)
+        try:
+            msg = await self.client.get_message(channel, messages['role_message']['id'])
+            await self.client.delete_message(msg)
+        except KeyError:
+            print("Role Message hasn't been added yet")
         text = await self.embeder(msg_embed)
         msg = await self.client.send_message(channel, embed=text)
-        # msg_id = {'id' : msg}
+        messages['role_message'] = {}
+        messages['role_message']['id'] = msg.id
+        with open(messages_path, 'w') as f:
+            json.dump(messages, f)
         await self.client.add_reaction(msg, emoji='👍')
 
     async def on_reaction_add(self, reaction, user):
         channel = self.client.get_channel('557248486324699176')
+        if user.id == self.client.user.id:
+            return
         if 'roles' != str(channel):
             return
         if reaction.emoji == "👍":
