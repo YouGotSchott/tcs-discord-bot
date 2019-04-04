@@ -3,5 +3,5 @@ __pycache__
 testing
 config.py
 tcs-discord-bot.bat
-com/__pycache__
+cogs/data/*
 logs/*
