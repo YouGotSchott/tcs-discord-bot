@@ -125,7 +125,7 @@ class RoleSelector:
         elif reaction.emoji == '{}'.format(emojis['heretic']):
             role = discord.utils.get(user.server.roles, name="heretic")
             await self.client.add_roles(user, role)
-        elif reaction.emoji == discord.utils.get(user.server.emojis, name="finger_guns"):
+        elif reaction.emoji == discord.utils.get(user.server.emojis, name="finger_gun"):
             role = discord.utils.get(user.server.roles, name="liberation")
             await self.client.add_roles(user, role)
         elif reaction.emoji == '{}'.format(emojis['r6siege']):
@@ -154,7 +154,7 @@ class RoleSelector:
         elif reaction.emoji == '{}'.format(emojis['heretic']):
             role = discord.utils.get(user.server.roles, name="heretic")
             await self.client.remove_roles(user, role)
-        elif reaction.emoji == discord.utils.get(user.server.emojis, name="finger_guns"):
+        elif reaction.emoji == discord.utils.get(user.server.emojis, name="finger_gun"):
             role = discord.utils.get(user.server.roles, name="liberation")
             await self.client.remove_roles(user, role)
         elif reaction.emoji == '{}'.format(emojis['r6siege']):
