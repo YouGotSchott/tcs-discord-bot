@@ -9,7 +9,10 @@ class WhichRepo:
 
     async def on_message(self, message):
         insults = [
-            'big fucking idiot'
+            'big fucking idiot',
+            'satchel of assholes',
+            'absolute fucking dumpling',
+            'cock weasel'
         ]
         dummy = message.author.mention
         msg = message.content.lower()
