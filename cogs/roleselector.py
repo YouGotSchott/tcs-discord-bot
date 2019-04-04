@@ -73,7 +73,7 @@ flight_sims = {
     '''
 }
 vr = {
-    'name' : '<:{}> @flight-sims'.format(emojis['vr']),
+    'name' : '<:{}> @vr'.format(emojis['vr']),
     'value' : '''
     Allows other members to ping you to play any *Virtual Reality Games*.
     '''
