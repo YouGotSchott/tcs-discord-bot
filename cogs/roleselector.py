@@ -119,28 +119,28 @@ class RoleSelector:
             return
         if 'roles' != str(channel):
             return
-        if reaction.emoji == emojis['mission-maker']:
+        if reaction.emoji == '<:{}>'.format(emojis['mission-maker']):
             role = discord.utils.get(user.server.roles, name="mission-maker")
             await self.client.add_roles(user, role)
-        elif reaction.emoji == emojis['heretic']:
+        elif reaction.emoji == '{}'.format(emojis['heretic']):
             role = discord.utils.get(user.server.roles, name="heretic")
             await self.client.add_roles(user, role)
-        elif reaction.emoji == emojis['liberation']:
+        elif reaction.emoji == '<:{}>'.format(emojis['liberation']):
             role = discord.utils.get(user.server.roles, name="liberation")
             await self.client.add_roles(user, role)
-        elif reaction.emoji == emojis['r6siege']:
+        elif reaction.emoji == '{}'.format(emojis['r6siege']):
             role = discord.utils.get(user.server.roles, name="r6siege")
             await self.client.add_roles(user, role)
-        elif reaction.emoji == emojis['ricefields']:
+        elif reaction.emoji == '<:{}>'.format(emojis['ricefields']):
             role = discord.utils.get(user.server.roles, name="ricefields")
             await self.client.add_roles(user, role)
-        elif reaction.emoji == emojis['minecraft']:
+        elif reaction.emoji == '{}'.format(emojis['minecraft']):
             role = discord.utils.get(user.server.roles, name="minecraft")
             await self.client.add_roles(user, role)
-        elif reaction.emoji == emojis['flight-sims']:
+        elif reaction.emoji == '{}'.format(emojis['flight-sims']):
             role = discord.utils.get(user.server.roles, name="flight-sims")
             await self.client.add_roles(user, role)
-        elif reaction.emoji == emojis['vr']:
+        elif reaction.emoji == '<:{}>'.format(emojis['vr']):
             role = discord.utils.get(user.server.roles, name="vr")
             await self.client.add_roles(user, role)
     
@@ -148,28 +148,28 @@ class RoleSelector:
         channel = discord.utils.get(self.client.get_all_channels(), name='roles')
         if 'roles' != str(channel):
             return
-        if reaction.emoji == emojis['mission-maker']:
+        if reaction.emoji == '<:{}>'.format(emojis['mission-maker']):
             role = discord.utils.get(user.server.roles, name="mission-maker")
             await self.client.remove_roles(user, role)
-        elif reaction.emoji == emojis['heretic']:
+        elif reaction.emoji == '{}'.format(emojis['heretic']):
             role = discord.utils.get(user.server.roles, name="heretic")
             await self.client.remove_roles(user, role)
-        elif reaction.emoji == emojis['liberation']:
+        elif reaction.emoji == '<:{}>'.format(emojis['liberation']):
             role = discord.utils.get(user.server.roles, name="liberation")
             await self.client.remove_roles(user, role)
-        elif reaction.emoji == emojis['r6siege']:
+        elif reaction.emoji == '{}'.format(emojis['r6siege']):
             role = discord.utils.get(user.server.roles, name="r6siege")
             await self.client.remove_roles(user, role)
-        elif reaction.emoji == emojis['ricefields']:
+        elif reaction.emoji == '<:{}>'.format(emojis['ricefields']):
             role = discord.utils.get(user.server.roles, name="ricefields")
             await self.client.remove_roles(user, role)
-        elif reaction.emoji == emojis['minecraft']:
+        elif reaction.emoji == '{}'.format(emojis['minecraft']):
             role = discord.utils.get(user.server.roles, name="minecraft")
             await self.client.remove_roles(user, role)
-        elif reaction.emoji == emojis['flight-sims']:
+        elif reaction.emoji == '{}'.format(emojis['flight-sims']):
             role = discord.utils.get(user.server.roles, name="flight-sims")
             await self.client.remove_roles(user, role)
-        elif reaction.emoji == emojis['vr']:
+        elif reaction.emoji == '<:{}>'.format(emojis['vr']):
             role = discord.utils.get(user.server.roles, name="vr")
             await self.client.remove_roles(user, role)
 
