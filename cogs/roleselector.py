@@ -5,6 +5,16 @@ import json
 
 messages_path = str(Path('cogs/data/messages.json'))
 
+# emojis = {
+#     'mission-maker' : '\U0001f52b',
+#     'heretic' : '\U0001f300',
+#     'liberation' : '\U0001f308',
+#     'r6siege' : '\U0001f3c3',
+#     'ricefields' : '\U0001f44d',
+#     'minecraft' : '\U000026cf',
+#     'flight-sims' : '\U0001f525',
+#     'vr' : '\U000026a0'
+# }
 emojis = {
     'mission-maker' : 'feelscornman:485958281458876416',
     'heretic' : '\U0001f300',
@@ -20,6 +30,7 @@ msg_embed = {
     'description' : '''
     Use this tool to select optional Discord roles.
     **DO NOT ABUSE THE BOT**
+    *Reactions are removed on occasion, but this does not affect your roles.*
     ''',
     'thumbnail' : 'https://s3.amazonaws.com/files.enjin.com/1015535/site_logo/2019_logo.png'
 } 
@@ -91,6 +102,7 @@ class RoleSelector:
     
     async def on_ready(self):
         channel = discord.utils.get(self.client.get_all_channels(), name='roles')
+        text = await self.embeder(msg_embed)
         with open(messages_path, 'r') as f:
             messages = json.load(f)
         try:
@@ -98,8 +110,7 @@ class RoleSelector:
             await self.client.delete_message(msg)
         except KeyError:
             print("Role Message hasn't been added yet")
-        text = await self.embeder(msg_embed)
-        msg = await self.client.send_message(channel, embed=text)
+            msg = await self.client.send_message(channel, embed=text)
         messages['role_message'] = {}
         messages['role_message']['id'] = msg.id
         with open(messages_path, 'w') as f:
@@ -114,10 +125,10 @@ class RoleSelector:
         await self.client.add_reaction(msg, emoji=emojis['vr'])
 
     async def on_reaction_add(self, reaction, user):
-        channel = discord.utils.get(self.client.get_all_channels(), name='roles')
+        role_channel = discord.utils.get(self.client.get_all_channels(), name='roles')
         if user.id == self.client.user.id:
             return
-        if 'roles' != str(channel):
+        if str(reaction.message.channel.id) != str(role_channel.id):
             return
         if reaction.emoji == discord.utils.get(user.server.emojis, name="feelscornman"):
             role = discord.utils.get(user.server.roles, name="mission-maker")
@@ -145,8 +156,8 @@ class RoleSelector:
             await self.client.add_roles(user, role)
     
     async def on_reaction_remove(self, reaction, user):
-        channel = discord.utils.get(self.client.get_all_channels(), name='roles')
-        if 'roles' != str(channel):
+        role_channel = discord.utils.get(self.client.get_all_channels(), name='roles')
+        if str(reaction.message.channel.id) != str(role_channel.id):
             return
         if reaction.emoji == discord.utils.get(user.server.emojis, name="feelscornman"):
             role = discord.utils.get(user.server.roles, name="mission-maker")
