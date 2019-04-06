@@ -109,7 +109,7 @@ class RoleSelector:
             msg = await self.client.get_message(channel, messages['role_message']['id'])
             await self.client.delete_message(msg)
             msg = await self.client.send_message(channel, embed=text)
-        except KeyError:
+        except:
             print("Role Message hasn't been added yet")
             msg = await self.client.send_message(channel, embed=text)
         messages['role_message'] = {}
