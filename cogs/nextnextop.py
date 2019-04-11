@@ -1,6 +1,7 @@
 import discord
 from datetime import datetime, timedelta, date
 from textwrap import wrap
+from pytz import timezone
 
 
 class NextNextOp:
@@ -15,17 +16,18 @@ class NextNextOp:
             await self.next_next_op(com_msg[0], message.channel)
 
     async def date_converter(self):
-        d = datetime.today()
+        d = datetime.now(timezone('US/Eastern'))
         t = d.strftime('%m-%d-%Y')
         date_parse = t + ' 21:00:00'
         date = datetime.strptime(date_parse, '%m-%d-%Y %H:%M:%S')
-        return date
+        eastern = timezone('US/Eastern')
+        return eastern.localize(date)
 
     async def counter(self, date, index):
         check = 0
         while check != index:
             if date.weekday() in [2, 4, 5]:
-                if datetime.today() > date:
+                if datetime.now(timezone('US/Eastern')) > date:
                     date = date + timedelta(days=1)
                 check += 1
                 if check == index:
@@ -33,7 +35,7 @@ class NextNextOp:
                 date = date + timedelta(days=1)
             else:
                 date = date + timedelta(days=1)
-        out = date - datetime.today()
+        out = date - datetime.now(timezone('US/Eastern'))
         return out, date
 
     async def output(self, out, index, date, channel):
