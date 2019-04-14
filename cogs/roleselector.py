@@ -6,26 +6,26 @@ import json
 
 messages_path = str(Path('cogs/data/messages.json'))
 
-emojis = {
-    'mission-maker' : '\U0001f52b',
-    'heretic' : '\U0001f300',
-    'liberation' : '\U0001f308',
-    'r6siege' : '\U0001f3c3',
-    'ricefields' : '\U0001f44d',
-    'minecraft' : '\U000026cf',
-    'flight-sims' : '\U0001f525',
-    'vr' : '\U000026a0'
-}
 # emojis = {
-#     'mission-maker' : 'feelscornman:485958281458876416',
+#     'mission-maker' : '\U0001f52b',
 #     'heretic' : '\U0001f300',
-#     'liberation' : 'finger_gun:300089586460131328',
-#     'r6siege' : '\U0001f308',
-#     'ricefields' : 'rice_fields:483791993370181632',
+#     'liberation' : '\U0001f308',
+#     'r6siege' : '\U0001f3c3',
+#     'ricefields' : '\U0001f44d',
 #     'minecraft' : '\U000026cf',
 #     'flight-sims' : '\U0001f525',
-#     'vr' : 'iron_uncle:548645154454765568'
+#     'vr' : '\U000026a0'
 # }
+emojis = {
+    'mission-maker' : 'feelscornman:485958281458876416',
+    'heretic' : '\U0001f300',
+    'liberation' : 'finger_gun:300089586460131328',
+    'r6siege' : '\U0001f308',
+    'ricefields' : 'rice_fields:483791993370181632',
+    'minecraft' : '\U000026cf',
+    'flight-sims' : '\U0001f525',
+    'vr' : 'iron_uncle:548645154454765568'
+}
 msg_embed = {
     'title' : '**TCS Role Selector**',
     'description' : '''
