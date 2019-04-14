@@ -14,7 +14,7 @@ extensions = [
     'cogs.swatter',
     'cogs.roleselector',
     'cogs.links',
-    'cogs.deploy',
+    'cogs.scripts',
     'cogs.whichrepo'
 ]
 
