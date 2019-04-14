@@ -14,7 +14,8 @@ messages_path = str(Path('cogs/data/messages.json'))
 #     'ricefields' : '\U0001f44d',
 #     'minecraft' : '\U000026cf',
 #     'flight-sims' : '\U0001f525',
-#     'vr' : '\U000026a0'
+#     'vr' : '\U000026a0',
+#     'got' : '\U0001f409'
 # }
 emojis = {
     'mission-maker' : 'feelscornman:485958281458876416',
@@ -24,7 +25,8 @@ emojis = {
     'ricefields' : 'rice_fields:483791993370181632',
     'minecraft' : '\U000026cf',
     'flight-sims' : '\U0001f525',
-    'vr' : 'iron_uncle:548645154454765568'
+    'vr' : 'iron_uncle:548645154454765568',
+    'got' : '\U0001f409'
 }
 msg_embed = {
     'title' : '**TCS Role Selector**',
@@ -90,6 +92,13 @@ vr = {
     Allows other members to ping you to play any *Virtual Reality Games*.
     '''
 }
+got = {
+    'name' : '{} @got'.format(emojis['got']),
+    'value' : '''
+    Provides access to the **#got-spoilers** channel.
+    *A place for discussing Game of Thrones Season 8*
+    '''
+}
 footer = {
     'footer' : '''
     Add reaction to recieve role.
@@ -126,6 +135,7 @@ class RoleSelector(commands.Cog):
         await msg.add_reaction(emoji=emojis['minecraft'])
         await msg.add_reaction(emoji=emojis['flight-sims'])
         await msg.add_reaction(emoji=emojis['vr'])
+        await msg.add_reaction(emoji=emojis['got'])
 
     @commands.Cog.listener()
     async def on_reaction_add(self, reaction, user):
@@ -158,6 +168,9 @@ class RoleSelector(commands.Cog):
         elif reaction.emoji == discord.utils.get(user.guild.emojis, name="iron_uncle"):
             role = discord.utils.get(user.guild.roles, name="vr")
             await user.add_roles(role)
+        elif reaction.emoji == '{}'.format(emojis['got']):
+            role = discord.utils.get(user.guild.roles, name="got")
+            await user.add_roles(role)
     
     @commands.Cog.listener()
     async def on_reaction_remove(self, reaction, user):
@@ -188,6 +201,9 @@ class RoleSelector(commands.Cog):
         elif reaction.emoji == discord.utils.get(user.guild.emojis, name="iron_uncle"):
             role = discord.utils.get(user.guild.roles, name="vr")
             await user.remove_roles(role)
+        elif reaction.emoji == '{}'.format(emojis['got']):
+            role = discord.utils.get(user.guild.roles, name="got")
+            await user.remove_roles(role)
 
     async def embeder(self, msg_embed):
         em = discord.Embed(
@@ -201,6 +217,7 @@ class RoleSelector(commands.Cog):
         em.add_field(name=minecraft['name'], value=minecraft['value'], inline=True)
         em.add_field(name=flight_sims['name'], value=flight_sims['value'], inline=True)
         em.add_field(name=vr['name'], value=vr['value'], inline=True)
+        em.add_field(name=got['name'], value=got['value'], inline=True)
         em.set_footer(text=footer['footer'])
         return em
 
