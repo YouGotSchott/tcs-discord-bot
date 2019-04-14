@@ -25,10 +25,10 @@ class WhichRepo(commands.Cog):
         or 'what repo' in msg) \
         and datetime.now(timezone('US/Eastern')).weekday() in [2, 4, 5]:
             if str(message.author.id) == 188724792680120320:
-                await ctx.send(
+                await message.send(
                     "{} We're using the main repo you {}.".format(dummy, 'crayon eater'))
             else:
-                await ctx.send(
+                await message.send(
                     "{} We're using the main repo you {}.".format(dummy, choice(insults)))
 
 
