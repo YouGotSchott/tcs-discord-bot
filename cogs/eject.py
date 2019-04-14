@@ -13,8 +13,7 @@ class Eject(commands.Cog):
         luck = randint(1, 20)
         if luck == 20:
             await ctx.send("*{} hit the canopy on the way out!*".format(username))
-            user_id = self.bot.get_user(ctx.message.author)
-            await user_id.kick()
+            await ctx.message.author.kick()
         else:
             await ctx.send("*has kicked {} from the server!*".format(username))
 
