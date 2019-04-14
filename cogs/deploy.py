@@ -11,7 +11,7 @@ class Deploy(commands.Cog):
     @commands.has_role('admin')
     async def deploy(self, ctx):
         await ctx.message.delete()
-        await subprocess.call(['ServiceRestart.bat'], shell=True)
+        subprocess.call(['./discordbot.sh'])
 
 
 def setup(bot):
