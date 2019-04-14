@@ -1,13 +1,15 @@
 import discord
+from discord.ext import commands
 from datetime import datetime, timedelta, date
 from textwrap import wrap
 from pytz import timezone
 
 
-class NextNextOp:
-    def __init__(self, client):
-        self.client = client
-
+class NextNextOp(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+    
+    @commands.Cog.listener()
     async def on_message(self, message):
         msg = str(message.content)
         com_msg = msg.split(" ", 2)
@@ -51,7 +53,7 @@ class NextNextOp:
                 " minutes. Every Saturday at 9PM EST/EDT with signups starting at 8PM EST/EDT."
         msgs = wrap(out_text, 2000)
         for msg in msgs:
-            await self.client.send_message(channel, msg)
+            await channel.send(msg)
 
     async def next_next_op(self, nextop, channel):
         index = nextop.count('next')
@@ -60,5 +62,5 @@ class NextNextOp:
         await self.output(out, index, out_date, channel)
 
 
-def setup(client):
-    client.add_cog(NextNextOp(client))
+def setup(bot):
+    bot.add_cog(NextNextOp(bot))

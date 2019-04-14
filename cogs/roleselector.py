@@ -1,30 +1,31 @@
 import discord
+from discord.ext import commands
 from pathlib import Path
 import json
 
 
 messages_path = str(Path('cogs/data/messages.json'))
 
-# emojis = {
-#     'mission-maker' : '\U0001f52b',
-#     'heretic' : '\U0001f300',
-#     'liberation' : '\U0001f308',
-#     'r6siege' : '\U0001f3c3',
-#     'ricefields' : '\U0001f44d',
-#     'minecraft' : '\U000026cf',
-#     'flight-sims' : '\U0001f525',
-#     'vr' : '\U000026a0'
-# }
 emojis = {
-    'mission-maker' : 'feelscornman:485958281458876416',
+    'mission-maker' : '\U0001f52b',
     'heretic' : '\U0001f300',
-    'liberation' : 'finger_gun:300089586460131328',
-    'r6siege' : '\U0001f308',
-    'ricefields' : 'rice_fields:483791993370181632',
+    'liberation' : '\U0001f308',
+    'r6siege' : '\U0001f3c3',
+    'ricefields' : '\U0001f44d',
     'minecraft' : '\U000026cf',
     'flight-sims' : '\U0001f525',
-    'vr' : 'iron_uncle:548645154454765568'
+    'vr' : '\U000026a0'
 }
+# emojis = {
+#     'mission-maker' : 'feelscornman:485958281458876416',
+#     'heretic' : '\U0001f300',
+#     'liberation' : 'finger_gun:300089586460131328',
+#     'r6siege' : '\U0001f308',
+#     'ricefields' : 'rice_fields:483791993370181632',
+#     'minecraft' : '\U000026cf',
+#     'flight-sims' : '\U0001f525',
+#     'vr' : 'iron_uncle:548645154454765568'
+# }
 msg_embed = {
     'title' : '**TCS Role Selector**',
     'description' : '''
@@ -56,7 +57,7 @@ heretic = {
 liberation = {
     'name' : '<:{}> @liberation'.format(emojis['liberation']),
     'value' : '''
-    Allows other members to ping you to play *Arma 3 Liberation* on our server.
+    Allows other members to ping you to play *Arma 3 Liberation* on our guild.
     '''
 }
 r6siege = {
@@ -74,7 +75,7 @@ ricefields = {
 minecraft = {
     'name' : '{} @minecraft'.format(emojis['minecraft']),
     'value' : '''
-    Allows other members to ping you to play *Minecraft* on our server.
+    Allows other members to ping you to play *Minecraft* on our guild.
     '''
 }
 flight_sims = {
@@ -96,94 +97,97 @@ footer = {
     '''
 }
 
-class RoleSelector:
-    def __init__(self, client):
-        self.client = client
-    
+class RoleSelector(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+
+    @commands.Cog.listener()    
     async def on_ready(self):
-        channel = discord.utils.get(self.client.get_all_channels(), name='roles')
+        channel = discord.utils.get(self.bot.get_all_channels(), name='roles')
         text = await self.embeder(msg_embed)
         with open(messages_path, 'r') as f:
             messages = json.load(f)
         try:
-            msg = await self.client.get_message(channel, messages['role_message']['id'])
-            await self.client.delete_message(msg)
-            msg = await self.client.send_message(channel, embed=text)
+            msg = await channel.fetch_message(messages['role_message']['id'])
+            await msg.delete()
+            msg = await channel.send(embed=text)
         except:
             print("Role Message hasn't been added yet")
-            msg = await self.client.send_message(channel, embed=text)
+            msg = await channel.send(embed=text)
         messages['role_message'] = {}
         messages['role_message']['id'] = msg.id
         with open(messages_path, 'w') as f:
             json.dump(messages, f)
-        await self.client.add_reaction(msg, emoji=emojis['mission-maker'])
-        await self.client.add_reaction(msg, emoji=emojis['heretic'])
-        await self.client.add_reaction(msg, emoji=emojis['liberation'])
-        await self.client.add_reaction(msg, emoji=emojis['r6siege'])
-        await self.client.add_reaction(msg, emoji=emojis['ricefields'])
-        await self.client.add_reaction(msg, emoji=emojis['minecraft'])
-        await self.client.add_reaction(msg, emoji=emojis['flight-sims'])
-        await self.client.add_reaction(msg, emoji=emojis['vr'])
+        await msg.add_reaction(emoji=emojis['mission-maker'])
+        await msg.add_reaction(emoji=emojis['heretic'])
+        await msg.add_reaction(emoji=emojis['liberation'])
+        await msg.add_reaction(emoji=emojis['r6siege'])
+        await msg.add_reaction(emoji=emojis['ricefields'])
+        await msg.add_reaction(emoji=emojis['minecraft'])
+        await msg.add_reaction(emoji=emojis['flight-sims'])
+        await msg.add_reaction(emoji=emojis['vr'])
 
+    @commands.Cog.listener()
     async def on_reaction_add(self, reaction, user):
-        role_channel = discord.utils.get(self.client.get_all_channels(), name='roles')
-        if user.id == self.client.user.id:
+        role_channel = discord.utils.get(self.bot.get_all_channels(), name='roles')
+        if user.id == self.bot.user.id:
             return
         if str(reaction.message.channel.id) != str(role_channel.id):
             return
-        if reaction.emoji == discord.utils.get(user.server.emojis, name="feelscornman"):
-            role = discord.utils.get(user.server.roles, name="mission-maker")
-            await self.client.add_roles(user, role)
+        if reaction.emoji == discord.utils.get(user.guild.emojis, name="feelscornman"):
+            role = discord.utils.get(user.guild.roles, name="mission-maker")
+            await user.add_roles(role)
         elif reaction.emoji == '{}'.format(emojis['heretic']):
-            role = discord.utils.get(user.server.roles, name="heretic")
-            await self.client.add_roles(user, role)
-        elif reaction.emoji == discord.utils.get(user.server.emojis, name="finger_gun"):
-            role = discord.utils.get(user.server.roles, name="liberation")
-            await self.client.add_roles(user, role)
+            role = discord.utils.get(user.guild.roles , name="heretic")
+            await user.add_roles(role)
+        elif reaction.emoji == discord.utils.get(user.guild.emojis, name="finger_gun"):
+            role = discord.utils.get(user.guild.roles, name="liberation")
+            await user.add_roles(role)
         elif reaction.emoji == '{}'.format(emojis['r6siege']):
-            role = discord.utils.get(user.server.roles, name="r6siege")
-            await self.client.add_roles(user, role)
-        elif reaction.emoji == discord.utils.get(user.server.emojis, name="rice_fields"):
-            role = discord.utils.get(user.server.roles, name="ricefields")
-            await self.client.add_roles(user, role)
+            role = discord.utils.get(user.guild.roles, name="r6siege")
+            await user.add_roles(role)
+        elif reaction.emoji == discord.utils.get(user.guild.emojis, name="rice_fields"):
+            role = discord.utils.get(user.guild.roles, name="ricefields")
+            await user.add_roles(role)
         elif reaction.emoji == '{}'.format(emojis['minecraft']):
-            role = discord.utils.get(user.server.roles, name="minecraft")
-            await self.client.add_roles(user, role)
+            role = discord.utils.get(user.guild.roles, name="minecraft")
+            await user.add_roles(role)
         elif reaction.emoji == '{}'.format(emojis['flight-sims']):
-            role = discord.utils.get(user.server.roles, name="flight-sims")
-            await self.client.add_roles(user, role)
-        elif reaction.emoji == discord.utils.get(user.server.emojis, name="iron_uncle"):
-            role = discord.utils.get(user.server.roles, name="vr")
-            await self.client.add_roles(user, role)
+            role = discord.utils.get(user.guild.roles, name="flight-sims")
+            await user.add_roles(role)
+        elif reaction.emoji == discord.utils.get(user.guild.emojis, name="iron_uncle"):
+            role = discord.utils.get(user.guild.roles, name="vr")
+            await user.add_roles(role)
     
+    @commands.Cog.listener()
     async def on_reaction_remove(self, reaction, user):
-        role_channel = discord.utils.get(self.client.get_all_channels(), name='roles')
+        role_channel = discord.utils.get(self.bot.get_all_channels(), name='roles')
         if str(reaction.message.channel.id) != str(role_channel.id):
             return
-        if reaction.emoji == discord.utils.get(user.server.emojis, name="feelscornman"):
-            role = discord.utils.get(user.server.roles, name="mission-maker")
-            await self.client.remove_roles(user, role)
+        if reaction.emoji == discord.utils.get(user.guild.emojis, name="feelscornman"):
+            role = discord.utils.get(user.guild.roles, name="mission-maker")
+            await user.remove_roles(role)
         elif reaction.emoji == '{}'.format(emojis['heretic']):
-            role = discord.utils.get(user.server.roles, name="heretic")
-            await self.client.remove_roles(user, role)
-        elif reaction.emoji == discord.utils.get(user.server.emojis, name="finger_gun"):
-            role = discord.utils.get(user.server.roles, name="liberation")
-            await self.client.remove_roles(user, role)
+            role = discord.utils.get(user.guild.roles, name="heretic")
+            await user.remove_roles(role)
+        elif reaction.emoji == discord.utils.get(user.guild.emojis, name="finger_gun"):
+            role = discord.utils.get(user.guild.roles, name="liberation")
+            await user.remove_roles(role)
         elif reaction.emoji == '{}'.format(emojis['r6siege']):
-            role = discord.utils.get(user.server.roles, name="r6siege")
-            await self.client.remove_roles(user, role)
-        elif reaction.emoji == discord.utils.get(user.server.emojis, name="rice_fields"):
-            role = discord.utils.get(user.server.roles, name="ricefields")
-            await self.client.remove_roles(user, role)
+            role = discord.utils.get(user.guild.roles, name="r6siege")
+            await user.remove_roles(role)
+        elif reaction.emoji == discord.utils.get(user.guild.emojis, name="rice_fields"):
+            role = discord.utils.get(user.guild.roles, name="ricefields")
+            await user.remove_roles(role)
         elif reaction.emoji == '{}'.format(emojis['minecraft']):
-            role = discord.utils.get(user.server.roles, name="minecraft")
-            await self.client.remove_roles(user, role)
+            role = discord.utils.get(user.guild.roles, name="minecraft")
+            await user.remove_roles(role)
         elif reaction.emoji == '{}'.format(emojis['flight-sims']):
-            role = discord.utils.get(user.server.roles, name="flight-sims")
-            await self.client.remove_roles(user, role)
-        elif reaction.emoji == discord.utils.get(user.server.emojis, name="iron_uncle"):
-            role = discord.utils.get(user.server.roles, name="vr")
-            await self.client.remove_roles(user, role)
+            role = discord.utils.get(user.guild.roles, name="flight-sims")
+            await user.remove_roles(role)
+        elif reaction.emoji == discord.utils.get(user.guild.emojis, name="iron_uncle"):
+            role = discord.utils.get(user.guild.roles, name="vr")
+            await user.remove_roles(role)
 
     async def embeder(self, msg_embed):
         em = discord.Embed(
@@ -201,5 +205,5 @@ class RoleSelector:
         return em
 
 
-def setup(client):
-    client.add_cog(RoleSelector(client))
+def setup(bot):
+    bot.add_cog(RoleSelector(bot))

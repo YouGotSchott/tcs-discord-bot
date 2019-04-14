@@ -32,16 +32,17 @@ dancing_alpha = {
 }
 
 
-class DanceIt:
-    def __init__(self, client):
-        self.client = client
+class DanceIt(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
 
-    @commands.command(pass_context=True)
+    @commands.command()
     async def danceit(self, ctx, *args):
-        await self.client.delete_message(ctx.message)
-        await self.dance_it(*args)
 
-    async def dance_it(self, *args):
+        await ctx.message.delete()
+        await self.dance_it(ctx, *args)
+
+    async def dance_it(self, ctx, *args):
         output = ''
         for word in args:
             letters = ''
@@ -56,8 +57,8 @@ class DanceIt:
             output += '    '
         msgs = wrap(output, 2000)
         for msg in msgs:
-            await self.client.say(msg)
+            await ctx.send(msg)
 
 
-def setup(client):
-    client.add_cog(DanceIt(client))
+def setup(bot):
+    bot.add_cog(DanceIt(bot))

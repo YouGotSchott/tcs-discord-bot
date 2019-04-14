@@ -1,14 +1,16 @@
 import discord
+from discord.ext import commands
 
 
-class Swatter:
-    def __init__(self, client):
-        self.client = client
+class Swatter(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
 
+    @commands.Cog.listener()
     async def on_message(self, message):
-        if self.client.user in message.mentions:
-            await self.client.add_reaction(message, '\U0001f5de')
+        if self.bot.user in message.mentions:
+            await message.add_reaction('\U0001f5de')
 
 
-def setup(client):
-    client.add_cog(Swatter(client))
+def setup(bot):
+    bot.add_cog(Swatter(bot))

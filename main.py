@@ -1,8 +1,8 @@
 import discord
 from discord.ext import commands
-from config import client, TOKEN
+from config import bot, TOKEN
 
-client.remove_command('help')
+bot.remove_command('help')
 
 extensions = [
     'cogs.downloader',
@@ -21,7 +21,7 @@ extensions = [
 if __name__ == '__main__':
     for extension in extensions:
         try:
-            client.load_extension(extension)
+            bot.load_extension(extension)
         except Exception as error:
             print('{} cannot be loaded. [{}]'.format(extension, error))
-    client.run(TOKEN)
+    bot.run(TOKEN)

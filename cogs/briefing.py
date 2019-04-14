@@ -5,11 +5,11 @@ import ast
 from lxml import html
 
 
-class Briefing:
-    def __init__(self, client):
-        self.client = client
+class Briefing(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
 
-    @commands.command(pass_context=True)
+    @commands.command()
     async def briefing(self, ctx):
         await self.rotation(ctx)
 
@@ -33,8 +33,8 @@ class Briefing:
     async def rotation(self, ctx):
         source = await self.main()
         url = await self.url_grab(source)
-        await self.client.send_message(ctx.message.channel, url)
+        await ctx.send(url)
 
 
-def setup(client):
-    client.add_cog(Briefing(client))
+def setup(bot):
+    bot.add_cog(Briefing(bot))

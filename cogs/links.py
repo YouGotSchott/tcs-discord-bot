@@ -13,19 +13,18 @@ amazon = {
     'footer': 'PRIVACY BADGER USERS: Ensure Privacy Badger is turned OFF while using the link'
 }
 
+class Links(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
 
-class Links:
-    def __init__(self, client):
-        self.client = client
-
-    @commands.command(pass_context=True)
+    @commands.command()
     async def amazon(self, ctx):
         em = discord.Embed(
             title=amazon['title'], description=amazon['description'], url=amazon['url'], color=amazon['color'])
         em.set_thumbnail(url=amazon['thumbnail'])
         em.set_footer(text=amazon['footer'])
-        await self.client.send_message(ctx.message.channel, embed=em)
+        await ctx.send(embed=em)
 
 
-def setup(client):
-    client.add_cog(Links(client))
+def setup(bot):
+    bot.add_cog(Links(bot))
