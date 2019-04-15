@@ -14,6 +14,7 @@ class Deploy(commands.Cog):
         root = Path('bash/bot/')
         name = Path('deploy')
         subprocess.call([str(root / name)])
+        ctx.message.add_reaction('👍')
 
     @commands.command()
     @commands.has_any_role('admin', 'moderator')
@@ -27,6 +28,7 @@ class Deploy(commands.Cog):
         elif ' restart' in msg:
             name = Path('restart')
         subprocess.call([str(root / name)])
+        ctx.message.add_reaction('👍')
 
     @commands.command()
     @commands.has_any_role('admin', 'moderator')
@@ -40,6 +42,7 @@ class Deploy(commands.Cog):
         elif ' restart' in msg:
             name = Path('restart')
         subprocess.call([str(root / name)])
+        ctx.message.add_reaction('👍')
 
 def setup(bot):
     bot.add_cog(Deploy(bot))
