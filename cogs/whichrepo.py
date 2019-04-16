@@ -32,10 +32,10 @@ class WhichRepo(commands.Cog):
             'bumbling sycophant'
         ]
         if message.author.id == 188724792680120320:
-            await message.send(
+            await message.channel.send(
                 "{} We're using the {} repo you {}.".format(dummy, repo, 'crayon eater'))
         else:
-            await message.send(
+            await message.channel.send(
                 "{} We're using the {} repo you {}.".format(dummy, repo, choice(insults)))
 
 def setup(bot):
