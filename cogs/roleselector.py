@@ -87,7 +87,8 @@ class RoleSelector(commands.Cog):
                 'minecraft' : '\U000026cf',
                 'flight-sims' : '\U0001f525',
                 'vr' : 'iron_uncle:548645154454765568',
-                'got' : '\U0001f409'
+                'got' : '\U0001f409',
+                'zeus-op' : '\U000026a1'
             }
         else:
             emojis = {
@@ -99,7 +100,8 @@ class RoleSelector(commands.Cog):
                 'minecraft' : '\U000026cf',
                 'flight-sims' : '\U0001f525',
                 'vr' : 'jensen_uncle:567728565391589399',
-                'got' : '\U0001f409'
+                'got' : '\U0001f409',
+                'zeus-op' : '\U000026a1'
             }
         return emojis
 
@@ -118,7 +120,7 @@ class RoleSelector(commands.Cog):
                 'name' : '<:{}> @mission-maker'.format(emojis['mission-maker']),
                 'value' : '''
                 Provides access to our mission making channels, which **MAY HAVE SPOILERS**.
-                __**Requirements:**__
+                __**REQUIREMENTS:**__
                 **1.** You **MUST** attend a Saturday Op before taking this role.
                 **2.** **ONLY** select this role if you plan on making missions for TCS.
                 **3.** **DO NOT** use this role to provide feedback or suggestions in the mission making channel, use **#debriefing**.
@@ -174,6 +176,15 @@ class RoleSelector(commands.Cog):
                 'value' : '''
                 Provides access to the **#got-spoilers** channel.
                 *A place for discussing Game of Thrones Season 8*
+                '''
+            },
+            'zeus-op' : {
+                'name' : '{} @zeus-op'.format(emojis['zeus-op']),
+                'value' : '''
+                Allows other memebers to ping you to play *Impromptu Zeus Missions*.
+                __**RULES:**__
+                **1.** Don't expect someone to step-up as Zeus.
+                **2.** Zeus has final say on what's allowed in their mission.
                 '''
             }
         }
