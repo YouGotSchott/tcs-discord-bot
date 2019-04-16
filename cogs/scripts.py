@@ -13,8 +13,8 @@ class Deploy(commands.Cog):
     async def deploy(self, ctx):
         root = Path('bash/bot/')
         name = Path('deploy')
+        ctx.message.delete()
         subprocess.call([str(root / name)])
-        ctx.message.add_reaction('👍')
 
     @commands.command()
     @commands.has_any_role('admin', 'moderator')
