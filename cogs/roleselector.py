@@ -180,7 +180,7 @@ class RoleSelector(commands.Cog):
             'zeus-op' : {
                 'name' : '{} @zeus-op'.format(emojis['zeus-op']),
                 'value' : '''
-                Allows other memebers to ping you to play *Impromptu Zeus Missions*.
+                Allows other members to ping you to play *Impromptu Zeus Missions*.
                 __**RULES:**__
                 **1.** Don't expect someone to step-up as Zeus.
                 **2.** Zeus has final say on what's allowed in their mission.
