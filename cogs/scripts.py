@@ -21,6 +21,8 @@ class Deploy(commands.Cog):
     async def arma(self, ctx):
         root = Path('bash/arma/')
         msg = ctx.message.content
+        if 'hc' in msg:
+            root = Path('bash/arma/hc/')
         if ' start' in msg:
             name = Path('start')
         elif ' stop' in msg:
@@ -28,13 +30,15 @@ class Deploy(commands.Cog):
         elif ' restart' in msg:
             name = Path('restart')
         subprocess.call([str(root / name)])
-        ctx.message.add_reaction('👍')
+        await ctx.message.add_reaction('👍')
 
     @commands.command()
     @commands.has_any_role('admin', 'moderator')
     async def ww2(self, ctx):
         root = Path('bash/ww2/')
         msg = ctx.message.content
+        if 'hc' in msg:
+            root = Path('bash/arma/hc/')
         if ' start' in msg:
             name = Path('start')
         elif ' stop' in msg:
@@ -42,7 +46,7 @@ class Deploy(commands.Cog):
         elif ' restart' in msg:
             name = Path('restart')
         subprocess.call([str(root / name)])
-        ctx.message.add_reaction('👍')
+        await ctx.message.add_reaction('👍')
 
 def setup(bot):
     bot.add_cog(Deploy(bot))
