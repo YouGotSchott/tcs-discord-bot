@@ -19,7 +19,8 @@ class RoleSelector(commands.Cog):
 
     @commands.Cog.listener()    
     async def on_ready(self):
-        emojis = self.emoji_selector(self.bot.guilds)
+        for guild in self.bot.guilds:
+            emojis = self.emoji_selector(guild.id)
         channel = discord.utils.get(self.bot.get_all_channels(), name='roles')
         text = await self.embeder(self.data(emojis))
         messages = await self.opener()
@@ -75,9 +76,7 @@ class RoleSelector(commands.Cog):
         return em
     
     def emoji_selector(self, guild):
-        guild_list = []
-        guild_list.append(guild)
-        if 169696752461414401 in guild_list:
+        if 169696752461414401 == guild:
             emojis = {
                 'mission-maker' : 'feelscornman:485958281458876416',
                 'heretic' : '\U0001f300',
