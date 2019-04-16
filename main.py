@@ -15,7 +15,8 @@ extensions = [
     'cogs.roleselector',
     'cogs.links',
     'cogs.scripts',
-    'cogs.whichrepo'
+    'cogs.whichrepo',
+    'cogs.affiliator'
 ]
 
 if __name__ == '__main__':
