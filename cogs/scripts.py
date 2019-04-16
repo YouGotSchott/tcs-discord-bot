@@ -13,7 +13,7 @@ class Deploy(commands.Cog):
     async def deploy(self, ctx):
         root = Path('bash/bot/')
         name = Path('deploy')
-        ctx.message.delete()
+        await ctx.message.delete()
         subprocess.call([str(root / name)])
 
     @commands.command()
