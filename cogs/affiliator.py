@@ -48,7 +48,5 @@ class Affiliator(commands.Cog):
         return em
 
 
-
-
 def setup(bot):
     bot.add_cog(Affiliator(bot))
