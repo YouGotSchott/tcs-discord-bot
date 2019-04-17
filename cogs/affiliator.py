@@ -13,8 +13,12 @@ class Affiliator(commands.Cog):
         msg = message.content.lower()
         if 'www.amazon.com' in msg:
             import re
-            product = re.search('/dp/(.*)/', msg)
-            product_code = product.group(1).upper()
+            try:
+                product = re.search('/dp/(.*)/', msg)
+                product_code = product.group(1).upper()
+            except:
+                product = msg.split('/dp/', 1)[1]
+                product_code = product.upper()
             url = "http://www.amazon.com/exec/obidos/ASIN/{}/thecoolerse0c-20".format(product_code)
             try:
                 em = await self.title_grab(url)
