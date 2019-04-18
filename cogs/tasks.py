@@ -9,7 +9,7 @@ class Tasks(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
     
-    @commands.Cog.listener()    
+    @commands.Cog.listener()
     async def on_ready(self):
         guild = self.bot.guilds[0]
         self.bot.loop.create_task(self.purge(guild))
