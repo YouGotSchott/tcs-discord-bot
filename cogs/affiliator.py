@@ -48,7 +48,7 @@ class Affiliator(commands.Cog):
     
     async def embeder(self, title, url):
         em = discord.Embed(
-            title='Converted to TCS Affiliate Link', description='[{}]({})'.format(title, url), color=0xff9900)
+            title='TCS Affiliate Link', description='[{}]({})'.format(title, url), color=0xff9900)
         return em
 
 
