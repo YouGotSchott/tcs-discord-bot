@@ -26,9 +26,8 @@ class Tasks(commands.Cog):
         while True:
             await self.daily(3, 0)
             channel = discord.utils.get(self.bot.get_all_channels(), name='server-management')
-            members = await guild.estimate_pruned_members(days=30)
+            members = await guild.prune_members(days=30, reason='Scheduled Purge')
             if members > 0:
-                await guild.prune_members(days=30, reason='Scheduled Purge')
                 await channel.send("Pruned {} member(s) from the server.".format(str(members)))
             else:
                 continue
