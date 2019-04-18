@@ -16,7 +16,8 @@ extensions = [
     'cogs.links',
     'cogs.scripts',
     'cogs.whichrepo',
-    'cogs.affiliator'
+    'cogs.affiliator',
+    'cogs.tasks'
 ]
 
 if __name__ == '__main__':
