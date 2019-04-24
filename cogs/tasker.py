@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 import asyncio
 
 
-class Tasks(commands.Cog):
+class Tasker(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
     
@@ -34,4 +34,4 @@ class Tasks(commands.Cog):
 
 
 def setup(bot):
-    bot.add_cog(Tasks(bot))
+    bot.add_cog(Tasker(bot))
