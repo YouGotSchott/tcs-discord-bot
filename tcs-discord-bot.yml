@@ -4,6 +4,7 @@ channels:
 dependencies:
   - python=3.7
   - pytz
+  - psycopg2
   - pip
   - pip:
     - discord.py
