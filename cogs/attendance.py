@@ -36,6 +36,7 @@ class Attendance(commands.Cog):
                 raise psycopg2.OperationalError("poll() returned %s" % state)
 
     @commands.command()
+    @commands.has_any_role('admin', 'moderator')
     async def startsignup(self, ctx):
         self.toggle = True
         self.uid_list = []
@@ -44,6 +45,7 @@ class Attendance(commands.Cog):
         self.uid_list.clear()
 
     @commands.command()
+    @commands.has_any_role('admin', 'moderator')
     async def stopsignup(self, ctx):
         self.toggle = False
         self.uid_list.clear()
@@ -104,7 +106,6 @@ class Attendance(commands.Cog):
         self.wait(acurs.connection)
         self.uid_list.remove(user_id)
         await ctx.message.add_reaction('👍')
-
 
 
 def setup(bot):
