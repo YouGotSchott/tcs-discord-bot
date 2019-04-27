@@ -41,7 +41,7 @@ class RoleSelector(commands.Cog):
         guild = self.bot.get_guild(payload.guild_id)
         emojis = self.emoji_selector(guild)
         user = guild.get_member(payload.user_id)
-        clean_emoji = str(payload.emoji).strip('<:>')
+        clean_emoji = str(payload.emoji)
         if user.id == self.bot.user.id:
             return
         if payload.message_id != self.msg.id:
@@ -56,7 +56,7 @@ class RoleSelector(commands.Cog):
         guild = self.bot.get_guild(payload.guild_id)
         emojis = self.emoji_selector(guild)
         user = guild.get_member(payload.user_id)
-        clean_emoji = str(payload.emoji).strip('<:>')
+        clean_emoji = str(payload.emoji)
         if user.id == self.bot.user.id:
             return
         if payload.message_id != self.msg.id:
