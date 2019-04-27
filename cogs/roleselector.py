@@ -17,10 +17,9 @@ class RoleSelector(commands.Cog):
         with open(self.messages_path, 'w') as f:
             json.dump(messages, f)
 
-    @commands.Cog.listener()    
+    @commands.Cog.listener()
     async def on_ready(self):
-        for guild in self.bot.guilds:
-            emojis = self.emoji_selector(guild.id)
+        emojis = self.emoji_selector(self.bot.guilds[0].id)
         channel = discord.utils.get(self.bot.get_all_channels(), name='roles')
         text = await self.embeder(self.data(emojis))
         messages = await self.opener()
@@ -35,11 +34,11 @@ class RoleSelector(commands.Cog):
         await self.closer(messages)
         for emoji in emojis.values():
             await self.msg.add_reaction(emoji=emoji)
-    
+
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):
         guild = self.bot.get_guild(payload.guild_id)
-        emojis = self.emoji_selector(guild)
+        emojis = self.emoji_selector(guild.id)
         user = guild.get_member(payload.user_id)
         clean_emoji = str(payload.emoji).strip('<:>')
         if user.id == self.bot.user.id:
@@ -50,11 +49,11 @@ class RoleSelector(commands.Cog):
             if v in clean_emoji:
                 role = discord.utils.get(user.guild.roles, name=k)
                 await user.add_roles(role)
-    
+
     @commands.Cog.listener()
     async def on_raw_reaction_remove(self, payload):
         guild = self.bot.get_guild(payload.guild_id)
-        emojis = self.emoji_selector(guild)
+        emojis = self.emoji_selector(guild.id)
         user = guild.get_member(payload.user_id)
         clean_emoji = str(payload.emoji).strip('<:>')
         if user.id == self.bot.user.id:
@@ -74,7 +73,7 @@ class RoleSelector(commands.Cog):
             em.add_field(name=value['name'], value=value['value'], inline=True)
         em.set_footer(text=self.footer['footer'])
         return em
-    
+
     def emoji_selector(self, guild):
         if 169696752461414401 == guild:
             emojis = {
