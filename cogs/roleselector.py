@@ -35,31 +35,37 @@ class RoleSelector(commands.Cog):
         for emoji in emojis.values():
             await self.msg.add_reaction(emoji=emoji)
 
-    @commands.Cog.listener()
-    async def on_raw_reaction_add(self, payload):
+    @commands.Cog.listener(name='on_raw_reaction_add')
+    async def role_reaction_add(self, payload):
+        try:
+            if payload.message_id != self.msg.id:
+                return
+        except AttributeError:
+            return
         guild = self.bot.get_guild(payload.guild_id)
-        emojis = self.emoji_selector(guild.id)
         user = guild.get_member(payload.user_id)
-        clean_emoji = str(payload.emoji).strip('<:>')
         if user.id == self.bot.user.id:
             return
-        if payload.message_id != self.msg.id:
-            return
+        emojis = self.emoji_selector(guild.id)
+        clean_emoji = str(payload.emoji).strip('<:>')
         for k, v in emojis.items():
             if v in clean_emoji:
                 role = discord.utils.get(user.guild.roles, name=k)
                 await user.add_roles(role)
 
-    @commands.Cog.listener()
-    async def on_raw_reaction_remove(self, payload):
+    @commands.Cog.listener(name='on_raw_reaction_remove')
+    async def role_reaction_remove(self, payload):
+        try:
+            if payload.message_id != self.msg.id:
+                return
+        except AttributeError:
+            return
         guild = self.bot.get_guild(payload.guild_id)
-        emojis = self.emoji_selector(guild.id)
         user = guild.get_member(payload.user_id)
-        clean_emoji = str(payload.emoji).strip('<:>')
         if user.id == self.bot.user.id:
             return
-        if payload.message_id != self.msg.id:
-            return
+        emojis = self.emoji_selector(guild.id)
+        clean_emoji = str(payload.emoji).strip('<:>')
         for k, v in emojis.items():
             if v in clean_emoji:
                 role = discord.utils.get(user.guild.roles, name=k)
