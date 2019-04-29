@@ -19,7 +19,7 @@ extensions = [
     'cogs.affiliator',
     'cogs.tasker',
     'cogs.attendance',
-    'cogs.howTall'
+    'cogs.howtall'
 ]
 
 if __name__ == '__main__':
