@@ -13,8 +13,8 @@ class Eject(commands.Cog):
     @commands.command()
     async def eject(self, ctx):
         username = ctx.message.author.display_name
-        luck = randint(1, 20)
-        if luck == 20:
+        luck = randint(1, 5)
+        if luck == 1:
             await ctx.send("*{} hit the canopy on the way out!*".format(username))
             await self.role_grabber(ctx.message.author)
             await self.invite_maker(ctx.message)
