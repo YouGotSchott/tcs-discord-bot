@@ -10,6 +10,8 @@ class Swatter(commands.Cog):
     async def on_message(self, message):
         if self.bot.user in message.mentions:
             await message.add_reaction('\U0001f5de')
+        if 'skynet' in message.content.lower():
+            await message.add_reaction('\U0001f916')
     
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):
