@@ -142,7 +142,7 @@ class RoleSelector(commands.Cog):
             'liberation' : {
                 'name' : '<:{}> @liberation'.format(emojis['liberation']),
                 'value' : '''
-                Allows other members to ping you to play *Arma 3 Liberation* on our guild.
+                Allows other members to ping you to play *Arma 3 Liberation* on our server.
                 '''
             },
             'r6siege' : {
@@ -160,7 +160,7 @@ class RoleSelector(commands.Cog):
             'minecraft' : {
                 'name' : '{} @minecraft'.format(emojis['minecraft']),
                 'value' : '''
-                Allows other members to ping you to play *Minecraft* on our guild.
+                Allows other members to ping you to play *Minecraft* on our server.
                 '''
             },
             'flight_sims' : {
