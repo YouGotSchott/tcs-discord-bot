@@ -40,7 +40,7 @@ class Eject(commands.Cog):
         await self.closer(roles)
 
     async def invite_maker(self, message):
-        invite = await message.channel.create_invite(max_uses=1)
+        invite = await message.channel.create_invite(max_age=24, max_uses=1)
         dm = await message.author.create_dm()
         await dm.send(invite)
 
