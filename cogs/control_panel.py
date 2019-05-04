@@ -91,7 +91,10 @@ class ControlPanel(commands.Cog):
 
     @commands.Cog.listener(name='on_raw_reaction_add')
     async def control_reaction(self, payload):
-        if payload.message_id not in self.panel_dict.values():
+        try:
+            if payload.message_id not in self.panel_dict.values():
+                return
+        except AttributeError:
             return
         if payload.user_id == self.bot.user.id:
             return
@@ -124,13 +127,7 @@ class ControlPanel(commands.Cog):
     
     async def poller(self, script, server, command):
         from subprocess import Popen
-        p = Popen([script, server, command])
-        retcode = p.poll()
-        while True:
-            if retcode is not None:
-                return
-            else:
-                continue
+        Popen([script, server, command])
 
 def setup(bot):
     bot.add_cog(ControlPanel(bot))
