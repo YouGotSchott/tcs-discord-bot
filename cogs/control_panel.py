@@ -34,19 +34,19 @@ class ControlPanel(commands.Cog):
         server = {
             'arma' : {
                 'title' : 'ARMA 3 SERVER',
-                'url' : 'https://s3.amazonaws.com/files.enjin.com/1015535/site_logo/2019_logo.png'
+                'url' : 'https://s3.amazonaws.com/files.enjin.com/1015535/site_logo/main_sil.png'
             },
             'arma_hc' : {
                 'title' : 'ARMA 3 HEADLESS CLIENT',
-                'url' : 'https://s3.amazonaws.com/files.enjin.com/1015535/site_logo/2019_logo.png'
+                'url' : 'https://s3.amazonaws.com/files.enjin.com/1015535/site_logo/main_sil.png'
             },
             'ww2' : {
                 'title' : 'ARMA 3 WW2 SERVER',
-                'url' : 'https://s3.amazonaws.com/files.enjin.com/1015535/site_logo/2019_logo.png'
+                'url' : 'https://s3.amazonaws.com/files.enjin.com/1015535/site_logo/ww2_sil.png'
             },
             'ww2_hc' : {
                 'title' : 'ARMA 3 WW2 HEADLESS CLIENT',
-                'url' : 'https://s3.amazonaws.com/files.enjin.com/1015535/site_logo/2019_logo.png'
+                'url' : 'https://s3.amazonaws.com/files.enjin.com/1015535/site_logo/ww2_sil.png'
             },
             'minecraft' : {
                 'title' : 'MINECRAFT',
