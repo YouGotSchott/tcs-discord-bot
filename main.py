@@ -19,7 +19,8 @@ extensions = [
     'cogs.affiliator',
     'cogs.tasker',
     'cogs.attendance',
-    'cogs.howtall'
+    'cogs.howtall',
+    'cogs.control_panel'
 ]
 
 if __name__ == '__main__':
