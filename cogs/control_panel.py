@@ -126,8 +126,16 @@ class ControlPanel(commands.Cog):
             await self.poller('bash/minecraft', 'mcserver', command)
     
     async def poller(self, script, server, command):
-        from subprocess import Popen
-        Popen([script, server, command])
+        import subprocess
+        import asyncio
+        cmd = [script, server, command]
+        output = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        while output is not None:
+            retcode = output.poll()
+            if retcode is not None:
+                return
+            else:
+                await asyncio.sleep(1)
 
 def setup(bot):
     bot.add_cog(ControlPanel(bot))
