@@ -45,7 +45,7 @@ class ControlPanel(commands.Cog):
                 'url' : 'https://s3.amazonaws.com/files.enjin.com/1015535/site_logo/2019_logo.png'
             },
             'ww2_hc' : {
-                'title' : 'ARMA 3 WW2 SERVER',
+                'title' : 'ARMA 3 WW2 HEADLESS CLIENT',
                 'url' : 'https://s3.amazonaws.com/files.enjin.com/1015535/site_logo/2019_logo.png'
             },
             'minecraft' : {
@@ -129,7 +129,7 @@ class ControlPanel(commands.Cog):
         import subprocess
         import asyncio
         cmd = [script, server, command]
-        output = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        output = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         while output is not None:
             retcode = output.poll()
             if retcode is not None:
