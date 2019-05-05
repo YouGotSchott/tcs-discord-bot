@@ -25,7 +25,7 @@ class Briefing(commands.Cog):
 
     async def url_grab(self, source):
         tree = html.fromstring(source)
-        xpath = '//a[@class="thread-view"]/@href'
+        xpath = '//a[@class="thread-view thread-subject"]/@href'
         href = tree.xpath(xpath)
         recent_briefing = ast.literal_eval(str(href))
         return "https://www.thecoolerserver.com" + str(recent_briefing[0])
