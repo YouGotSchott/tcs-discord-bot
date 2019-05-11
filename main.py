@@ -20,7 +20,8 @@ extensions = [
     'cogs.tasker',
     'cogs.attendance',
     'cogs.howtall',
-    'cogs.control_panel'
+    'cogs.control_panel',
+    'cogs.giveaway'
 ]
 
 if __name__ == '__main__':
