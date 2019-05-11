@@ -85,7 +85,7 @@ class ControlPanel(commands.Cog):
             title=server_title, description=desc, color=0x008080)
         em.set_thumbnail(url=server_url)
         for value in commands.values():
-            em.add_field(name=value, value="|", inline=False)
+            em.add_field(name=value, value="\u200b", inline=False)
         em.set_footer(text=foot)
         return em
 
