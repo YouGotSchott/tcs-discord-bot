@@ -28,11 +28,9 @@ class Briefing(commands.Cog):
         xpath = '/html/body/rss/channel/item[1]/text()'
         href = tree.xpath(xpath)
         for item in href:
-            check = item.strip()
-            if check:
-                link = check
-                continue
-        return link
+            link = item.strip()
+            if link:
+                return link
 
     async def rotation(self, ctx):
         source = await self.main()
