@@ -20,15 +20,19 @@ class Briefing(commands.Cog):
     async def main(self):
         async with aiohttp.ClientSession() as session:
             source = await self.fetch(session,
-                                      'https://www.thecoolerserver.com/forum/m/32181632/viewforum/6725698')
+                'https://www.thecoolerserver.com/forum/m/32181632/op/rss/forum_id/6725698')
             return source
 
     async def url_grab(self, source):
-        tree = html.fromstring(source)
-        xpath = '//a[@class="thread-view thread-subject"]/@href'
+        tree = html.fromstring(source.encode('utf-8'))
+        xpath = '/html/body/rss/channel/item[1]/text()'
         href = tree.xpath(xpath)
-        recent_briefing = ast.literal_eval(str(href))
-        return "https://www.thecoolerserver.com" + str(recent_briefing[0])
+        for item in href:
+            check = item.strip()
+            if check:
+                link = check
+                continue
+        return link
 
     async def rotation(self, ctx):
         source = await self.main()
