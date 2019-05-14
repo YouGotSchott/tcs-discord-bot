@@ -17,10 +17,9 @@ class Briefing(commands.Cog):
         async with session.get(url) as response:
             return await response.text()
 
-    async def main(self):
+    async def main(self, url):
         async with aiohttp.ClientSession() as session:
-            source = await self.fetch(session,
-                'https://www.thecoolerserver.com/forum/m/32181632/op/rss/forum_id/6725698')
+            source = await self.fetch(session, url)
             return source
 
     async def url_grab(self, source):
@@ -33,7 +32,8 @@ class Briefing(commands.Cog):
                 return link
 
     async def rotation(self, ctx):
-        source = await self.main()
+        target = 'https://www.thecoolerserver.com/forum/m/32181632/op/rss/forum_id/6725698'
+        source = await self.main(target)
         url = await self.url_grab(source)
         await ctx.send(url)
 
