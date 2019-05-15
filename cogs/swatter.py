@@ -34,7 +34,7 @@ class Swatter(commands.Cog):
             guild = self.bot.get_guild(payload.guild_id)
             channel = guild.get_channel(payload.channel_id)
             message = await channel.fetch_message(payload.message_id)
-            await message.add_reaction('uncle:567728566540697635')
+            await message.add_reaction('its_just_ham:504456342119907349')
 
 
 def setup(bot):
