@@ -13,8 +13,8 @@ class Swatter(commands.Cog):
         if 'skynet' in message.content.lower():
             await message.add_reaction('\U0001f916')
     
-    @commands.Cog.listener()
-    async def on_raw_reaction_add(self, payload):
+    @commands.Cog.listener(name='on_raw_reaction_add')
+    async def newspaper_stacker(self, payload):
         if payload.user_id == self.bot.user.id:
             return
         if str(payload.emoji) == '\U0001f5de':
@@ -22,6 +22,19 @@ class Swatter(commands.Cog):
             channel = guild.get_channel(payload.channel_id)
             message = await channel.fetch_message(payload.message_id)
             await message.add_reaction('\U0001f5de')
+
+    @commands.Cog.listener(name='on_raw_reaction_add')
+    async def ham_stacker(self, payload):
+        if payload.user_id == self.bot.user.id:
+            return
+        channel = self.bot.get_channel(payload.channel_id)
+        message = await channel.fetch_message(payload.message_id)
+        if str(payload.emoji).strip('<:>') == 'its_just_ham:504456342119907349' \
+            and message.author.id == 178960174738833409:
+            guild = self.bot.get_guild(payload.guild_id)
+            channel = guild.get_channel(payload.channel_id)
+            message = await channel.fetch_message(payload.message_id)
+            await message.add_reaction('uncle:567728566540697635')
 
 
 def setup(bot):
