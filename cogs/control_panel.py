@@ -28,64 +28,89 @@ class ControlPanel(commands.Cog):
             '\U000025b6' : 'start',
             '\U000023f9' : 'stop',
             '\U0001f501' : 'restart',
-            '\U0000002a\U000020e3' : 'validate',
-            '\U00002b06' : 'update'
+            '\U00002705' : 'hc_start',
+            '\U0000274e' : 'hc_stop',
+            '\U00002733' : 'hc_restart'
         }
         server = {
+            'instructions' : {
+                'title' : 'INSTRUCTIONS',
+                'url' : 'https://s3.amazonaws.com/files.enjin.com/1015535/site_logo/2019_logo.png',
+                'color' : 0x008080
+            },
             'arma' : {
                 'title' : 'ARMA 3 SERVER',
-                'url' : 'https://s3.amazonaws.com/files.enjin.com/1015535/site_logo/main_sil.png'
-            },
-            'arma_hc' : {
-                'title' : 'ARMA 3 HEADLESS CLIENT',
-                'url' : 'https://s3.amazonaws.com/files.enjin.com/1015535/site_logo/main_sil.png'
+                'url' : 'https://s3.amazonaws.com/files.enjin.com/1015535/site_logo/main_sil.png',
+                'color' : 0xFF0000
             },
             'ww2' : {
                 'title' : 'ARMA 3 WW2 SERVER',
-                'url' : 'https://s3.amazonaws.com/files.enjin.com/1015535/site_logo/ww2_sil.png'
-            },
-            'ww2_hc' : {
-                'title' : 'ARMA 3 WW2 HEADLESS CLIENT',
-                'url' : 'https://s3.amazonaws.com/files.enjin.com/1015535/site_logo/ww2_sil.png'
+                'url' : 'https://s3.amazonaws.com/files.enjin.com/1015535/site_logo/ww2_sil.png',
+                'color' : 0xFF5733
             },
             'minecraft' : {
                 'title' : 'MINECRAFT',
-                'url' : 'https://s3.amazonaws.com/files.enjin.com/1015535/site_logo/2019_logo.png'
+                'url' : 'https://s3.amazonaws.com/files.enjin.com/1015535/site_logo/2019_logo.png',
+                'color' : 0xF4D03F
             }
         }
         panel = await self.opener()
         if not panel.values():
             for key, value in server.items():
-                print("Control panel message hasn't been made yet.")
-                text = await self.embeder(value['title'], value['url'])
-                msg = await channel.send(embed=text)
-                panel[key] = msg.id
-                for moji in self.emojis.keys():
-                    await msg.add_reaction(emoji=moji)
+                print("Control panel message hasn't been created yet.")
+                if value['title'] == 'INSTRUCTIONS':
+                    text = await self.intro_embeder(value['title'], value['url'], value['color'])
+                    msg = await channel.send(embed=text)
+                    panel[key] = msg.id
+                if value['title'] == 'MINECRAFT':
+                    text = await self.embeder(value['title'], value['url'], value['color'])
+                    msg = await channel.send(embed=text)
+                    panel[key] = msg.id
+                    for index, moji in zip(range(3), self.emojis.keys()):
+                        if index == 3:
+                            continue
+                        await msg.add_reaction(emoji=moji)
+                else:
+                    text = await self.embeder(value['title'], value['url'], value['color'])
+                    msg = await channel.send(embed=text)
+                    panel[key] = msg.id
+                    for moji in self.emojis.keys():
+                        await msg.add_reaction(emoji=moji)
         else:
             for p_value, p_key, s_value in zip(panel.values(), panel.keys(), server.values()):
                 msg = await channel.fetch_message(p_value)
-                text = await self.embeder(s_value['title'], s_value['url'])
+                if s_value['title'] == 'INSTRUCTIONS':
+                    text = await self.intro_embeder(s_value['title'], s_value['url'], s_value['color'])
+                else:
+                    text = await self.embeder(s_value['title'], s_value['url'], s_value['color'])
                 panel[p_key] = msg.id
                 await msg.edit(embed=text)
         await self.closer(panel)
         self.panel_dict = await self.opener()
 
-    async def embeder(self, server_title, server_url):
-        desc = 'Use the following reactions to perform actions on the server. Your reaction will be removed once the action has completed.'
+    async def intro_embeder(self, server_title, server_url, color):
+        desc = '''
+        ```Use the following reactions to perform actions on the server. Your reaction will be removed once the action has completed.```
+        \U000025b6 Start the Server
+        \U000023f9 Stop the Server
+        \U0001f501 Restart the Server
+        \U00002705 Start the Headless Client
+        \U0000274e Stop the Headless Client
+        \U00002733 Restart the Headless Client
+        '''
         foot = 'The bot will show as "typing" while the action is runnning.'
-        commands = {
-            'start' : "\U000025b6 Start the server",
-            'stop' : "\U000023f9 Stop the server",
-            'restart' : "\U0001f501 Restart the server",
-            'validate' : "\U0000002a\U000020e3 Validate server files",
-            'update' : "\U00002b06 Update the server"
-        }
         em = discord.Embed(
-            title=server_title, description=desc, color=0x008080)
+            title=server_title, description=desc, color=color)
         em.set_thumbnail(url=server_url)
-        for value in commands.values():
-            em.add_field(name=value, value="\u200b", inline=False)
+        em.set_footer(text=foot)
+        return em
+
+    async def embeder(self, server_title, server_url, color):
+        desc = '_ _'
+        foot = 'The bot will show as "typing" while the action is runnning.'
+        em = discord.Embed(
+            title=server_title, description=desc, color=color)
+        em.set_thumbnail(url=server_url)
         em.set_footer(text=foot)
         return em
 
@@ -115,16 +140,20 @@ class ControlPanel(commands.Cog):
             if message_id == value:
                 server = key
         if server == 'arma':
-            await self.poller('bash/arma', 'arma3server', command)
-        elif server == 'arma_hc':
-            await self.poller('bash/arma', 'arma3server-hc', command)
+            server = 'arma3server'
+            if 'hc_' in command:
+                server = 'arma3server-hc'
+                command = command.split('_')[1]
+            await self.poller('bash/arma', server, command)
         elif server == 'ww2':
-            await self.poller('bash/ww2', 'arma3server', command)
-        elif server == 'ww2_hc':
-            await self.poller('bash/ww2', 'arma3server-hc', command)
+            server = 'arma3server'
+            if 'hc_' in command:
+                server = 'arma3server-hc'
+                command = command.split('_')[1]
+            await self.poller('bash/ww2', server, command)
         elif server == 'minecraft':
             await self.poller('bash/minecraft', 'mcserver', command)
-    
+
     async def poller(self, script, server, command):
         import subprocess
         import asyncio
