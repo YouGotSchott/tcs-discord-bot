@@ -62,6 +62,7 @@ class ControlPanel(commands.Cog):
                     text = await self.intro_embeder(value['title'], value['url'], value['color'])
                     msg = await channel.send(embed=text)
                     panel[key] = msg.id
+                    continue
                 if value['title'] == 'MINECRAFT':
                     text = await self.embeder(value['title'], value['url'], value['color'])
                     msg = await channel.send(embed=text)
