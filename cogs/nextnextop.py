@@ -15,7 +15,7 @@ class NextNextOp(commands.Cog):
         com_msg = msg.split(" ", 2)
         if com_msg[0].lower().startswith('!nextnext') \
                 and com_msg[0].lower().endswith('op'):
-            await self.next_next_op(com_msg[0], message.channel)
+            await self.next_next_op(com_msg[0].lower(), message.channel)
 
     async def date_converter(self):
         d = datetime.now(timezone('US/Eastern'))
