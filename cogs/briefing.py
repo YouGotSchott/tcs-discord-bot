@@ -1,7 +1,6 @@
 import discord
 from discord.ext import commands
 import aiohttp
-import ast
 from lxml import html
 
 
