@@ -62,7 +62,7 @@ class Attendance(commands.Cog):
         for arg in args:
             roles.append(arg.replace(',','').strip(' '))
         if len(roles) == 0:
-            return
+            roles = ['']
         roles = roles[slice(0, min(3, len(roles)))]
         d = datetime.now(timezone('US/Eastern'))
         self.date = d.strftime('%Y-%m-%d')
