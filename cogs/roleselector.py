@@ -91,7 +91,6 @@ class RoleSelector(commands.Cog):
                 'minecraft' : '\U000026cf',
                 'flight-sims' : '\U0001f525',
                 'vr' : 'iron_uncle:548645154454765568',
-                'got' : '\U0001f409',
                 'zeus-op' : '\U000026a1'
             }
         else:
@@ -104,7 +103,6 @@ class RoleSelector(commands.Cog):
                 'minecraft' : '\U000026cf',
                 'flight-sims' : '\U0001f525',
                 'vr' : 'jensen_uncle:567728565391589399',
-                'got' : '\U0001f409',
                 'zeus-op' : '\U000026a1'
             }
         return emojis
@@ -173,13 +171,6 @@ class RoleSelector(commands.Cog):
                 'name' : '<:{}> @vr'.format(emojis['vr']),
                 'value' : '''
                 Allows other members to ping you to play any *Virtual Reality Games*.
-                '''
-            },
-            'got' : {
-                'name' : '{} @got'.format(emojis['got']),
-                'value' : '''
-                Provides access to the **#got-spoilers** channel.
-                *A place for discussing Game of Thrones Season 8*
                 '''
             },
             'zeus-op' : {
