@@ -10,6 +10,18 @@ class Butler(commands.Cog):
         self.bot = bot
         self.agreement_path = str(Path('cogs/data/agreement.json'))
 
+    @commands.Cog.listener()
+    async def on_ready(self):
+        agreement = await self.opener()
+        channel = discord.utils.get(self.bot.get_all_channels(), name='rules')
+        try:
+            self.msg = await channel.fetch_message(agreement['agreement_msg']['id'])
+        except:
+            await self.creator(channel)
+        agreement['agreement_msg'] = {}
+        agreement['agreement_msg']['id'] = self.msg.id
+        await self.closer(agreement)
+
     async def opener(self):
         with open(self.agreement_path, 'r') as f:
             return json.load(f)
@@ -25,19 +37,7 @@ class Butler(commands.Cog):
         if not role_check:
             return
         self.role = discord.utils.get(self.member.guild.roles, name='restricted')
-        agreement = await self.opener()
-        dm = await self.member.create_dm()
-        try:
-            self.msg = await dm.fetch_message(agreement[str(self.member.id)]['id'])
-        except:
-            await self.creator(dm, self.member)
-        agreement[str(self.member.id)] = {}
-        agreement[str(self.member.id)]['id'] = self.msg.id
-        await self.closer(agreement)
-        try:
-            self.bot.loop.create_task(await self.timeout())
-        except:
-            return
+        await self.member.add_roles(self.role)
 
     async def eject_checker(self, member):
         roles_path = str(Path('cogs/data/roles.json'))
@@ -52,18 +52,9 @@ class Butler(commands.Cog):
                 json.dump(roles, f)
             return False
 
-    async def timeout(self):
-        await asyncio.sleep(30)
-        try:
-            await self.msg.delete()
-            await self.member.kick(reason="Failed to accept rule agreement in alotted time")
-        except:
-            return
-
-    async def creator(self, dm, member):
+    async def creator(self, channel):
             text = await self.embeder(self.data())
-            self.msg = await dm.send(embed=text)
-            await self.member.add_roles(self.role)
+            self.msg = await channel.send(embed=text)
             await self.msg.add_reaction('\U00002705')
             await self.msg.add_reaction('\U0001f6ab')
 
@@ -77,16 +68,17 @@ class Butler(commands.Cog):
 
     async def join_message(self, member):
         channel = discord.utils.get(self.bot.get_all_channels(), name='general')
-        await channel.send('{} has joined the server!'.format(member.mention))
+        greet = await channel.send('{} has joined the server!'.format(member.mention))
+        await greet.add_reaction('\U0001f44b')
 
     @commands.Cog.listener(name='on_raw_reaction_add')
     async def agreement_reaction_add(self, payload):
         if payload.user_id == self.bot.user.id:
             return
-        user = self.bot.get_user(payload.user_id)
+        channel = discord.utils.get(self.bot.get_all_channels(), name='rules')
         agreement = await self.opener()
         try:
-            msg = await user.fetch_message(agreement[str(user.id)]['id'])
+            msg = await channel.fetch_message(agreement['agreement_msg']['id'])
         except KeyError:
             return
         try:
@@ -96,24 +88,21 @@ class Butler(commands.Cog):
             return
         guild = self.bot.get_guild(544217233560436779)
         member = guild.get_member(payload.user_id)
-        if str(payload.emoji) == '\U00002705':
-            await self.accept(msg, member, agreement)
-        elif str(payload.emoji) == '\U0001f6ab':
-            await self.decline(msg, member, agreement)
-
-    async def accept(self, msg, member, agreement):
         role = discord.utils.get(member.guild.roles, name='restricted')
-        await member.remove_roles(role)
-        await self.join_message(member)
-        await msg.remove_reaction('\U0001f6ab', self.bot.user)
-        del agreement[str(member.id)]
-        self.msg = None
-        await self.closer(agreement)
+        if role not in member.roles:
+            return
+        if str(payload.emoji) == '\U00002705':
+            await self.accept(member, role)
+        elif str(payload.emoji) == '\U0001f6ab':
+            await self.decline(member)
 
-    async def decline(self, msg, member, agreement):
-        await msg.delete()
-        del agreement[str(member.id)]
-        await self.closer(agreement)
+    async def accept(self, member, role):
+        await member.remove_roles(role)
+        fng = discord.utils.get(member.guild.roles, name='fng')
+        await member.add_roles(fng)
+        await self.join_message(member)
+
+    async def decline(self, member):
         await member.kick(reason="Declined rule agreement")
 
     def data(self):
