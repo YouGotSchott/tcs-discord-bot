@@ -21,7 +21,8 @@ extensions = [
     'cogs.attendance',
     'cogs.howtall',
     'cogs.control_panel',
-    'cogs.giveaway'
+    'cogs.giveaway',
+    'cogs.swifty'
 ]
 
 if __name__ == '__main__':
