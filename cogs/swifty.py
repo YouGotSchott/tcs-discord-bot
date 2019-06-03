@@ -28,7 +28,7 @@ class Swifty(commands.Cog):
         title="Swifty Installation Guide", description="**__Repo URL__:**```{}```".format(repo_url), url=swifty_guide, color=0x29b585)
         # em.set_thumbnail(url=amazon['thumbnail'])
         if "ww2" in repo:
-            em.set_footer(text="Check pinned information in #ww2-repo for additional info")
+            em.set_footer(text="Check pinned messages in #ww2-repo for additional infomation")
         await ctx.send(embed=em)
 
 
