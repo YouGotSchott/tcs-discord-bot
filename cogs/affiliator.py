@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 import aiohttp
 from lxml import html
+import re
 
 
 class Affiliator(commands.Cog):
@@ -12,13 +13,10 @@ class Affiliator(commands.Cog):
     async def on_message(self, message):
         msg = message.content.lower()
         if 'www.amazon.com' in msg:
-            import re
             try:
-                product = re.search('/dp/(.*)/', msg)
-                product_code = product.group(1).upper()
+                product_code = await self.dp_check(msg)
             except:
-                product = msg.split('/dp/', 1)[1]
-                product_code = product.upper()
+                product_code = await self.prod_check(msg)
             url = "http://www.amazon.com/exec/obidos/ASIN/{}/thecoolerse0c-20".format(product_code)
             try:
                 em = await self.title_grab(url)
@@ -27,6 +25,24 @@ class Affiliator(commands.Cog):
                 return
         else:
             return
+
+    async def dp_check(self, msg):
+        try:
+            product = re.search('/dp/(.*)/', msg)
+            product_code = product.group(1).upper()
+        except:
+            product = msg.split('/dp/', 1)[1]
+            product_code = product.upper()
+        return product_code
+
+    async def prod_check(self, msg):
+        try:
+            product = re.search('/product/(.*)/', msg)
+            product_code = product.group(1).upper()
+        except:
+            product = msg.split('/product/', 1)[1]
+            product_code = product.upper()
+        return product_code
     
     async def fetch(self, session, url):
         async with session.get(url) as response:
