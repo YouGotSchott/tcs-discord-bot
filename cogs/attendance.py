@@ -2,26 +2,14 @@ import discord
 from discord.ext import commands
 from pytz import timezone
 from datetime import datetime
-from config import db_user, db_pass, db_port
+from config import bot
 import asyncio
 import psycopg2
 
 class Attendance(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-    
-    @commands.Cog.listener()
-    async def on_ready(self):
-        self.toggle = False
-        self.aconn = psycopg2.connect(
-            database='discord_bot', 
-            user=db_user, 
-            password=db_pass, 
-            host='127.0.0.1', 
-            port=db_port,
-            async_=1)
-        self.wait(self.aconn)
-    
+
     def wait(self, conn):
         import select
         while True:
@@ -49,7 +37,7 @@ class Attendance(commands.Cog):
     async def stopsignup(self, ctx):
         self.toggle = False
         self.uid_list.clear()
-    
+
     @commands.command()
     async def role(self, ctx, *args):
         if self.toggle == False:
@@ -75,9 +63,9 @@ class Attendance(commands.Cog):
         await self.writer(user_data)
         self.uid_list.append(uid)
         await ctx.message.add_reaction('👍')
-    
+
     async def writer(self, user_data):
-        acurs = self.aconn.cursor()
+        acurs = bot.aconn.cursor()
         acurs.execute("""
         INSERT INTO attendance (user_id, nickname, date)
         VALUES (%s, %s, %s)""", (user_data['user_id'], user_data['nickname'], user_data['date']))
@@ -88,14 +76,14 @@ class Attendance(commands.Cog):
             VALUES ((SELECT id FROM attendance WHERE attendance.user_id = %s 
             AND attendance.date = %s), %s)""", (user_data['user_id'], user_data['date'], role))
             self.wait(acurs.connection)
-    
+
     @commands.command()
     @commands.has_any_role('admin', 'moderator')
     async def remove(self, ctx):
         if self.toggle == False:
             return
         user_id = ctx.message.mentions[0].id
-        acurs = self.aconn.cursor()
+        acurs = bot.aconn.cursor()
         acurs.execute("""
         DELETE FROM roles WHERE attendance_id = (SELECT id FROM attendance WHERE attendance.user_id = %s 
         AND attendance.date = %s)""", (user_id, self.date))
@@ -106,6 +94,23 @@ class Attendance(commands.Cog):
         self.wait(acurs.connection)
         self.uid_list.remove(user_id)
         await ctx.message.add_reaction('👍')
+
+    @commands.command()
+    async def joined(self, ctx):
+        user_id = ctx.author.id
+        acurs = bot.aconn.cursor()
+        acurs.execute("""
+        SELECT join_date FROM date_joined WHERE user_id = %s;""", (user_id,))
+        self.wait(acurs.connection)
+        try:
+            result = acurs.fetchone()[0]
+        except TypeError:
+            await ctx.message.add_reaction('👎')
+            return
+        joined_date = str(result)
+        joined_date = datetime.strptime(joined_date, '%Y-%m-%d')
+        joined_date = joined_date.strftime("%d %B, %Y")
+        await ctx.send(joined_date)
 
 
 def setup(bot):
