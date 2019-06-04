@@ -1,6 +1,10 @@
 import discord
 from discord.ext import commands
 from pathlib import Path
+from config import bot
+from pytz import timezone
+from datetime import datetime
+import psycopg2
 import json
 import asyncio
 
@@ -9,6 +13,19 @@ class Butler(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.agreement_path = str(Path('cogs/data/agreement.json'))
+
+    def wait(self, conn):
+        import select
+        while True:
+            state = conn.poll()
+            if state == psycopg2.extensions.POLL_OK:
+                break
+            elif state == psycopg2.extensions.POLL_WRITE:
+                select.select([], [conn.fileno()], [])
+            elif state == psycopg2.extensions.POLL_READ:
+                select.select([conn.fileno()], [], [])
+            else:
+                raise psycopg2.OperationalError("poll() returned %s" % state)
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -52,6 +69,24 @@ class Butler(commands.Cog):
                 json.dump(roles, f)
             return False
 
+    async def db_check(self, user_id):
+        acurs = bot.aconn.cursor()
+        acurs.execute("""
+        SELECT join_date FROM date_joined WHERE user_id = %s;""", (user_id,))
+        self.wait(acurs.connection)
+        if acurs.fetchone():
+            return
+        await self.date_joined(user_id)
+
+    async def date_joined(self, user_id):
+        d = datetime.now(timezone('US/Eastern'))
+        joined = d.strftime('%Y-%m-%d')
+        acurs = bot.aconn.cursor()
+        acurs.execute("""
+        INSERT INTO date_joined (user_id, join_date)
+        VALUES (%s, %s)""", (user_id, joined))
+        self.wait(acurs.connection)
+
     async def creator(self, channel):
             text = await self.embeder(self.data())
             self.msg = await channel.send(embed=text)
@@ -63,7 +98,8 @@ class Butler(commands.Cog):
             title=self.rules['title'], description=self.rules['description'], color=0x008080)
         em.set_thumbnail(url=self.rules['thumbnail'])
         for value in self.rule_list.values():
-            em.add_field(name=value['name'], value=value['value'], inline=True)
+            em.add_field(name=value['name'], value=value['value'])
+        em.set_footer(text="Accept: \U00002705 | Decline: \U0001f6ab")
         return em
 
     async def join_message(self, member):
@@ -86,20 +122,23 @@ class Butler(commands.Cog):
                 return
         except AttributeError:
             return
-        guild = self.bot.get_guild(544217233560436779)
+        guild = self.bot.get_guild(self.bot.guilds[0].id)
         member = guild.get_member(payload.user_id)
         role = discord.utils.get(member.guild.roles, name='restricted')
         if role not in member.roles:
+            await msg.remove_reaction(payload.emoji, member)
             return
         if str(payload.emoji) == '\U00002705':
             await self.accept(member, role)
         elif str(payload.emoji) == '\U0001f6ab':
             await self.decline(member)
+        await msg.remove_reaction(payload.emoji, member)
 
     async def accept(self, member, role):
         await member.remove_roles(role)
         fng = discord.utils.get(member.guild.roles, name='fng')
         await member.add_roles(fng)
+        await self.db_check(str(member.id))
         await self.join_message(member)
 
     async def decline(self, member):
@@ -109,19 +148,30 @@ class Butler(commands.Cog):
         self.rules = {
             'title' : 'TCS Rule Agreement',
             'description' : '''
-            This is a placeholder rule agreement for The Cooler Server
-            Continue to the Discord Server by reacting on '\U00002705'.
+            ```Accepting this agreement is MANDATORY for entry into our Discord. By clicking ACCEPT, you acknowledge that you have read and understand the below rules.```
             ''',
             'thumbnail' : 'https://s3.amazonaws.com/files.enjin.com/1015535/site_logo/2019_logo.png'
         }
         self.rule_list = {
             'rule_1' : {
-                'name' : 'Rule One Name',
-                'value' : 'Description of Rule One'
+                'name' : "**1. DO NOT** have fun at the expense of others",
+                'value' : "*We're a community, act that way*"
             },
             'rule_2' : {
-                'name' : 'Rule Two Name',
-                'value' : 'Description of Rule Two'
+                'name' : "**2. DO NOT** compromise the spirit of the mission",
+                'value' : """*Don't try to "break" missions to win, mission makers work hard*"""
+            },
+            'rule_3' : {
+                'name' : "**3. DO NOT** use slurs or bigoted language",
+                'value' : "*...regardless of mission setting or context*"
+            },
+            'rule_4' : {
+                'name' : "**4. DO** show up **1 HOUR** before your *__first__* mission for orientation",
+                'value' : "*Your first misson **MUST** be a Wednesday or Friday*"
+            },
+            'rule_5' : {
+                'name' : "**5. DO** attend your *__first__* mission **45 DAYS** after joining",
+                'value' : "*Failure to attend your first mission within 45 days will result in a ban. You will need to re-apply to re-join.*"
             }
         }
 
