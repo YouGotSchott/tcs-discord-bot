@@ -5,6 +5,7 @@ from config import bot, TOKEN
 bot.remove_command('help')
 
 extensions = [
+    'cogs.db_conn',
     'cogs.downloader',
     'cogs.nextnextop',
     'cogs.danceit',
@@ -22,7 +23,8 @@ extensions = [
     'cogs.howtall',
     'cogs.control_panel',
     'cogs.giveaway',
-    'cogs.swifty'
+    'cogs.swifty',
+    'cogs.butler'
 ]
 
 if __name__ == '__main__':
