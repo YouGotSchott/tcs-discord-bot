@@ -26,7 +26,6 @@ class Swifty(commands.Cog):
         swifty_guide = "https://www.thecoolerserver.com/forum/m/32181632/viewthread/27537251-tcs-swifty-installation-guide"
         em = discord.Embed(
         title="Swifty Installation Guide", description="**__Repo URL__:**```{}```".format(repo_url), url=swifty_guide, color=0x29b585)
-        # em.set_thumbnail(url=amazon['thumbnail'])
         if "ww2" in repo:
             em.set_footer(text="Check pinned messages in #ww2-repo for additional infomation")
         await ctx.send(embed=em)
