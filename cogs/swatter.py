@@ -12,6 +12,9 @@ class Swatter(commands.Cog):
             await message.add_reaction('\U0001f5de')
         if 'skynet' in message.content.lower():
             await message.add_reaction('\U0001f916')
+        if 'bitch' in message.content.lower() and \
+            message.author.id == 178960174738833409:
+            await message.add_reaction('its_just_ham:504456342119907349')
     
     @commands.Cog.listener(name='on_raw_reaction_add')
     async def newspaper_stacker(self, payload):
