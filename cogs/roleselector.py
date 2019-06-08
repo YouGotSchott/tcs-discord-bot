@@ -1,13 +1,28 @@
 import discord
 from discord.ext import commands
 from pathlib import Path
+from config import bot
 import json
+import psycopg2
 
 
 class RoleSelector(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.messages_path = str(Path('cogs/data/messages.json'))
+
+    def wait(self, conn):
+        import select
+        while True:
+            state = conn.poll()
+            if state == psycopg2.extensions.POLL_OK:
+                break
+            elif state == psycopg2.extensions.POLL_WRITE:
+                select.select([], [conn.fileno()], [])
+            elif state == psycopg2.extensions.POLL_READ:
+                select.select([conn.fileno()], [], [])
+            else:
+                raise psycopg2.OperationalError("poll() returned %s" % state)
 
     async def opener(self):
         with open(self.messages_path, 'r') as f:
@@ -51,32 +66,32 @@ class RoleSelector(commands.Cog):
         for k, v in emojis.items():
             if v in clean_emoji:
                 role = discord.utils.get(user.guild.roles, name=k)
-                await user.add_roles(role)
+                if 'mission-maker' in k:
+                    results = await self.saturday_check()
+                    if user.id not in results:
+                        await self.msg.remove_reaction(v, user)
+                        return
+                if role in user.roles:
+                    await user.remove_roles(role)
+                else:
+                    await user.add_roles(role)
+                await self.msg.remove_reaction(v, user)
 
-    @commands.Cog.listener(name='on_raw_reaction_remove')
-    async def role_reaction_remove(self, payload):
-        try:
-            if payload.message_id != self.msg.id:
-                return
-        except AttributeError:
-            return
-        guild = self.bot.get_guild(payload.guild_id)
-        user = guild.get_member(payload.user_id)
-        if user.id == self.bot.user.id:
-            return
-        emojis = self.emoji_selector(guild.id)
-        clean_emoji = str(payload.emoji).strip('<:>')
-        for k, v in emojis.items():
-            if v in clean_emoji:
-                role = discord.utils.get(user.guild.roles, name=k)
-                await user.remove_roles(role)
+    async def saturday_check(self):
+        acurs = bot.aconn.cursor()
+        acurs.execute("""
+        SELECT user_id FROM attendance;""")
+        self.wait(acurs.connection)
+        results = acurs.fetchall()
+        id_list = [x[0] for x in results]
+        return id_list
 
     async def embeder(self, msg_embed):
         em = discord.Embed(
             title=self.msg_embed['title'], description=self.msg_embed['description'], color=0x008080)
         em.set_thumbnail(url=self.msg_embed['thumbnail'])
         for value in self.field_dict.values():
-            em.add_field(name=value['name'], value=value['value'], inline=True)
+            em.add_field(name=value['name'], value=value['value'])
         em.set_footer(text=self.footer['footer'])
         return em
 
@@ -91,7 +106,8 @@ class RoleSelector(commands.Cog):
                 'minecraft' : '\U000026cf',
                 'flight-sims' : '\U0001f525',
                 'vr' : 'iron_uncle:548645154454765568',
-                'zeus-op' : '\U000026a1'
+                'zeus-op' : '\U000026a1',
+                'paradox' : '\U0001f3ed'
             }
         else:
             emojis = {
@@ -103,7 +119,8 @@ class RoleSelector(commands.Cog):
                 'minecraft' : '\U000026cf',
                 'flight-sims' : '\U0001f525',
                 'vr' : 'jensen_uncle:567728565391589399',
-                'zeus-op' : '\U000026a1'
+                'zeus-op' : '\U000026a1',
+                'paradox' : '\U0001f3ed'
             }
         return emojis
 
@@ -112,8 +129,9 @@ class RoleSelector(commands.Cog):
             'title' : '**TCS Role Selector**',
             'description' : '''
             Use this tool to select optional Discord roles.
-            **DO NOT ABUSE THE BOT**
-            *Reactions are removed on occasion, but this does not affect your roles.*
+
+            **DO NOT ABUSE THE BOT!**
+            \u200B
             ''',
             'thumbnail' : 'https://s3.amazonaws.com/files.enjin.com/1015535/site_logo/2019_logo.png'
         }
@@ -121,13 +139,15 @@ class RoleSelector(commands.Cog):
             'mission_maker' : {
                 'name' : '<:{}> @mission-maker'.format(emojis['mission-maker']),
                 'value' : '''
-                Provides access to our mission making channels, which **MAY HAVE SPOILERS**.
-                __**REQUIREMENTS:**__
-                **1.** You **MUST** attend a Saturday Op before taking this role.
-                **2.** **ONLY** select this role if you plan on making missions for TCS.
-                **3.** **DO NOT** use this role to provide feedback or suggestions in the mission making channel, use **#debriefing**.
-                **4.** Understand that we make missions differently than other units.
-                **5.** Understand that this is not an easy job and you might not get it right the first time.
+                Provides access to our mission making channels, which *MAY HAVE SPOILERS*.
+                
+                __**REQUIREMENTS**__
+                **__1.)__** You **MUST** attend a Saturday Op before taking this role.
+                **__2.)__** **ONLY** select this role if you plan on making missions for TCS.
+                **__3.)__** **DO NOT** use this role to provide feedback or suggestions in the mission making channel, use **#debriefing**.
+                **__4.)__** Understand that we make missions differently than other units.
+                **__5.)__** Understand that this is not an easy job and you might not get it right the first time.
+                \u200B
                 '''
             },
             'heretic' : {
@@ -177,16 +197,23 @@ class RoleSelector(commands.Cog):
                 'name' : '{} @zeus-op'.format(emojis['zeus-op']),
                 'value' : '''
                 Allows other members to ping you to play *Impromptu Zeus Missions*.
-                __**RULES:**__
-                **1.** Don't expect someone to step-up as Zeus.
-                **2.** Zeus has final say on what's allowed in their mission.
+                
+                __**RULES**__
+                **__1.)__** Don't expect someone to step-up as Zeus.
+                **__2.)__** Zeus has final say on what's allowed in their mission.
+                \u200B
+                '''
+            },
+            'paradox' : {
+                'name' : '{} @paradox'.format(emojis['paradox']),
+                'value' : '''
+                Allows other members to ping you to play *Paradox Games*. (Currently *Hearts of Iron 4* & *Stellaris*)
                 '''
             }
         }
         self.footer = {
             'footer' : '''
-            Add reaction to recieve role.
-            Remove reaction to remove role.
+            React to toggle role on/off
             '''
         }
 
