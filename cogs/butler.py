@@ -33,6 +33,8 @@ class Butler(commands.Cog):
         channel = discord.utils.get(self.bot.get_all_channels(), name='rules')
         try:
             self.msg = await channel.fetch_message(agreement['agreement_msg']['id'])
+            text = await self.embeder(self.data())
+            await self.msg.edit(embed=text)
         except:
             await self.creator(channel)
         agreement['agreement_msg'] = {}
@@ -81,10 +83,13 @@ class Butler(commands.Cog):
     async def date_joined(self, user_id):
         d = datetime.now(timezone('US/Eastern'))
         joined = d.strftime('%Y-%m-%d')
+        guild = self.bot.get_guild(self.bot.guilds[0].id)
+        member = guild.get_member(int(user_id))
+        nickname = member.display_name
         acurs = bot.aconn.cursor()
         acurs.execute("""
-        INSERT INTO date_joined (user_id, join_date)
-        VALUES (%s, %s)""", (user_id, joined))
+        INSERT INTO date_joined (user_id, nickname, join_date)
+        VALUES (%s, %s, %s)""", (user_id, nickname, joined))
         self.wait(acurs.connection)
 
     async def creator(self, channel):
@@ -138,7 +143,7 @@ class Butler(commands.Cog):
         await member.remove_roles(role)
         fng = discord.utils.get(member.guild.roles, name='fng')
         await member.add_roles(fng)
-        await self.db_check(str(member.id))
+        await self.db_check(member.id)
         await self.join_message(member)
 
     async def decline(self, member):
@@ -146,33 +151,46 @@ class Butler(commands.Cog):
 
     def data(self):
         self.rules = {
-            'title' : 'TCS Rule Agreement',
+            'title' : '**__TCS RULE AGREEMENT__**',
             'description' : '''
             ```Accepting this agreement is MANDATORY for entry into our Discord. By clicking ACCEPT, you acknowledge that you have read and understand the below rules.```
             ''',
             'thumbnail' : 'https://s3.amazonaws.com/files.enjin.com/1015535/site_logo/2019_logo.png'
         }
         self.rule_list = {
+            'title_1' : {
+                'name' : "**__CODE OF CONDUCT__**",
+                'value' : "_ _"
+            },
             'rule_1' : {
-                'name' : "**1. DO NOT** have fun at the expense of others",
-                'value' : "*We're a community, act that way*"
+                'name' : "**1.** Do not have fun at the expense of others",
+                'value' : "*We're a community, please treat others with respect*"
             },
             'rule_2' : {
-                'name' : "**2. DO NOT** compromise the spirit of the mission",
-                'value' : """*Don't try to "break" missions to win, mission makers work hard*"""
+                'name' : "**2.** Do not compromise the spirit of the mission",
+                'value' : """*Don't try to "break" missions to win*"""
             },
             'rule_3' : {
-                'name' : "**3. DO NOT** use slurs or bigoted language",
-                'value' : "*...regardless of mission setting or context*"
+                'name' : "**3.** Do not use slurs or bigoted language",
+                'value' : """*...regardless of mission setting or context*
+                \u200B"""
+            },
+            'title_2' : {
+                'name' : "**__NEW MEMEBER REQUIREMENTS__**",
+                'value' : "_ _"
             },
             'rule_4' : {
-                'name' : "**4. DO** show up **1 HOUR** before your *__first__* mission for orientation",
-                'value' : "*Your first misson **MUST** be a Wednesday or Friday*"
+                'name' : "**1.** Your first mission must be on a Wednesday or Friday night",
+                'value' : "*These are smaller missions that will be easier to navigate on your first night*"
             },
             'rule_5' : {
-                'name' : "**5. DO** attend your *__first__* mission **45 DAYS** after joining",
-                'value' : "*Failure to attend your first mission within 45 days will result in a ban. You will need to re-apply to re-join.*"
-            }
+                'name' : "**2.** You must show up one hour before your first mission",
+                'value' : """*Orientation is necessary, regardless of your familiarity with Arma 3*"""
+            },
+            'rule_6' : {
+                'name' : "**3.** Attend your first mission 30 days after joining",
+                'value' : "*The Cooler Server is an Arma 3 unit, not just a Discord server*"
+            },
         }
 
 
