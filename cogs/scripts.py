@@ -17,7 +17,7 @@ class Deploy(commands.Cog):
         subprocess.call([str(root / name)])
 
     @commands.group()
-    async def whitelist(self, ctx, *args):
+    async def whitelist(self, ctx):
         if ctx.invoked_subcommand is None:
             await ctx.message.add_reaction('👎')
 
