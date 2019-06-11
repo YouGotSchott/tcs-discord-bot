@@ -16,5 +16,32 @@ class Deploy(commands.Cog):
         await ctx.message.delete()
         subprocess.call([str(root / name)])
 
+    @commands.group()
+    async def whitelist(self, ctx, *args):
+        if ctx.invoked_subcommand is None:
+            await ctx.message.add_reaction('👎')
+
+    @whitelist.command()
+    async def add(self, ctx, *args):
+        await self.poller('add', args[0])
+        await ctx.message.add_reaction('👍')
+
+    @whitelist.command()
+    @commands.has_any_role('admin', 'moderator', 'helper')
+    async def remove(self, ctx, *args):
+        await self.poller('remove', args[0])
+        await ctx.message.add_reaction('👍')
+
+    async def poller(self, command, username):
+        import asyncio
+        cmd = ['bash/mc-wl', command, username]
+        output = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        while output is not None:
+            retcode = output.poll()
+            if retcode is not None:
+                return
+            else:
+                await asyncio.sleep(1)
+
 def setup(bot):
     bot.add_cog(Deploy(bot))
