@@ -24,7 +24,8 @@ extensions = [
     'cogs.control_panel',
     'cogs.giveaway',
     'cogs.swifty',
-    'cogs.butler'
+    'cogs.butler',
+    'cogs.helpers'
 ]
 
 if __name__ == '__main__':
