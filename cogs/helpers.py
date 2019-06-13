@@ -11,6 +11,9 @@ class Helpers(commands.Cog):
     async def removefng(self, ctx):
         guild = self.bot.get_guild(self.bot.guilds[0].id)
         fng = discord.utils.get(guild.roles, name="fng")
+        if not ctx.message.mentions:
+            await ctx.message.add_reaction('👎')
+            return
         for user in ctx.message.mentions:
             member = guild.get_member(user.id)
             if fng not in member.roles:
