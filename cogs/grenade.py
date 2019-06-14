@@ -31,6 +31,7 @@ class Grenade(commands.Cog):
             if post:
                 await self.reactor(post)
         self.toggle = False
+        self.dive_toggle = False
 
     async def reactor(self, message):
         try:
