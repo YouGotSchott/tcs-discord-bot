@@ -3,7 +3,6 @@ from discord.ext import commands
 import aiohttp
 from config import ftp_host, ftp_user, ftp_pwd
 from pathlib import Path
-import ftplib
 
 
 class Downloader(commands.Cog):
@@ -65,6 +64,8 @@ class Downloader(commands.Cog):
             await ctx.message.add_reaction('👍')
 
     async def ftp_to_server(self, path):
+        import ftplib
+        import os
         ftp = ftplib.FTP(host=ftp_host)
         ftp.login(user=ftp_user, passwd=ftp_pwd)
         ftp.cwd(self.folder)
@@ -73,6 +74,7 @@ class Downloader(commands.Cog):
         ftp.storbinary("STOR {}".format(filename), file)
         file.close()
         ftp.quit()
+        os.remove(path)
 
 
 def setup(bot):
