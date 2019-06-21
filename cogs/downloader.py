@@ -74,5 +74,6 @@ class Downloader(commands.Cog):
         file.close()
         ftp.quit()
 
+
 def setup(bot):
     bot.add_cog(Downloader(bot))
