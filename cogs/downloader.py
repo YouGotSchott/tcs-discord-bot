@@ -60,8 +60,8 @@ class Downloader(commands.Cog):
                 if not chunk:
                     break
                 f.write(chunk)
-            await self.ftp_to_server(path)
-            await ctx.message.add_reaction('👍')
+        await self.ftp_to_server(path)
+        await ctx.message.add_reaction('👍')
 
     async def ftp_to_server(self, path):
         import ftplib
@@ -69,11 +69,10 @@ class Downloader(commands.Cog):
         ftp = ftplib.FTP(host=ftp_host)
         ftp.login(user=ftp_user, passwd=ftp_pwd)
         ftp.cwd(self.folder)
-        file = open(path,'rb')
         filename = str(self.end_file)
-        ftp.storbinary("STOR {}".format(filename), file)
-        file.close()
-        ftp.quit()
+        with open(path, 'rb') as data_file:
+            ftp.storbinary("STOR " + filename, data_file)
+            ftp.close()
         os.remove(path)
 
 
