@@ -7,6 +7,7 @@ from datetime import datetime
 import psycopg2
 import json
 import asyncio
+import collections
 
 
 class Butler(commands.Cog):
@@ -102,6 +103,7 @@ class Butler(commands.Cog):
         em = discord.Embed(
             title=self.rules['title'], description=self.rules['description'], color=0x008080)
         em.set_thumbnail(url=self.rules['thumbnail'])
+        self.rule_list = collections.OrderedDict()
         for value in self.rule_list.values():
             em.add_field(name=value['name'], value=value['value'])
         em.set_footer(text="Accept: \U00002705 | Decline: \U0001f6ab")

@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 from pathlib import Path
 import json
+import collections
 
 
 class ControlPanel(commands.Cog):
@@ -55,6 +56,8 @@ class ControlPanel(commands.Cog):
             }
         }
         panel = await self.opener()
+        server = collections.OrderedDict()
+        self.emojis = collections.OrderedDict()
         if not panel.values():
             for key, value in server.items():
                 print("Control panel message hasn't been created yet.")

@@ -4,6 +4,7 @@ from pathlib import Path
 from config import bot
 import json
 import psycopg2
+import collections
 
 
 class RoleSelector(commands.Cog):
@@ -47,6 +48,7 @@ class RoleSelector(commands.Cog):
         messages['role_message'] = {}
         messages['role_message']['id'] = self.msg.id
         await self.closer(messages)
+        emojis = collections.OrderedDict()
         for emoji in emojis.values():
             await self.msg.add_reaction(emoji=emoji)
 
@@ -90,6 +92,7 @@ class RoleSelector(commands.Cog):
         em = discord.Embed(
             title=self.msg_embed['title'], description=self.msg_embed['description'], color=0x008080)
         em.set_thumbnail(url=self.msg_embed['thumbnail'])
+        self.field_dict = collections.OrderedDict()
         for value in self.field_dict.values():
             em.add_field(name=value['name'], value=value['value'])
         em.set_footer(text=self.footer['footer'])
