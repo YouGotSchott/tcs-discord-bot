@@ -108,7 +108,8 @@ class RoleSelector(commands.Cog):
                 ('flight-sims', '\U0001f525'),
                 ('vr', 'iron_uncle:548645154454765568'),
                 ('zeus-op', '\U000026a1'),
-                ('paradox', '\U0001f3ed')
+                ('4x', '\U0001f3ed'),
+                ('rts', 'smoothbrain:592115163390410783')
             ])
         else:
             emojis = OrderedDict([
@@ -121,7 +122,8 @@ class RoleSelector(commands.Cog):
                 ('flight-sims', '\U0001f525'),
                 ('vr', 'jensen_uncle:567728565391589399'),
                 ('zeus-op', '\U000026a1'),
-                ('paradox', '\U0001f3ed')
+                ('4x', '\U0001f3ed'),
+                ('rts', 'fast_uncle:567728565525807104')
             ])
         return emojis
 
@@ -205,13 +207,28 @@ class RoleSelector(commands.Cog):
                 \u200B
                 ''')])
             ),
-            ('paradox', OrderedDict([
-                ('name', '{} @paradox'.format(emojis['paradox'])),
+            ('4x', OrderedDict([
+                ('name', '{} @4x'.format(emojis['4x'])),
                 ('value', '''
-                Allows other members to ping you to play *Paradox Games*. (Currently *Hearts of Iron 4* & *Stellaris*)
+                Allows other members to ping you to play *4X Games*.
+                
+                __Active Games:__
+                *Hearts of Iron 4*
+                *Stellaris*
                 ''')])
-            )
-        ])
+            ),
+            ('rts', OrderedDict([
+                ('name', '<:{}> @rts'.format(emojis['rts'])),
+                ('value', '''
+                Allows other members to ping you to play *RTS Games*.
+
+                __Active Games:__
+                *Wargame: Red Dragon*
+                *Wargame: War in the East*
+                *Men of War: Assault Squad 2*
+                *StarCraft 2*
+                ''')])
+        )])
         self.footer = OrderedDict([
             ('footer', '''
             React to toggle role on/off
