@@ -130,109 +130,79 @@ class RoleSelector(commands.Cog):
     def data(self, emojis):
         self.msg_embed = OrderedDict([
             ('title', '**TCS Role Selector**'),
-            ('description', '''
-            Use this tool to select optional Discord roles.
-
-            **DO NOT ABUSE THE BOT!**
-            \u200B
-            '''),
+            ('description', '''Use this tool to select optional Discord roles.\n\n'''
+            '''**DO NOT ABUSE THE BOT!**\n'''
+            '''\u200B'''),
             ('thumbnail', 'https://s3.amazonaws.com/files.enjin.com/1015535/site_logo/2019_logo.png')
         ])
         self.field_dict = OrderedDict([
             ('mission_maker', OrderedDict([
                 ('name', '<:{}> @mission-maker'.format(emojis['mission-maker'])),
-                ('value', '''
-                Provides access to our mission making channels, which *MAY HAVE SPOILERS*.
-                
-                __**REQUIREMENTS**__
-                **__1.)__** You **MUST** attend a Saturday Op before taking this role.
-                **__2.)__** **ONLY** select this role if you plan on making missions for TCS.
-                **__3.)__** **DO NOT** use this role to provide feedback or suggestions in the mission making channel, use **#debriefing**.
-                **__4.)__** Understand that we make missions differently than other units.
-                **__5.)__** Understand that this is not an easy job and you might not get it right the first time.
-                \u200B
-                ''')])
+                ('value', '''Provides access to our mission making channels, which *MAY HAVE SPOILERS*.\n\n'''
+                '''__**REQUIREMENTS**__\n'''
+                '''**__1.)__** You **MUST** attend a Saturday Op before taking this role.\n'''
+                '''**__2.)__** **ONLY** select this role if you plan on making missions for TCS.\n'''
+                '''**__3.)__** **DO NOT** use this role to provide feedback or suggestions in the mission making channel, use **#debriefing**.\n'''
+                '''**__4.)__** Understand that we make missions differently than other units.\n'''
+                '''**__5.)__** Understand that this is not an easy job and you might not get it right the first time.\n'''
+                '''\u200B''')])
             ),
             ('heretic', OrderedDict([
                 ('name', '{} @heretic'.format(emojis['heretic'])),
-                ('value', '''
-                Provides access to the **#heresy** channel.
-                *A place for Warhammer 40K discussion and shitposting.*
-                ''')])
+                ('value', '''Provides access to the **#heresy** channel.\n'''
+                '''*A place for Warhammer 40K discussion and shitposting.*''')])
             ),
             ('liberation', OrderedDict([
                 ('name', '<:{}> @liberation'.format(emojis['liberation'])),
-                ('value', '''
-                Allows other members to ping you to play *Arma 3 Liberation* on our server.
-                ''')])
+                ('value', '''Allows other members to ping you to play *Arma 3 Liberation* on our server.''')])
             ),
             ('r6siege', OrderedDict([
                 ('name', '{} @r6siege'.format(emojis['r6siege'])),
-                ('value', '''
-                Allows other members to ping you to play *Rainbow Six Siege*.
-                ''')])
+                ('value', '''Allows other members to ping you to play *Rainbow Six Siege*.''')])
             ),
             ('ricefields', OrderedDict([
                 ('name', '<:{}> @ricefields'.format(emojis['ricefields'])),
-                ('value', '''
-                Allows other members to ping you to play *Rising Storm 2: Vietnam*.
-                ''')])
+                ('value', '''Allows other members to ping you to play *Rising Storm 2: Vietnam*.''')])
             ),
             ('minecraft', OrderedDict([
                 ('name', '{} @minecraft'.format(emojis['minecraft'])),
-                ('value', '''
-                Allows other members to ping you to play *Minecraft* on our server.
-                ''')])
+                ('value', '''Allows other members to ping you to play *Minecraft* on our server.''')])
             ),
             ('flight_sims', OrderedDict([
                 ('name', '{} @flight-sims'.format(emojis['flight-sims'])),
-                ('value', '''
-                Allows other members to ping you to play *DCS* or *IL2*.
-                ''')])
+                ('value', '''Allows other members to ping you to play *DCS* or *IL2*.''')])
             ),
             ('vr', OrderedDict([
                 ('name', '<:{}> @vr'.format(emojis['vr'])),
-                ('value', '''
-                Allows other members to ping you to play any *Virtual Reality Games*.
-                ''')])
+                ('value', '''Allows other members to ping you to play any *Virtual Reality Games*.''')])
             ),
             ('zeus-op', OrderedDict([
                 ('name', '{} @zeus-op'.format(emojis['zeus-op'])),
-                ('value', '''
-                Allows other members to ping you to play *Impromptu Zeus Missions*.
-                
-                __**RULES**__
-                **__1.)__** Don't expect someone to step-up as Zeus.
-                **__2.)__** Zeus has final say on what's allowed in their mission.
-                \u200B
-                ''')])
+                ('value', '''Allows other members to ping you to play *Impromptu Zeus Missions*.\n\n'''
+                '''__**RULES**__\n'''
+                '''**__1.)__** Don't expect someone to step-up as Zeus.\n'''
+                '''**__2.)__** Zeus has final say on what's allowed in their mission.\n'''
+                '''\u200B''')])
             ),
             ('4x', OrderedDict([
                 ('name', '{} @4x'.format(emojis['4x'])),
-                ('value', '''
-                Allows other members to ping you to play *4X Games*.
-                
-                __Active Games:__
-                *Hearts of Iron 4*
-                *Stellaris*
-                ''')])
+                ('value', '''Allows other members to ping you to play *4X Games*.\n\n'''
+                '''__**Active Games**__\n'''
+                '''*> Hearts of Iron 4*\n'''
+                '''*> Stellaris*\n'''
+                '''\u200B''')])
             ),
             ('rts', OrderedDict([
                 ('name', '<:{}> @rts'.format(emojis['rts'])),
-                ('value', '''
-                Allows other members to ping you to play *RTS Games*.
-
-                __Active Games:__
-                *Wargame: Red Dragon*
-                *Wargame: War in the East*
-                *Men of War: Assault Squad 2*
-                *StarCraft 2*
-                ''')])
+                ('value', '''Allows other members to ping you to play *RTS Games*.\n\n'''
+                '''__**Active Games**__\n'''
+                '''*> Wargame: Red Dragon*\n'''
+                '''*> Wargame: War in the East*\n'''
+                '''*> Men of War: Assault Squad 2*\n'''
+                '''*> StarCraft 2*''')])
         )])
         self.footer = OrderedDict([
-            ('footer', '''
-            React to toggle role on/off
-            ''')
+            ('footer', '''React to toggle role on/off''')
         ])
 
 def setup(bot):
