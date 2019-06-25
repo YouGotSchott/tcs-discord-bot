@@ -34,25 +34,25 @@ class ControlPanel(commands.Cog):
             ('\U00002733', 'hc_restart')
         ])
         server = OrderedDict([
-            'instructions', OrderedDict([
+            ('instructions', OrderedDict([
                 ('title', 'INSTRUCTIONS'),
                 ('url', 'https://s3.amazonaws.com/files.enjin.com/1015535/site_logo/2019_logo.png'),
-                ('color', 0x008080)]
+                ('color', 0x008080)])
             ),
-            'arma', OrderedDict([
+            ('arma', OrderedDict([
                 ('title', 'ARMA 3 SERVER'),
                 ('url', 'https://s3.amazonaws.com/files.enjin.com/1015535/site_logo/main_sil.png'),
-                ('color', 0xFF0000)]
+                ('color', 0xFF0000)])
             ),
-            'ww2', OrderedDict([
+            ('ww2', OrderedDict([
                 ('title', 'ARMA 3 WW2 SERVER'),
                 ('url', 'https://s3.amazonaws.com/files.enjin.com/1015535/site_logo/ww2_sil.png'),
-                ('color', 0xFF5733)]
+                ('color', 0xFF5733)])
             ),
-            'minecraft', OrderedDict([
+            ('minecraft', OrderedDict([
                 ('title', 'MINECRAFT'),
                 ('url', 'https://s3.amazonaws.com/files.enjin.com/1015535/site_logo/2019_logo.png'),
-                ('color', 0xF4D03F)]
+                ('color', 0xF4D03F)])
             )
         ])
         panel = await self.opener()
