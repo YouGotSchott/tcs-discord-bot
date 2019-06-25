@@ -42,6 +42,11 @@ class Attendance(commands.Cog):
     async def role(self, ctx, *args):
         if self.toggle == False:
             return
+        guild = self.bot.get_guild(self.bot.guilds[0].id)
+        fng = discord.utils.get(guild.roles, name="fng")
+        if fng in ctx.message.author.roles:
+            await ctx.message.add_reaction('👎')
+            return
         uid = ctx.message.author.id
         if uid in self.uid_list:
             await ctx.message.add_reaction('👎')
