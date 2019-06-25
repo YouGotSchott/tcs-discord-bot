@@ -1,8 +1,8 @@
 import discord
 from discord.ext import commands
 from pathlib import Path
+from collections import OrderedDict
 import json
-import collections
 
 
 class ControlPanel(commands.Cog):
@@ -25,39 +25,37 @@ class ControlPanel(commands.Cog):
     async def msg_setup(self):
         panel = await self.opener()
         channel = discord.utils.get(self.bot.get_all_channels(), name='control-panel')
-        self.emojis = {
-            '\U000025b6' : 'start',
-            '\U000023f9' : 'stop',
-            '\U0001f501' : 'restart',
-            '\U00002705' : 'hc_start',
-            '\U0000274e' : 'hc_stop',
-            '\U00002733' : 'hc_restart'
-        }
-        server = {
-            'instructions' : {
-                'title' : 'INSTRUCTIONS',
-                'url' : 'https://s3.amazonaws.com/files.enjin.com/1015535/site_logo/2019_logo.png',
-                'color' : 0x008080
-            },
-            'arma' : {
-                'title' : 'ARMA 3 SERVER',
-                'url' : 'https://s3.amazonaws.com/files.enjin.com/1015535/site_logo/main_sil.png',
-                'color' : 0xFF0000
-            },
-            'ww2' : {
-                'title' : 'ARMA 3 WW2 SERVER',
-                'url' : 'https://s3.amazonaws.com/files.enjin.com/1015535/site_logo/ww2_sil.png',
-                'color' : 0xFF5733
-            },
-            'minecraft' : {
-                'title' : 'MINECRAFT',
-                'url' : 'https://s3.amazonaws.com/files.enjin.com/1015535/site_logo/2019_logo.png',
-                'color' : 0xF4D03F
-            }
-        }
+        self.emojis = OrderedDict([
+            ('\U000025b6', 'start'),
+            ('\U000023f9', 'stop'),
+            ('\U0001f501', 'restart'),
+            ('\U00002705', 'hc_start'),
+            ('\U0000274e', 'hc_stop'),
+            ('\U00002733', 'hc_restart')
+        ])
+        server = OrderedDict([
+            'instructions', OrderedDict([
+                ('title', 'INSTRUCTIONS'),
+                ('url', 'https://s3.amazonaws.com/files.enjin.com/1015535/site_logo/2019_logo.png'),
+                ('color', 0x008080)]
+            ),
+            'arma', OrderedDict([
+                ('title', 'ARMA 3 SERVER'),
+                ('url', 'https://s3.amazonaws.com/files.enjin.com/1015535/site_logo/main_sil.png'),
+                ('color', 0xFF0000)]
+            ),
+            'ww2', OrderedDict([
+                ('title', 'ARMA 3 WW2 SERVER'),
+                ('url', 'https://s3.amazonaws.com/files.enjin.com/1015535/site_logo/ww2_sil.png'),
+                ('color', 0xFF5733)]
+            ),
+            'minecraft', OrderedDict([
+                ('title', 'MINECRAFT'),
+                ('url', 'https://s3.amazonaws.com/files.enjin.com/1015535/site_logo/2019_logo.png'),
+                ('color', 0xF4D03F)]
+            )
+        ])
         panel = await self.opener()
-        server = collections.OrderedDict()
-        self.emojis = collections.OrderedDict()
         if not panel.values():
             for key, value in server.items():
                 print("Control panel message hasn't been created yet.")

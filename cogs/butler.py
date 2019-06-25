@@ -4,10 +4,10 @@ from pathlib import Path
 from config import bot
 from pytz import timezone
 from datetime import datetime
+from collections import OrderedDict
 import psycopg2
 import json
 import asyncio
-import collections
 
 
 class Butler(commands.Cog):
@@ -103,7 +103,6 @@ class Butler(commands.Cog):
         em = discord.Embed(
             title=self.rules['title'], description=self.rules['description'], color=0x008080)
         em.set_thumbnail(url=self.rules['thumbnail'])
-        self.rule_list = collections.OrderedDict()
         for value in self.rule_list.values():
             em.add_field(name=value['name'], value=value['value'])
         em.set_footer(text="Accept: \U00002705 | Decline: \U0001f6ab")
@@ -152,48 +151,48 @@ class Butler(commands.Cog):
         await member.kick(reason="Declined rule agreement")
 
     def data(self):
-        self.rules = {
-            'title' : '**__TCS RULE AGREEMENT__**',
-            'description' : '''
+        self.rules = OrderedDict([
+            ('title', '**__TCS RULE AGREEMENT__**'),
+            ('description', '''
             ```Accepting this agreement is MANDATORY for entry into our Discord. By clicking ACCEPT, you acknowledge that you have read and understand the below rules.```
-            ''',
-            'thumbnail' : 'https://s3.amazonaws.com/files.enjin.com/1015535/site_logo/2019_logo.png'
-        }
-        self.rule_list = {
-            'title_1' : {
-                'name' : "**__CODE OF CONDUCT__**",
-                'value' : "_ _"
-            },
-            'rule_1' : {
-                'name' : "**1.** Do not have fun at the expense of others",
-                'value' : "*We're a community, please treat others with respect*"
-            },
-            'rule_2' : {
-                'name' : "**2.** Do not compromise the spirit of the mission",
-                'value' : """*Don't try to "break" missions to win*"""
-            },
-            'rule_3' : {
-                'name' : "**3.** Do not use slurs or bigoted language",
-                'value' : """*...regardless of mission setting or context*
-                \u200B"""
-            },
-            'title_2' : {
-                'name' : "**__NEW MEMEBER REQUIREMENTS__**",
-                'value' : "_ _"
-            },
-            'rule_4' : {
-                'name' : "**1.** Your first mission must be on a Wednesday or Friday night",
-                'value' : "*These are smaller missions that will be easier to navigate on your first night*"
-            },
-            'rule_5' : {
-                'name' : "**2.** You must show up one hour before your first mission",
-                'value' : """*Orientation is necessary, regardless of your familiarity with Arma 3*"""
-            },
-            'rule_6' : {
-                'name' : "**3.** Attend your first mission 30 days after joining",
-                'value' : "*The Cooler Server is an Arma 3 unit, not just a Discord server*"
-            },
-        }
+            '''),
+            ('thumbnail', 'https://s3.amazonaws.com/files.enjin.com/1015535/site_logo/2019_logo.png'
+        )])
+        self.rule_list = OrderedDict([
+            ('title_1', OrderedDict([
+                ('name', "**__CODE OF CONDUCT__**"),
+                ('value', "_ _")])
+            ),
+            ('rule_1', OrderedDict([
+                ('name', "**1.** Do not have fun at the expense of others"),
+                ('value', "*We're a community, please treat others with respect*")])
+            ),
+            ('rule_2', OrderedDict([
+                ('name', "**2.** Do not compromise the spirit of the mission"),
+                ('value', """*Don't try to "break" missions to win*""")])
+            ),
+            ('rule_3', OrderedDict([
+                ('name', "**3.** Do not use slurs or bigoted language"),
+                ('value', """*...regardless of mission setting or context*
+                \u200B""")])
+            ),
+            ('title_2', OrderedDict([
+                ('name', "**__NEW MEMEBER REQUIREMENTS__**"),
+                ('value', "_ _")])
+            ),
+            ('rule_4', OrderedDict([
+                ('name', "**1.** Your first mission must be on a Wednesday or Friday night"),
+                ('value', "*These are smaller missions that will be easier to navigate on your first night*")])
+            ),
+            ('rule_5', OrderedDict([
+                ('name', "**2.** You must show up one hour before your first mission"),
+                ('value', """*Orientation is necessary, regardless of your familiarity with Arma 3*""")])
+            ),
+            ('rule_6', OrderedDict([
+                ('name', "**3.** Attend your first mission 30 days after joining"),
+                ('value', "*The Cooler Server is an Arma 3 unit, not just a Discord server*")])
+            ),
+        ])
 
 
 def setup(bot):
