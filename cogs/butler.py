@@ -177,7 +177,7 @@ class Butler(commands.Cog):
                 \u200B""")])
             ),
             ('title_2', OrderedDict([
-                ('name', "**__NEW MEMEBER REQUIREMENTS__**"),
+                ('name', "**__NEW MEMBER REQUIREMENTS__**"),
                 ('value', "_ _")])
             ),
             ('rule_4', OrderedDict([
