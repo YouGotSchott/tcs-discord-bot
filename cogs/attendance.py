@@ -103,6 +103,10 @@ class Attendance(commands.Cog):
     @commands.command()
     async def joined(self, ctx):
         user_id = ctx.author.id
+        if user_id == 104373590069084160:
+            await ctx.message.add_reaction('👎')
+            await ctx.send("No, spell it right.")
+            return
         acurs = bot.aconn.cursor()
         acurs.execute("""
         SELECT join_date FROM date_joined WHERE user_id = %s;""", (user_id,))
