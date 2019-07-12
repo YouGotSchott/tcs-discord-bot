@@ -26,6 +26,7 @@ class Attendance(commands.Cog):
     @commands.command()
     @commands.has_any_role('admin', 'moderator')
     async def startsignup(self, ctx):
+        self.bot.fake_toggle = False
         self.toggle = True
         self.uid_list = []
         await asyncio.sleep(5400)
@@ -40,6 +41,8 @@ class Attendance(commands.Cog):
 
     @commands.command()
     async def role(self, ctx, *args):
+        if self.bot.fake_toggle == True:
+            await self.fake_signup(ctx)
         if self.toggle == False:
             return
         guild = self.bot.get_guild(self.bot.guilds[0].id)
@@ -99,6 +102,13 @@ class Attendance(commands.Cog):
         self.wait(acurs.connection)
         self.uid_list.remove(user_id)
         await ctx.message.add_reaction('👍')
+
+    async def fake_signup(self, ctx):
+        user = ctx.author
+        role = discord.utils.get(user.guild.roles, name='silenced')
+        await user.add_roles(role)
+        await asyncio.sleep(300)
+        await user.remove_roles(role)
 
     @commands.command()
     async def joined(self, ctx):
