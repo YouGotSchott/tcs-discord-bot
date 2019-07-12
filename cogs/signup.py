@@ -9,7 +9,6 @@ class Signup(commands.Cog):
 
     @commands.command()
     async def startsingup(self, ctx):
-        # Creates a fake !startsignup command
         self.bot.fake_toggle = True
         guild = self.bot.get_guild(self.bot.guilds[0].id)
         evreyone = discord.utils.get(guild.roles, name="evreyone")
