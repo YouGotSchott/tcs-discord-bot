@@ -107,7 +107,7 @@ class Attendance(commands.Cog):
         user = ctx.author
         role = discord.utils.get(user.guild.roles, name='silenced')
         await user.add_roles(role)
-        await asyncio.sleep(300)
+        await asyncio.sleep(30)
         await user.remove_roles(role)
 
     @commands.command()
