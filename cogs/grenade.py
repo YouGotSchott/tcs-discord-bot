@@ -24,7 +24,7 @@ class Grenade(commands.Cog):
         zone = await ctx.channel.history(limit=self.blast).flatten()
         count_msg = await ctx.send('\U0001f4a3 \U0001f55b')
         await self.countdown(count_msg)
-        if self.dive_toggle:
+        if self.dive_messages:
             for msg in self.dive_messages:
                 await msg.add_reaction('\U0001f5de')
             self.toggle = False
