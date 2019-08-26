@@ -18,10 +18,11 @@ class Grenade(commands.Cog):
         self.bot_member = ctx.me
         self.blast = randint(4, 10)
         self.channel = ctx.channel
-        zone = await ctx.channel.history(limit=self.blast).flatten()
-        count_msg = await ctx.send('\U0001f4a3 \U0001f55b')
         self.post_messages = []
         self.toggle = True
+        self.dive_toggle = True
+        zone = await ctx.channel.history(limit=self.blast).flatten()
+        count_msg = await ctx.send('\U0001f4a3 \U0001f55b')
         await self.countdown(count_msg)
         if self.dive_toggle:
             for msg in self.dive_messages:
@@ -83,8 +84,8 @@ class Grenade(commands.Cog):
 
     @commands.command()
     async def dive(self, ctx):
-        self.dive_toggle = True
-        self.dive_messages.append(ctx.message)
+        if self.dive_toggle:
+            self.dive_messages.append(ctx.message)
 
 
 def setup(bot):
