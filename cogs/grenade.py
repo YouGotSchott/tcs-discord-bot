@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 from random import randint
 import asyncio
+import itertools
 
 
 class Grenade(commands.Cog):
@@ -9,11 +10,12 @@ class Grenade(commands.Cog):
         self.bot = bot
         self.toggle = False
         self.dive_toggle = False
+        self.dive_messages = []
 
     @commands.command()
     async def grenade(self, ctx):
-        import itertools
         await ctx.message.delete()
+        self.bot_member = ctx.me
         self.blast = randint(4, 10)
         self.channel = ctx.channel
         zone = await ctx.channel.history(limit=self.blast).flatten()
@@ -22,16 +24,38 @@ class Grenade(commands.Cog):
         self.toggle = True
         await self.countdown(count_msg)
         if self.dive_toggle:
-            await self.dive_message.add_reaction('\U0001f5de')
+            for msg in self.dive_messages:
+                await msg.add_reaction('\U0001f5de')
+            self.toggle = False
+            self.dive_toggle = False
+            self.dive_messages.clear()
             return
         for pre, post in itertools.zip_longest(zone, self.post_messages):
             if post == count_msg:
+                pass
+            if pre == count_msg:
                 pass
             await self.reactor(pre)
             if post:
                 await self.reactor(post)
         self.toggle = False
         self.dive_toggle = False
+        await asyncio.sleep(10)
+        await self.clear(zone, self.post_messages)
+
+    async def clear(self, pre, post):
+        import random
+        damage = []
+        damage.extend(pre)
+        if post:
+            damage.extend(post)
+        random.shuffle(damage)
+        for msg in damage:
+            await asyncio.sleep(1)
+            try:
+                await msg.remove_reaction('\U0001f5de', self.bot_member)
+            except:
+                pass
 
     async def reactor(self, message):
         try:
@@ -60,7 +84,7 @@ class Grenade(commands.Cog):
     @commands.command()
     async def dive(self, ctx):
         self.dive_toggle = True
-        self.dive_message = ctx.message
+        self.dive_messages.append(ctx.message)
 
 
 def setup(bot):
