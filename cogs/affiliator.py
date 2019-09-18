@@ -13,15 +13,19 @@ class Affiliator(commands.Cog):
     async def on_message(self, message):
         msg = message.content.lower()
         if 'www.amazon.com' in msg:
+            print(msg)
             try:
                 product_code = await self.dp_check(msg)
             except:
                 product_code = await self.prod_check(msg)
-            url = "http://www.amazon.com/exec/obidos/ASIN/{}/thecoolerse0c-20".format(product_code)
+            print(product_code)
+            url = "https://www.amazon.com/exec/obidos/ASIN/{}/thecoolerse0c-20".format(product_code)
+            print(url)
             try:
                 em = await self.title_grab(url)
                 await message.channel.send(embed=em)
-            except:
+            except Exception as e:
+                print(e)
                 return
         else:
             return
@@ -31,7 +35,7 @@ class Affiliator(commands.Cog):
             product = re.search('/dp/(.*)/', msg)
             product_code = product.group(1).upper()
         except:
-            product = msg.split('/dp/', 1)[1]
+            product = msg.split('/dp/', 1)[-1]
             product_code = product.upper()
         return product_code
 
@@ -40,7 +44,7 @@ class Affiliator(commands.Cog):
             product = re.search('/product/(.*)/', msg)
             product_code = product.group(1).upper()
         except:
-            product = msg.split('/product/', 1)[1]
+            product = msg.split('/product/', 1)[-1]
             product_code = product.upper()
         return product_code
     
@@ -59,6 +63,7 @@ class Affiliator(commands.Cog):
         tree = html.fromstring(source)
         xpath = '//span[@id="productTitle"]//text()'
         raw_title = ast.literal_eval(str(tree.xpath(xpath)))
+        print(raw_title)
         title = raw_title[0].strip()
         return await self.embeder(title, url)
     
