@@ -41,22 +41,6 @@ class Grenade(commands.Cog):
                 await self.reactor(post)
         self.toggle = False
         self.dive_toggle = False
-        await asyncio.sleep(10)
-        await self.clear(zone, self.post_messages)
-
-    async def clear(self, pre, post):
-        import random
-        damage = []
-        damage.extend(pre)
-        if post:
-            damage.extend(post)
-        random.shuffle(damage)
-        for msg in damage:
-            await asyncio.sleep(1)
-            try:
-                await msg.remove_reaction('\U0001f5de', self.bot_member)
-            except:
-                pass
 
     async def reactor(self, message):
         try:
