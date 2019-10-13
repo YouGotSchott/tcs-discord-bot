@@ -109,7 +109,8 @@ class RoleSelector(commands.Cog):
                 ('vr', 'iron_uncle:548645154454765568'),
                 ('zeus-op', '\U000026a1'),
                 ('4x', '\U0001f3ed'),
-                ('rts', 'smoothbrain:592115163390410783')
+                ('rts', 'smoothbrain:592115163390410783'),
+                ('destiny-2', '\U0001f47e')
             ])
         else:
             emojis = OrderedDict([
@@ -123,7 +124,8 @@ class RoleSelector(commands.Cog):
                 ('vr', 'jensen_uncle:567728565391589399'),
                 ('zeus-op', '\U000026a1'),
                 ('4x', '\U0001f3ed'),
-                ('rts', 'fast_uncle:567728565525807104')
+                ('rts', 'fast_uncle:567728565525807104'),
+                ('destiny-2', '\U0001f47e')
             ])
         return emojis
 
@@ -199,7 +201,13 @@ class RoleSelector(commands.Cog):
                 '''*> Wargame: Red Dragon*\n'''
                 '''*> Wargame: War in the East*\n'''
                 '''*> Men of War: Assault Squad 2*\n'''
-                '''*> StarCraft 2*''')])
+                '''*> StarCraft 2*\n'''
+                '''\u200B''')])
+            ),
+            ('destiny-2', OrderedDict([
+                ('name', '{} @destiny-2'.format(emojis['destiny-2'])),
+                ('value', '''Allows other members to ping you to play *Destiny 2*.\n\n'''
+            )])
         )])
         self.footer = OrderedDict([
             ('footer', '''React to toggle role on/off''')
