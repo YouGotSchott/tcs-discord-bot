@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 from pathlib import Path
-from config import bot
+from config import bot, wait
 from collections import OrderedDict
 import json
 import psycopg2
@@ -11,19 +11,6 @@ class RoleSelector(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.messages_path = str(Path('cogs/data/messages.json'))
-
-    def wait(self, conn):
-        import select
-        while True:
-            state = conn.poll()
-            if state == psycopg2.extensions.POLL_OK:
-                break
-            elif state == psycopg2.extensions.POLL_WRITE:
-                select.select([], [conn.fileno()], [])
-            elif state == psycopg2.extensions.POLL_READ:
-                select.select([conn.fileno()], [], [])
-            else:
-                raise psycopg2.OperationalError("poll() returned %s" % state)
 
     async def opener(self):
         with open(self.messages_path, 'r') as f:
@@ -82,7 +69,7 @@ class RoleSelector(commands.Cog):
         acurs = bot.aconn.cursor()
         acurs.execute("""
         SELECT user_id FROM attendance;""")
-        self.wait(acurs.connection)
+        wait(acurs.connection)
         results = acurs.fetchall()
         id_list = [x[0] for x in results]
         return id_list

@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 from pathlib import Path
-from config import bot
+from config import bot, wait
 from pytz import timezone
 from datetime import datetime
 from collections import OrderedDict
@@ -76,7 +76,7 @@ class Butler(commands.Cog):
         acurs = bot.aconn.cursor()
         acurs.execute("""
         SELECT join_date FROM date_joined WHERE user_id = %s;""", (user_id,))
-        self.wait(acurs.connection)
+        wait(acurs.connection)
         if acurs.fetchone():
             return
         await self.date_joined(user_id)
@@ -91,7 +91,7 @@ class Butler(commands.Cog):
         acurs.execute("""
         INSERT INTO date_joined (user_id, nickname, join_date)
         VALUES (%s, %s, %s)""", (user_id, nickname, joined))
-        self.wait(acurs.connection)
+        wait(acurs.connection)
 
     async def creator(self, channel):
             text = await self.embeder(self.data())
