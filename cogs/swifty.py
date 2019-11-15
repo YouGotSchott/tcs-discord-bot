@@ -30,7 +30,20 @@ class Swifty(commands.Cog):
             em.set_footer(text="Check pinned messages in #ww2-repo for additional infomation")
         await ctx.send(embed=em)
 
-
+    @swifty.command()
+    async def uninstall(self, ctx):
+        guide = {
+            'description' : "```Swifty requires extra steps to uninstall correctly, please complete all steps before re-installing.```",
+            'step 1' : "Uninstall Swifty like any other program with *Programs and Features* in Windows.",
+            'step 2' : """Delete the Swifty Folders from `%appdata%` and `%localappdata%`. *(You can copy and paste these values into "Run" `⊞Win + R` to find them quicker.*)""",
+            'step 3' : "[Re-download Swifty](https://s3.amazonaws.com/files.enjin.com/1015535/Swifty_2.2.1_Setup.zip) and re-install."
+        }
+        em = discord.Embed(
+            title="How to Uninstall Swifty", description=guide['description'], color=0x29b585)
+        em.add_field(name="**STEP 1**", value=guide['step 1'], inline=True)
+        em.add_field(name="**STEP 2**", value=guide['step 2'], inline=True)
+        em.add_field(name="**STEP 3**", value=guide['step 3'], inline=True)
+        await ctx.send(embed=em)
 
 
 def setup(bot):
