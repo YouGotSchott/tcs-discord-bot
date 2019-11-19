@@ -49,7 +49,7 @@ class Swifty(commands.Cog):
     async def shortcut(self, ctx):
         guide = {
             'description' : "```Swifty may not create a shortcut on your desktop, and while some people use the downloaded *Installation File* as a way to open Swifty, it is not recommended and could cause unintentional side-effects.```",
-            'step 1' : """Find the "Swifty.exe" at `%localappdata%\\app\\2.2.1\\` *(You can copy and paste this directory into "Run" `⊞Win + R` to find it quicker.*).""",
+            'step 1' : """Find the "Swifty.exe" at `%localappdata%\\Swifty\\app-2.2.1\\` *(You can copy and paste this directory into "Run" `⊞Win + R` to find it quicker.*).""",
             'step 2' : """Right-click "Swifty.exe" and choose "Send to Desktop"."""
         }
         em = discord.Embed(
