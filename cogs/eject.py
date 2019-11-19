@@ -40,9 +40,13 @@ class Eject(commands.Cog):
         await self.closer(roles)
 
     async def invite_maker(self, message):
+        from discord.errors import Forbidden
         invite = await message.channel.create_invite(max_age=24, max_uses=1)
         dm = await message.author.create_dm()
-        await dm.send(invite)
+        try:
+            await dm.send(invite)
+        except Forbidden:
+            print("{} has the bot blocked!".format(message.author.display_name))
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
