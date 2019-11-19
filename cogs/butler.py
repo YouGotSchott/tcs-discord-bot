@@ -104,7 +104,7 @@ class Butler(commands.Cog):
             title=self.rules['title'], description=self.rules['description'], color=0x008080)
         em.set_thumbnail(url=self.rules['thumbnail'])
         for value in self.rule_list.values():
-            em.add_field(name=value['name'], value=value['value'])
+            em.add_field(name=value['name'], value=value['value'], inline=False)
         em.set_footer(text="Accept: \U00002705 | Decline: \U0001f6ab")
         return em
 
