@@ -28,7 +28,8 @@ extensions = [
     'cogs.helpers',
     'cogs.grenade',
     'cogs.signup',
-    'cogs.cleanup'
+    'cogs.cleanup',
+    'cogs.countdown'
 ]
 
 if __name__ == '__main__':
