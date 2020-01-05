@@ -8,11 +8,7 @@ class HowTall(commands.Cog):
 
     @commands.command()
     async def howtall(self, ctx):
-        still = [92362557439893504]
-        if ctx.message.author.id in still:
-            await ctx.send("__STILL__ not enough.")
-            return
-        await ctx.send("Not enough.")
+        await ctx.send("https://tenor.com/view/beating-horse-south-dead-park-gif-3899971")
 
 
 def setup(bot):
