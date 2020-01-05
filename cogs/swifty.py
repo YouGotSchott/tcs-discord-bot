@@ -16,7 +16,7 @@ class Swifty(commands.Cog):
         await self.embeder(ctx, "main")
 
     @swifty.command()
-    async def ww2(self, ctx):
+    async def unsung(self, ctx):
         await self.embeder(ctx, "unsung")
 
     async def embeder(self, ctx, repo):
