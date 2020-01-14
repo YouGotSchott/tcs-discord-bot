@@ -10,16 +10,20 @@ class Downloader(commands.Cog):
         self.bot = bot
         self.cache = Path('cogs/data/pbo_cache/')
 
-    @commands.command()
+    @commands.group()
     @commands.has_any_role('upload', 'admin', 'moderator')
     async def upload(self, ctx):
+        if ctx.invoked_subcommand is None:
+            await ctx.message.add_reaction('👎')
+
+    @upload.command()
+    async def main(self, ctx):
         self.folder = 'main_mpmissions'
         await self.downloader(ctx)
 
-    @commands.command()
-    @commands.has_any_role('upload', 'admin', 'moderator')
-    async def ww2upload(self, ctx):
-        self.folder = 'ww2_mpmissions'
+    @upload.command()
+    async def unsung(self, ctx):
+        self.folder = 'unsung_mpmissions'
         await self.downloader(ctx)
 
     async def downloader(self, ctx):
