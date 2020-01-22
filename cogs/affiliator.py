@@ -15,9 +15,7 @@ class Affiliator(commands.Cog):
         if 'amazon' in message_lower:
             list_message = message_lower.split()
             list_links = [x for x in list_message if 'amazon' in x]
-            print(list_links)
             list_asin = await self.grab_asin(list_links)
-            print(list_asin)
             if list_asin:
                 await self.send_message(list_asin, message)
 
