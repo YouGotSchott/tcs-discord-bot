@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 import aiohttp
-from lxml import html
+import lxml
 import re
 
 
@@ -11,43 +11,30 @@ class Affiliator(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        msg = message.content.lower()
-        if 'www.amazon.com' in msg:
-            print(msg)
-            try:
-                product_code = await self.dp_check(msg)
-            except:
-                product_code = await self.prod_check(msg)
-            print(product_code)
-            url = "https://www.amazon.com/exec/obidos/ASIN/{}/thecoolerse0c-20".format(product_code)
-            print(url)
-            try:
-                em = await self.title_grab(url)
-                await message.channel.send(embed=em)
-            except Exception as e:
-                print(e)
-                return
-        else:
-            return
+        message_lower = message.content.lower()
+        if 'amazon' in message_lower:
+            list_message = message_lower.split()
+            list_links = [x for x in list_message if 'amazon' in x]
+            print(list_links)
+            list_asin = await self.grab_asin(list_links)
+            print(list_asin)
+            if list_asin:
+                await self.send_message(list_asin, message)
 
-    async def dp_check(self, msg):
-        try:
-            product = re.search('/dp/(.*)/', msg)
-            product_code = product.group(1).upper()
-        except:
-            product = msg.split('/dp/', 1)[-1]
-            product_code = product.upper()
-        return product_code
+    async def grab_asin(self, list_links):
+        list_asin = []
+        for link in list_links:
+            asin = re.search('(gp/|dp/|product/|asin/)([a-z0-9]{10})', link)
+            if asin:
+                list_asin.append(asin.group(2))
+        return list_asin
 
-    async def prod_check(self, msg):
-        try:
-            product = re.search('/product/(.*)/', msg)
-            product_code = product.group(1).upper()
-        except:
-            product = msg.split('/product/', 1)[-1]
-            product_code = product.upper()
-        return product_code
-    
+    async def send_message(self, list_asin, message):
+        for asin in list_asin:
+            link_affiliate = f"https://www.amazon.com/exec/obidos/ASIN/{asin}/thecoolerse0c-20"
+            message_embed = await self.get_title(link_affiliate)
+            await message.channel.send(embed=message_embed)
+
     async def fetch(self, session, url):
         async with session.get(url) as response:
             return await response.text()
@@ -56,17 +43,16 @@ class Affiliator(commands.Cog):
         async with aiohttp.ClientSession() as session:
             source = await self.fetch(session, url)
             return source
-    
-    async def title_grab(self, url):
+
+    async def get_title(self, url):
         import ast
         source = await self.http(url)
-        tree = html.fromstring(source)
-        xpath = '//span[@id="productTitle"]//text()'
+        tree = lxml.html.fromstring(source)
+        xpath = '//span[@id="productTitle"]/text()'
         raw_title = ast.literal_eval(str(tree.xpath(xpath)))
-        print(raw_title)
         title = raw_title[0].strip()
         return await self.embeder(title, url)
-    
+
     async def embeder(self, title, url):
         em = discord.Embed(
             title='TCS Affiliate Link', description='[{}]({})'.format(title, url), color=0xff9900)
