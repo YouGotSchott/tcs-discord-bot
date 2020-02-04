@@ -3,7 +3,6 @@ from discord.ext import commands
 from pytz import timezone
 from datetime import datetime, timedelta
 import asyncio
-import psycopg2
 from config import bot
 
 class Tasker(commands.Cog):
