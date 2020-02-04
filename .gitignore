@@ -6,3 +6,4 @@ tcs-discord-bot.bat
 cogs/data/*
 logs/*
 .DS_Store
+.devcontainer/docker-compose.yml
