@@ -1,8 +1,8 @@
 import discord
 from discord.ext import commands
-from config import bot, wait
+from config import bot, secret_db
 import asyncio
-import psycopg2
+import asyncpg
 
 class DBConn(commands.Cog):
     def __init__(self, bot):
@@ -10,7 +10,13 @@ class DBConn(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        wait(self.bot.aconn)
+        print("Starting database connection...")
+        self.bot.conn = await asyncpg.connect(
+            host=secret_db['host'],
+            database=secret_db['database'],
+            user=secret_db['user'],
+            password=secret_db['password'],
+            port=secret_db['port'])
         print("Database connected.")
 
 
