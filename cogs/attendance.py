@@ -2,13 +2,13 @@ import discord
 from discord.ext import commands
 from pytz import timezone
 from datetime import datetime
-from config import bot, wait
+from config import bot
 import asyncio
-import psycopg2
 
 class Attendance(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.toggle = False
 
     @commands.command()
     @commands.has_any_role('admin', 'moderator')
@@ -47,8 +47,7 @@ class Attendance(commands.Cog):
         if len(roles) == 0:
             roles = ['']
         roles = roles[slice(0, min(3, len(roles)))]
-        d = datetime.now(timezone('US/Eastern'))
-        self.date = d.strftime('%Y-%m-%d')
+        self.date = datetime.now(timezone('US/Eastern'))
         user_data = {
             'user_id' : ctx.message.author.id,
             'nickname' : ctx.message.author.display_name,
@@ -60,17 +59,16 @@ class Attendance(commands.Cog):
         await ctx.message.add_reaction('👍')
 
     async def writer(self, user_data):
-        acurs = bot.aconn.cursor()
-        acurs.execute("""
+        await self.bot.conn.execute("""
         INSERT INTO attendance (user_id, nickname, date)
-        VALUES (%s, %s, %s)""", (user_data['user_id'], user_data['nickname'], user_data['date']))
-        wait(acurs.connection)
+        VALUES ($1, $2, $3)
+        """, user_data['user_id'], user_data['nickname'], user_data['date'])
         for role in user_data['roles']:
-            acurs.execute("""
+            await self.bot.conn.execute("""
             INSERT INTO roles (attendance_id, role)
-            VALUES ((SELECT id FROM attendance WHERE attendance.user_id = %s 
-            AND attendance.date = %s), %s)""", (user_data['user_id'], user_data['date'], role))
-            wait(acurs.connection)
+            VALUES ((SELECT id FROM attendance WHERE attendance.user_id = $1 
+            AND attendance.date = $2), $3)
+            """, user_data['user_id'], user_data['date'], role)
 
     @commands.command()
     @commands.has_any_role('admin', 'moderator')
@@ -78,15 +76,13 @@ class Attendance(commands.Cog):
         if self.toggle == False:
             return
         user_id = ctx.message.mentions[0].id
-        acurs = bot.aconn.cursor()
-        acurs.execute("""
-        DELETE FROM roles WHERE attendance_id = (SELECT id FROM attendance WHERE attendance.user_id = %s 
-        AND attendance.date = %s)""", (user_id, self.date))
-        wait(acurs.connection)
-        acurs.execute("""
-        DELETE FROM attendance WHERE user_id = %s
-        AND date = %s""", (user_id, self.date))
-        wait(acurs.connection)
+        await self.bot.conn.execute("""
+        DELETE FROM roles WHERE attendance_id = (SELECT id FROM attendance WHERE attendance.user_id = $1 
+        AND attendance.date = $2)
+        """, user_id, self.date)
+        await self.bot.conn.execute("""
+        DELETE FROM attendance WHERE user_id = $1
+        AND date = $2""", user_id, self.date)
         self.uid_list.remove(user_id)
         await ctx.message.add_reaction('👍')
 
@@ -100,18 +96,14 @@ class Attendance(commands.Cog):
     @commands.command()
     async def joined(self, ctx):
         user_id = ctx.author.id
-        acurs = bot.aconn.cursor()
-        acurs.execute("""
-        SELECT join_date FROM date_joined WHERE user_id = %s;""", (user_id,))
-        wait(acurs.connection)
         try:
-            result = acurs.fetchone()[0]
+            result = await self.bot.conn.fetchrow("""
+            SELECT join_date FROM date_joined WHERE user_id = $1;
+            """, user_id)
         except TypeError:
             await ctx.message.add_reaction('👎')
             return
-        joined_date = str(result)
-        joined_date = datetime.strptime(joined_date, '%Y-%m-%d')
-        joined_date = joined_date.strftime("%d %B, %Y")
+        joined_date = result[0].strftime("%d %B, %Y")
         await ctx.send(joined_date)
 
 
