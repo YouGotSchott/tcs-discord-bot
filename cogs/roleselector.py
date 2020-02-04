@@ -1,10 +1,9 @@
 import discord
 from discord.ext import commands
 from pathlib import Path
-from config import bot, wait
+from config import bot
 from collections import OrderedDict
 import json
-import psycopg2
 
 
 class RoleSelector(commands.Cog):
@@ -59,6 +58,11 @@ class RoleSelector(commands.Cog):
                     if user.id not in results:
                         await self.msg.remove_reaction(v, user)
                         return
+                if 'auditor' in k:
+                    role_mm = discord.utils.get(user.guild.roles, name='mission-maker')
+                    if role_mm not in user.roles:
+                        await self.msg.remove_reaction(v, user)
+                        return
                 if role in user.roles:
                     await user.remove_roles(role)
                 else:
@@ -66,12 +70,10 @@ class RoleSelector(commands.Cog):
                 await self.msg.remove_reaction(v, user)
 
     async def saturday_check(self):
-        acurs = bot.aconn.cursor()
-        acurs.execute("""
-        SELECT user_id FROM attendance;""")
-        wait(acurs.connection)
-        results = acurs.fetchall()
-        id_list = [x[0] for x in results]
+        results = await self.bot.conn.fetchrow("""
+        SELECT user_id FROM attendance
+        VALUES""")
+        id_list = [x for x in results]
         return id_list
 
     async def embeder(self, msg_embed):
@@ -79,7 +81,7 @@ class RoleSelector(commands.Cog):
             title=self.msg_embed['title'], description=self.msg_embed['description'], color=0x008080)
         em.set_thumbnail(url=self.msg_embed['thumbnail'])
         for value in self.field_dict.values():
-            em.add_field(name=value['name'], value=value['value'])
+            em.add_field(name=value['name'], value=value['value'], inline=False)
         em.set_footer(text=self.footer['footer'])
         return em
 
@@ -87,6 +89,7 @@ class RoleSelector(commands.Cog):
         if 169696752461414401 == guild:
             emojis = OrderedDict([
                 ('mission-maker', 'feelscornman:485958281458876416'),
+                ('auditor', '\U0001F913'),
                 ('heretic', '\U0001f300'),
                 ('liberation', 'finger_gun:300089586460131328'),
                 ('r6siege', '\U0001f308'),
@@ -102,6 +105,7 @@ class RoleSelector(commands.Cog):
         else:
             emojis = OrderedDict([
                 ('mission-maker', 'uncle:567728566540697635'),
+                ('auditor', '\U0001F913'),
                 ('heretic', '\U0001f300'),
                 ('liberation', 'snek_uncle:567728565781528576'),
                 ('r6siege', '\U0001f3c3'),
@@ -135,6 +139,10 @@ class RoleSelector(commands.Cog):
                 '''**__4.)__** Understand that we make missions differently than other units.\n'''
                 '''**__5.)__** Understand that this is not an easy job and you might not get it right the first time.\n'''
                 '''\u200B''')])
+            ),
+            ('auditor', OrderedDict([
+                ('name', '{} @auditor'.format(emojis['auditor'])),
+                ('value', '''Allows other mission makers to ping you to check their missions for errors. *(requires @mission-maker tag)*\n''')])
             ),
             ('heretic', OrderedDict([
                 ('name', '{} @heretic'.format(emojis['heretic'])),
@@ -177,18 +185,18 @@ class RoleSelector(commands.Cog):
                 ('name', '{} @4x'.format(emojis['4x'])),
                 ('value', '''Allows other members to ping you to play *4X Games*.\n\n'''
                 '''__**Active Games**__\n'''
-                '''*> Hearts of Iron 4*\n'''
-                '''*> Stellaris*\n'''
+                '''> *Hearts of Iron 4*\n'''
+                '''> *Stellaris*\n'''
                 '''\u200B''')])
             ),
             ('rts', OrderedDict([
                 ('name', '<:{}> @rts'.format(emojis['rts'])),
                 ('value', '''Allows other members to ping you to play *RTS Games*.\n\n'''
                 '''__**Active Games**__\n'''
-                '''*> Wargame: Red Dragon*\n'''
-                '''*> Wargame: War in the East*\n'''
-                '''*> Men of War: Assault Squad 2*\n'''
-                '''*> StarCraft 2*\n'''
+                '''> *Wargame: Red Dragon*\n'''
+                '''> *Wargame: War in the East*\n'''
+                '''> *Men of War: Assault Squad 2*\n'''
+                '''> *StarCraft 2*\n'''
                 '''\u200B''')])
             ),
             ('destiny-2', OrderedDict([
