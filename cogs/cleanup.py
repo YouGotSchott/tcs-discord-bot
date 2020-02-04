@@ -3,8 +3,7 @@ from discord.ext import commands
 from pytz import timezone
 from datetime import datetime, timedelta
 import asyncio
-import psycopg2
-from config import bot, wait
+from config import bot
 
 
 class Cleanup(commands.Cog):
@@ -43,13 +42,11 @@ class Cleanup(commands.Cog):
                             banned_usernames.append(username)
                             continue
                     if not warned_date:
-                        d = datetime.now(timezone('US/Eastern'))
-                        warned = d.strftime('%Y-%m-%d')
-                        acurs = bot.aconn.cursor()
-                        acurs.execute("""
-                        UPDATE date_joined SET warned_date = %s
-                        WHERE date_joined.user_id = %s;""", (warned, fng))
-                        wait(acurs.connection)
+                        warned = datetime.now(timezone('US/Eastern'))
+                        await self.bot.conn.execute("""
+                        UPDATE date_joined SET warned_date = $1
+                        WHERE date_joined.user_id = $2;
+                        """, warned, fng)
                         nickname, username = await self.warning_message(fng)
                         warned_nicknames.append(nickname)
                         warned_usernames.append(username)
@@ -57,11 +54,10 @@ class Cleanup(commands.Cog):
             await self.banned_admin_notification(banned_nicknames, banned_usernames)
 
     async def day_counter(self, user_id):
-        acurs = bot.aconn.cursor()
-        acurs.execute("""
-        SELECT join_date, warned_date FROM date_joined WHERE user_id = %s;""", (user_id,))
-        wait(acurs.connection)
-        join_date, warned_date = acurs.fetchmany()[0]
+        results = await self.bot.conn.fetchrow("""
+        SELECT join_date, warned_date FROM date_joined WHERE user_id = $1;
+        """, user_id)
+        join_date, warned_date = results
         today_date = datetime.now(timezone('US/Eastern')).date()
         return today_date - join_date, warned_date
 
