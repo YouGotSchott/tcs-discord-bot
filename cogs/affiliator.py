@@ -1,8 +1,11 @@
+from config import secret_amazon
 import discord
 from discord.ext import commands
+from bs4 import BeautifulSoup
 import aiohttp
 import lxml
 import re
+import bottlenose
 
 
 class Affiliator(commands.Cog):
@@ -29,27 +32,20 @@ class Affiliator(commands.Cog):
 
     async def send_message(self, list_asin, message):
         for asin in list_asin:
-            link_affiliate = f"https://www.amazon.com/exec/obidos/ASIN/{asin}/thecoolerse0c-20"
-            message_embed = await self.get_title(link_affiliate)
+            message_embed = await self.link_maker(asin)
             await message.channel.send(embed=message_embed)
 
-    async def fetch(self, session, url):
-        async with session.get(url) as response:
-            return await response.text()
-
-    async def http(self, url):
-        async with aiohttp.ClientSession() as session:
-            source = await self.fetch(session, url)
-            return source
-
-    async def get_title(self, url):
-        import ast
-        source = await self.http(url)
-        tree = lxml.html.fromstring(source)
-        xpath = '//span[@id="productTitle"]/text()'
-        raw_title = ast.literal_eval(str(tree.xpath(xpath)))
-        title = raw_title[0].strip()
-        return await self.embeder(title, url)
+    async def link_maker(self, asin):
+        amazon = bottlenose.Amazon(
+            secret_amazon['key'], 
+            secret_amazon['secret'], 
+            secret_amazon['tag'],
+            Parser=lambda text: BeautifulSoup(text, 'lxml-xml'),
+            MaxQPS=0.9)
+        response = amazon.ItemLookup(ItemId=asin)
+        title = response.find('Title').string
+        link = response.find('DetailPageURL').string
+        return await self.embeder(title, link)
 
     async def embeder(self, title, url):
         em = discord.Embed(
