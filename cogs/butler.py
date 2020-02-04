@@ -1,11 +1,10 @@
 import discord
 from discord.ext import commands
 from pathlib import Path
-from config import bot, wait
+from config import bot
 from pytz import timezone
 from datetime import datetime
 from collections import OrderedDict
-import psycopg2
 import json
 import asyncio
 
@@ -73,25 +72,24 @@ class Butler(commands.Cog):
             return False
 
     async def db_check(self, user_id):
-        acurs = bot.aconn.cursor()
-        acurs.execute("""
-        SELECT join_date FROM date_joined WHERE user_id = %s;""", (user_id,))
-        wait(acurs.connection)
-        if acurs.fetchone():
-            return
-        await self.date_joined(user_id)
+        result = await self.bot.conn.fetchrow("""
+        SELECT join_date FROM date_joined WHERE user_id = $1;
+        """, user_id)
+        if not result:
+            await self.date_joined(user_id)
+            return False
+        else:
+            return True
 
     async def date_joined(self, user_id):
-        d = datetime.now(timezone('US/Eastern'))
-        joined = d.strftime('%Y-%m-%d')
+        joined = datetime.now(timezone('US/Eastern'))
         guild = self.bot.get_guild(self.bot.guilds[0].id)
         member = guild.get_member(int(user_id))
         nickname = member.display_name
-        acurs = bot.aconn.cursor()
-        acurs.execute("""
+        await self.bot.conn.execute("""
         INSERT INTO date_joined (user_id, nickname, join_date)
-        VALUES (%s, %s, %s)""", (user_id, nickname, joined))
-        wait(acurs.connection)
+        VALUES ($1, $2, $3)
+        """, user_id, nickname, joined)
 
     async def creator(self, channel):
             text = await self.embeder(self.data())
@@ -143,8 +141,9 @@ class Butler(commands.Cog):
     async def accept(self, member, role):
         await member.remove_roles(role)
         fng = discord.utils.get(member.guild.roles, name='fng')
+        if await self.db_check(member.id):
+            return
         await member.add_roles(fng)
-        await self.db_check(member.id)
         await self.join_message(member)
 
     async def decline(self, member):
