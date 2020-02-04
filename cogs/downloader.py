@@ -26,6 +26,11 @@ class Downloader(commands.Cog):
         self.folder = 'unsung_mpmissions'
         await self.downloader(ctx)
 
+    @upload.command()
+    async def test(self, ctx):
+        self.folder = 'test_mpmissions'
+        await self.downloader(ctx)
+
     async def downloader(self, ctx):
         await self.status_check(ctx, await self.ingest(ctx))  
 
