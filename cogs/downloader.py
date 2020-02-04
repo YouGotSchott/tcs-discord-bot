@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 import aiohttp
-from config import ftp_host, ftp_user, ftp_pwd
+from config import secret_ftp
 from pathlib import Path
 
 
@@ -75,8 +75,8 @@ class Downloader(commands.Cog):
     async def ftp_to_server(self, path):
         import ftplib
         import os
-        ftp = ftplib.FTP(host=ftp_host)
-        ftp.login(user=ftp_user, passwd=ftp_pwd)
+        ftp = ftplib.FTP(host=secret_ftp['host'])
+        ftp.login(user=secret_ftp['user'], passwd=secret_ftp['pwd'])
         ftp.cwd(self.folder)
         filename = str(self.end_file)
         with open(path, 'rb') as data_file:
