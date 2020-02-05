@@ -96,11 +96,10 @@ class Attendance(commands.Cog):
     @commands.command()
     async def joined(self, ctx):
         user_id = ctx.author.id
-        try:
-            result = await self.bot.conn.fetchrow("""
-            SELECT join_date FROM date_joined WHERE user_id = $1;
-            """, user_id)
-        except TypeError:
+        result = await self.bot.conn.fetchrow("""
+        SELECT join_date FROM date_joined WHERE user_id = $1;
+        """, user_id)
+        if not result:
             await ctx.message.add_reaction('👎')
             return
         joined_date = result[0].strftime("%d %B, %Y")
