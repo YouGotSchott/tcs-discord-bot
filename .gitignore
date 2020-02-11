@@ -7,3 +7,4 @@ cogs/data/*
 logs/*
 .DS_Store
 .devcontainer/docker-compose.yml
+.docker
