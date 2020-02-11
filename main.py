@@ -7,7 +7,7 @@ bot.remove_command('help')
 
 async def create_db_pool():
     print("[DB] Attempting connection...")
-    bot.conn = await asyncpg.connect(
+    bot.conn = await asyncpg.create_pool(
         host=secret_db['host'],
         database=secret_db['database'],
         user=secret_db['user'],
