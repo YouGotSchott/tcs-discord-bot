@@ -1,11 +1,21 @@
 import discord
 from discord.ext import commands
-from config import bot, TOKEN
+from config import bot, TOKEN, secret_db
+import asyncpg
 
 bot.remove_command('help')
 
+async def create_db_pool():
+    print("[DB] Attempting connection...")
+    bot.conn = await asyncpg.connect(
+        host=secret_db['host'],
+        database=secret_db['database'],
+        user=secret_db['user'],
+        password=secret_db['password'],
+        port=secret_db['port'])
+    print("[DB] Database connected.")
+
 extensions = [
-    'cogs.db_conn',
     'cogs.downloader',
     'cogs.nextnextop',
     'cogs.danceit',
@@ -38,4 +48,5 @@ if __name__ == '__main__':
             bot.load_extension(extension)
         except Exception as error:
             print('{} cannot be loaded. [{}]'.format(extension, error))
+    bot.loop.run_until_complete(create_db_pool())
     bot.run(TOKEN)
