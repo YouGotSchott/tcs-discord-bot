@@ -70,10 +70,9 @@ class RoleSelector(commands.Cog):
                 await self.msg.remove_reaction(v, user)
 
     async def saturday_check(self):
-        results = await self.bot.conn.fetchrow("""
-        SELECT user_id FROM attendance
-        VALUES""")
-        id_list = [x for x in results]
+        results = await self.bot.conn.fetch("""
+        SELECT user_id FROM attendance""")
+        id_list = [x["user_id"] for x in results]
         return id_list
 
     async def embeder(self, msg_embed):
