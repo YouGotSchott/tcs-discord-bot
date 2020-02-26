@@ -14,10 +14,10 @@ class WhichRepo(commands.Cog):
         msg = message.content.lower()
         if ('which repo' in msg \
         or 'what repo' in msg):
-            if datetime.now(timezone('US/Eastern')).weekday() in [4, 5]:
+            if datetime.now(timezone('US/Eastern')).weekday() in [2, 4, 5]:
                 await self.insult(message, 'main')
-            elif datetime.now(timezone('US/Eastern')).weekday() == 2:
-                await self.insult(message, 'Unsung')
+            # elif datetime.now(timezone('US/Eastern')).weekday() == 2:
+            #     await self.insult(message, 'Unsung')
             else:
                 await message.add_reaction('\U0001f5de')
 
