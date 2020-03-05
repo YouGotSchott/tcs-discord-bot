@@ -1,8 +1,10 @@
 import discord
 from discord.ext import commands
 import aiohttp
-from config import secret_ftp
-from pathlib import Path
+from config import secret_sftp
+from pathlib import Path, PurePath
+import asyncssh
+import os
 
 
 class Downloader(commands.Cog):
@@ -18,17 +20,12 @@ class Downloader(commands.Cog):
 
     @upload.command()
     async def main(self, ctx):
-        self.folder = 'main_mpmissions'
-        await self.downloader(ctx)
-
-    @upload.command()
-    async def unsung(self, ctx):
-        self.folder = 'unsung_mpmissions'
+        self.folder = PurePath('\\MissionUpload\\Main\\')
         await self.downloader(ctx)
 
     @upload.command()
     async def test(self, ctx):
-        self.folder = 'test_mpmissions'
+        self.folder = PurePath('\\MissionUpload\\Test\\')
         await self.downloader(ctx)
 
     async def downloader(self, ctx):
@@ -69,20 +66,14 @@ class Downloader(commands.Cog):
                 if not chunk:
                     break
                 f.write(chunk)
-        await self.ftp_to_server(path)
+        await self.sftp_to_server(path)
         await ctx.message.add_reaction('👍')
-
-    async def ftp_to_server(self, path):
-        import ftplib
-        import os
-        ftp = ftplib.FTP(host=secret_ftp['host'])
-        ftp.login(user=secret_ftp['user'], passwd=secret_ftp['pwd'])
-        ftp.cwd(self.folder)
-        filename = str(self.end_file)
-        with open(path, 'rb') as data_file:
-            ftp.storbinary("STOR " + filename, data_file)
-            ftp.close()
         os.remove(path)
+
+    async def sftp_to_server(self, path):
+        async with asyncssh.connect(host=secret_sftp['host'], username=secret_sftp['user'], password=secret_sftp['pwd'], known_hosts=None) as conn:
+            async with conn.start_sftp_client() as sftp:
+                await sftp.put(path, remotepath=self.folder)
 
 
 def setup(bot):
