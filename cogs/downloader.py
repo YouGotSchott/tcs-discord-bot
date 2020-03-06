@@ -10,7 +10,7 @@ import os
 class Downloader(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.cache = Path('cogs/data/pbo_cache/')
+        self.cache = PurePath('cogs/data/pbo_cache/')
 
     @commands.group()
     @commands.has_any_role('upload', 'admin', 'moderator')
@@ -35,7 +35,7 @@ class Downloader(commands.Cog):
         url = ctx.message.attachments[0].url
         filename = url.split("/")
         if filename[-1].endswith('.pbo'):
-            self.end_file = Path(filename[-1])
+            self.end_file = PurePath(filename[-1])
             path = str(self.cache / self.end_file)
             attachment = {
                 "url": url,
@@ -66,14 +66,18 @@ class Downloader(commands.Cog):
                 if not chunk:
                     break
                 f.write(chunk)
-        await self.sftp_to_server(path)
+        temp_name = PurePath(str(self.end_file).replace('.pbo', '.temp'))
+        new_path = self.cache / temp_name
+        os.rename(path, new_path)
+        await self.sftp_to_server(new_path, temp_name)
         await ctx.message.add_reaction('👍')
-        os.remove(path)
+        os.remove(new_path)
 
-    async def sftp_to_server(self, path):
+    async def sftp_to_server(self, new_path, temp_name):
         async with asyncssh.connect(host=secret_sftp['host'], username=secret_sftp['user'], password=secret_sftp['pwd'], known_hosts=None) as conn:
             async with conn.start_sftp_client() as sftp:
-                await sftp.put(path, remotepath=self.folder)
+                await sftp.put(new_path, remotepath=self.folder)
+                await sftp.rename(self.folder / temp_name, self.folder / self.end_file)
 
 
 def setup(bot):
