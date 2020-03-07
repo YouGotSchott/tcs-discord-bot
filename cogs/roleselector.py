@@ -99,7 +99,8 @@ class RoleSelector(commands.Cog):
                 ('zeus-op', '\U000026a1'),
                 ('4x', '\U0001f3ed'),
                 ('rts', 'smoothbrain:592115163390410783'),
-                ('destiny-2', '\U0001f47e')
+                ('destiny-2', '\U0001f47e'),
+                ('squad', 'CplChad:409868955239579649')
             ])
         else:
             emojis = OrderedDict([
@@ -115,7 +116,8 @@ class RoleSelector(commands.Cog):
                 ('zeus-op', '\U000026a1'),
                 ('4x', '\U0001f3ed'),
                 ('rts', 'fast_uncle:567728565525807104'),
-                ('destiny-2', '\U0001f47e')
+                ('destiny-2', '\U0001f47e'),
+                ('squad', 'uncle_uncle:567728565785985025')
             ])
         return emojis
 
@@ -201,6 +203,11 @@ class RoleSelector(commands.Cog):
             ('destiny-2', OrderedDict([
                 ('name', '{} @destiny-2'.format(emojis['destiny-2'])),
                 ('value', '''Allows other members to ping you to play *Destiny 2*.\n\n'''
+            )])
+            ),
+            ('squad', OrderedDict([
+                ('name', '<:{}> @squad'.format(emojis['squad'])),
+                ('value', '''Allows other members to ping you to play *Squad*.\n\n'''
             )])
         )])
         self.footer = OrderedDict([
