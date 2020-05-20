@@ -3,6 +3,7 @@ from discord.ext import commands
 from random import choice
 from datetime import datetime
 from pytz import timezone
+import re
 
 
 class WhichRepo(commands.Cog):
@@ -11,9 +12,9 @@ class WhichRepo(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        msg = message.content.lower()
-        if ('which repo' in msg \
-        or 'what repo' in msg):
+        msg = re.sub(r'\s+', '', message.content.lower())
+        if ('whichrepo' in msg \
+        or 'whatrepo' in msg):
             if datetime.now(timezone('US/Eastern')).weekday() in [2, 4, 5]:
                 await self.insult(message, 'main')
             else:
