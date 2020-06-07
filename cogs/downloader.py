@@ -74,16 +74,10 @@ class Downloader(commands.Cog):
         os.remove(new_path)
 
     async def sftp_to_server(self, new_path, temp_name):
-        for i in range(10):
-            try:
-                async with asyncssh.connect(host=secret_sftp['host'], port=secret_sftp['port'], username=secret_sftp['user']) as conn:
-                    async with conn.start_sftp_client() as sftp:
-                        await sftp.put(new_path, remotepath=self.folder)
-                        await sftp.rename(self.folder / temp_name, self.folder / self.end_file)
-            except asyncssh.misc.PermissionDenied:
-                continue
-            break
-
+        async with asyncssh.connect(host=secret_sftp['host'], port=secret_sftp['port'], username=secret_sftp['user']) as conn:
+            async with conn.start_sftp_client() as sftp:
+                await sftp.put(new_path, remotepath=self.folder)
+                await sftp.rename(self.folder / temp_name, self.folder / self.end_file)
 
 
 def setup(bot):
