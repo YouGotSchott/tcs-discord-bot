@@ -18,7 +18,7 @@ class BaconBuster(commands.Cog):
             for user in message.mentions:
                 log_time = datetime.now(timezone('US/Eastern')).strftime("%m/%d/%Y %H:%M:%S")
                 member = guild.get_member(user.id)
-                print(f"{log_time} - {message.author.nick} has mentioned {member.nick} without context")
+                print(f"{log_time} - {message.author.display_name} has mentioned {member.display_name} without context")
 
 
 def setup(bot):
