@@ -10,15 +10,14 @@ class BaconBuster(commands.Cog):
         self.bot = bot
 
     @commands.Cog.listener()
-    async def on_message(self, message):
+    async def on_message_delete(self, message):
         msg = str(message.content)
         msg = msg.strip()
-        if msg.startswith('<@') and msg.endswith('>'):
-            guild = self.bot.get_guild(self.bot.guilds[0].id)
-            for user in message.mentions:
-                log_time = datetime.now(timezone('US/Eastern')).strftime("%m/%d/%Y %H:%M:%S")
-                member = guild.get_member(user.id)
-                print(f"{log_time} - {message.author.display_name} has mentioned {member.display_name} without context")
+        if message.mentions:
+            log_time = datetime.now(timezone('US/Eastern')).strftime("%m/%d/%Y %H:%M:%S")
+            channel = discord.utils.get(self.bot.get_all_channels(), name='logging')
+            await channel.send((f'{log_time} - **{message.author.mention}** deleted a user mention in {message.channel.mention} | '
+                    f'**Message Content:** "{msg}"'))
 
 
 def setup(bot):
