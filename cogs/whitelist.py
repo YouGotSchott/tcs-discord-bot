@@ -45,7 +45,8 @@ class Whitelist(commands.Cog):
                     UPDATE date_joined SET mc_username = $2
                     WHERE user_id = $1
                     """, user_data['user_id'], user_data['username'])
-                await self.remove_whitelist(check_mc_username[0])
+                if str(check_mc_username[0]) != "None":
+                    await self.remove_whitelist(check_mc_username[0])
                 await self.add_whitelist(user_data['username'])
             else:
                 await self.add_whitelist(user_data['username'])
