@@ -78,7 +78,8 @@ CREATE TABLE public.date_joined (
     user_id bigint,
     nickname text,
     join_date date,
-    warned_date date
+    warned_date date,
+    mc_username text
 );
 
 

@@ -24,7 +24,6 @@ extensions = [
     'cogs.baconbuster',
     'cogs.swatter',
     'cogs.roleselector',
-    'cogs.scripts',
     'cogs.whichrepo',
     'cogs.tasker',
     'cogs.attendance',
@@ -38,7 +37,8 @@ extensions = [
     'cogs.signup',
     'cogs.cleanup',
     'cogs.countdown',
-    'cogs.ping_abuse'
+    'cogs.ping_abuse',
+    'cogs.whitelist'
 ]
 
 if __name__ == '__main__':
