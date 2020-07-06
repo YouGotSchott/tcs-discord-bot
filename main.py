@@ -38,7 +38,8 @@ extensions = [
     'cogs.cleanup',
     'cogs.countdown',
     'cogs.ping_abuse',
-    'cogs.whitelist'
+    'cogs.whitelist',
+    'cogs.cooldown'
 ]
 
 if __name__ == '__main__':
