@@ -3,7 +3,6 @@ from pytz import timezone
 from discord.ext import commands
 from datetime import datetime, timedelta
 import asyncio
-import math
 
 
 class Countdown(commands.Cog):
@@ -16,25 +15,18 @@ class Countdown(commands.Cog):
         self.brief_fri = discord.utils.get(self.bot.get_all_channels(), name='fri-mission-briefing')
         self.brief_sat = discord.utils.get(self.bot.get_all_channels(), name='sat-mission-briefing')
 
-        sleep_time = await self.every_five_minutes(datetime.now(timezone('US/Eastern')))
-        await asyncio.sleep(sleep_time)
         while True:
+            sleep_time = await self.every_five_minutes(datetime.now())
+            await asyncio.sleep(sleep_time)
             op_days = [2, 4, 5]
             for op_day in op_days:
+                await asyncio.sleep(1)
                 await self.wait_for(op_day)
-            await asyncio.sleep(300)
 
     async def every_five_minutes(self, current):
-        next_minute = math.ceil(current.minute / 5) * 5
-        if (next_minute == 60):
-            next_time = current.replace(hour=(current.hour + 1), minute=0, seconds=0)
-        else:
-            next_time = current.replace(minute=next_minute, second=0)
-        sleep_time = (next_time - current).seconds
-        if sleep_time < 0:
-            return 0
-        else:
-            return sleep_time
+        while True:
+            output = current + (datetime.min - current) % timedelta(minutes=5)
+            return (output - current).seconds
 
     async def get_next_mission(self, op_day, current):
         op = timedelta((7 + op_day - current.weekday()) % 7)
@@ -53,24 +45,26 @@ class Countdown(commands.Cog):
 
         current = datetime.now(timezone('US/Eastern'))
         op = await self.get_next_mission(op_day, current)
+        current = current - timedelta(minutes=current.minute % 5,
+                             seconds=current.second,
+                             microseconds=current.microsecond)
         countdown = op - current
 
-        if (current.weekday() == op_day) and (current > current.replace(hour=21, minute=0, second=0)):
+        if (current.weekday() == op_day) and (current >= current.replace(hour=21, minute=0, second=0)):
             await briefing_channel.edit(topic="{} Op is going on now! Join the server!".format(op_name))
         else:
             await self.countdown_updater(countdown, op_name, briefing_channel)
 
     async def countdown_updater(self, countdown, op_name, briefing_channel):
-        rounded_seconds = math.ceil(countdown.seconds / 100) * 100
         days = str(countdown.days)
         plur_day = "days"
         if days == "1":
             plur_day = "day"
-        hours = str(rounded_seconds // 3600)
+        hours = str(countdown.seconds // 3600)
         plur_hour = "hours"
         if hours == "1":
             plur_hour = "hour"
-        minutes = str((rounded_seconds // 60) % 60)
+        minutes = str((countdown.seconds // 60) % 60)
         plur_minute = "minutes"
         if minutes == "1":
             plur_minute = "minute"
