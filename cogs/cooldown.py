@@ -14,7 +14,7 @@ class Cooldown(commands.Cog):
         while True:
             time_current = datetime.now(timezone('US/Eastern'))
             time_mission = await self.get_next_mission(time_current)
-            sleep_time = (time_mission - time_current).seconds
+            sleep_time = (time_mission - time_current).total_seconds()
             await asyncio.sleep(sleep_time)
             await self.set_lockdown(time_mission)
 
