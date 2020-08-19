@@ -1,5 +1,7 @@
 import discord
 from discord.ext import commands
+from random import randint
+import asyncio
 
 
 class Swifty(commands.Cog):
@@ -19,10 +21,18 @@ class Swifty(commands.Cog):
     async def unsung(self, ctx):
         await self.embeder(ctx, "unsung")
 
+    @swifty.command()
+    async def ww2(self, ctx):
+        await self.embeder(ctx, "ww2")
+
     async def embeder(self, ctx, repo):
         repo_url = "http://mods.thecoolerserver.com/"
         if "unsung" in repo:
-            repo_url = "http://unsung.thecoolerserver.com/"
+            await self.silence_user(ctx)
+            return
+        if "ww2" in repo:
+            await self.silence_user(ctx)
+            return
         swifty_guide = "https://www.thecoolerserver.com/wiki/m/39575060/page/Swifty#Mod_Installation"
         em = discord.Embed(
         title="Swifty Installation Guide", description="**__Repo URL__:**```{}```".format(repo_url), url=swifty_guide, color=0x29b585)
@@ -56,6 +66,13 @@ class Swifty(commands.Cog):
         em.add_field(name="**STEP 2**", value=guide['step 2'], inline=True)
         await ctx.send(embed=em)
 
+    async def silence_user(self, ctx):
+        role_silenced = discord.utils.get(ctx.message.author.guild.roles, name='silenced')
+        await ctx.message.author.add_roles(role_silenced)
+        num = randint(5, 61) * 60
+        await ctx.send(f"**Congratulations!** You've found the *secret* silence command! You've been silenced for {int(num / 60)} minutes!")
+        await asyncio.sleep(num)
+        await ctx.message.author.remove_roles(role_silenced)
 
 def setup(bot):
     bot.add_cog(Swifty(bot))
