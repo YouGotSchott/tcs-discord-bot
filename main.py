@@ -16,6 +16,7 @@ async def create_db_pool():
     print("[DB] Database connected.")
 
 extensions = [
+    'cogs.applications',
     'cogs.downloader',
     'cogs.nextnextop',
     'cogs.danceit',
