@@ -318,7 +318,7 @@ class ReactionHandler:
         It’s not required, but highly encouraged.\n\n
         TS Address: ts3.thecoolerserver.com
         """
-        await EnjinWrapper().send_message(session_id, title, body, [15473358])
+        await EnjinWrapper().send_message(session_id, title, body, [result['enjin_user_id']])
 
     async def set_message_status(self, message_id, approved=False):
         val = False
