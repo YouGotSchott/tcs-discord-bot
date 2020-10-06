@@ -8,3 +8,4 @@ logs/*
 .DS_Store
 .devcontainer/docker-compose.yml
 .docker
+client_secret.json
