@@ -142,9 +142,9 @@ class Applications(commands.Cog):
             em_color = 0x991313
         em = discord.Embed(
             title=str(user_data['enjin_username']),
-            description=f"**Created:** {await self.localize_time(user_data['time_created'])}\n**Age:** {user_data['age']}\n**Time Zone:** {user_data['time_zone']}\n\n[Steam Account]({user_data['steam_profile']})\n",
+            description="**Created:** {}\n**Age:** {}\n**Time Zone:** {}\n\n[Steam Account]({})\n".format(await self.localize_time(user_data['time_created']), user_data['age'], user_data['time_zone'], user_data['steam_profile']),
             color=em_color,
-            url=f"https://www.thecoolerserver.com/dashboard/applications/application?app_id={user_data['enjin_app_id']}",
+            url="https://www.thecoolerserver.com/dashboard/applications/application?app_id={}".format(user_data['enjin_app_id']),
         )
         em.add_field(
             name="Availability",
@@ -178,7 +178,7 @@ class Applications(commands.Cog):
             fri = "\U00002705"
         if data_sat:
             sat = "\U00002705"
-        return f"> {wed} **Wednesday**\n> {fri} **Friday**\n> {sat} **Saturday**"
+        return "> {} **Wednesday**\n> {} **Friday**\n> {} **Saturday**".format(wed, fri, sat)
 
     async def availability_convert(self, availability):
         wed = False
