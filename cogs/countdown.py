@@ -25,7 +25,7 @@ class Countdown(commands.Cog):
 
     async def every_five_minutes(self, current):
         while True:
-            output = current + (datetime.min - current) % timedelta(minutes=5)
+            output = current + (datetime.min - current) % timedelta(minutes=10)
             return (output - current).seconds
 
     async def get_next_mission(self, op_day, current):
