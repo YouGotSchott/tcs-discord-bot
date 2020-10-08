@@ -61,7 +61,7 @@ class Applications(commands.Cog):
                         await ReactionHandler(self.bot).set_message_status(msg.id, approved=True)
                         user_data = await self.get_user_data(msg=msg.id)
                         await msg.edit(embed=await self.generate_app_message(user_data, approved=True))
-                        await self.add_name_to_spreadsheet()
+                        await GoogleHelperSheet().update_helper_sheet([user_data['enjin_username']])
                         
             if str(payload.emoji) == '\U0001f44e':
                 msg = await self.app_channel.fetch_message(payload.message_id)
@@ -73,16 +73,6 @@ class Applications(commands.Cog):
                         await ReactionHandler(self.bot).set_message_status(msg.id)
                         user_data = await self.get_user_data(msg=msg.id)
                         await msg.edit(embed=await self.generate_app_message(user_data, declined=True))
-
-    async def add_name_to_spreadsheet(self):
-        result = await self.bot.conn.fetch(
-        """
-        SELECT enjin_username FROM applications
-        WHERE is_message_sent=TRUE;
-        """
-        )
-        usernames = [{'range' : 'A{}'.format(i+1), 'values' : [[x['enjin_username']]]} for i, x in enumerate(result, 1)]
-        await GoogleHelperSheet().update_helper_sheet(usernames)
 
     async def compare_app_lists(self, app_ids):
         result = await self.bot.conn.fetch(

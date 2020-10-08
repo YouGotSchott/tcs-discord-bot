@@ -22,5 +22,5 @@ class GoogleHelperSheet:
         agc = await agcm.authorize()
         ss = await agc.open_by_key(helper_sheet)
         ws = await ss.worksheet('Sheet1')
-        await ws.batch_update(data)
+        await ws.append_row(data)
 
