@@ -514,7 +514,7 @@ class Approver:
         for user in denied:
             await self.fill_is_approved(user)
         for user in approved:
-            await EnjinWrapper().approve_applications(
+            await EnjinWrapper().approve_applicatons(
                 session_id, [user["enjin_app_id"]]
             )
             await EnjinWrapper().send_message(
