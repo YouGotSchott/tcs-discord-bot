@@ -74,11 +74,31 @@ class EnjinWrapper:
         }
         return user_data
 
-    async def approve_applicaton(self, session_id, app):
-        pass
+    async def approve_applicatons(self, session_id, apps):
+        payload = {
+            "jsonrpc": "2.0",
+            "id": "0",
+            "params": {"session_id": session_id, "application_id": apps},
+            "method": "Applications.approve",
+        }
+        async with aiohttp.ClientSession() as session:
+            async with session.post(self.api_url, json=payload) as response:
+                json_resp = json.loads(await response.text())
+        if "error" in json_resp:
+            raise APIException(json_resp["error"]["message"])
 
-    async def decline_application(self, session_id, app):
-        pass
+    async def decline_applications(self, session_id, apps):
+        payload = {
+            "jsonrpc": "2.0",
+            "id": "0",
+            "params": {"session_id": session_id, "application_id": apps},
+            "method": "Applications.reject",
+        }
+        async with aiohttp.ClientSession() as session:
+            async with session.post(self.api_url, json=payload) as response:
+                json_resp = json.loads(await response.text())
+        if "error" in json_resp:
+            raise APIException(json_resp["error"]["message"])
 
     async def send_message(self, session_id, data_subject, data_body, user_ids):
         payload = {
