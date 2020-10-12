@@ -74,7 +74,7 @@ class EnjinWrapper:
         }
         return user_data
 
-    async def approve_applicatons(self, session_id, apps):
+    async def approve_applications(self, session_id, apps):
         payload = {
             "jsonrpc": "2.0",
             "id": "0",
