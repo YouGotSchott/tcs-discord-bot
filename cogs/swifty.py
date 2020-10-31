@@ -69,7 +69,7 @@ class Swifty(commands.Cog):
     async def silence_user(self, ctx):
         role_silenced = discord.utils.get(ctx.message.author.guild.roles, name='silenced')
         await ctx.message.author.add_roles(role_silenced)
-        num = randint(5, 61) * 60
+        num = randint(5, 60) * 60
         await ctx.send(f"**Congratulations!** You've found the *secret* silence command! You've been silenced for {int(num / 60)} minutes!")
         await asyncio.sleep(num)
         await ctx.message.author.remove_roles(role_silenced)
