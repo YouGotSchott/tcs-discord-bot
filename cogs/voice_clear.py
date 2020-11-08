@@ -16,8 +16,8 @@ class VoiceClear(commands.Cog):
             sleep_time = await self.every_fifteen_minutes()
             await asyncio.sleep(sleep_time)
             msgs = await self.get_expired_messages(voice_text)
-            if len(msgs) >= 100:
-                await voice_text.delete_messages(msgs[:100])
+            if len(msgs) > 100:
+                await voice_text.delete_messages(msgs[100:])
             else:
                 await voice_text.delete_messages(msgs)
 
