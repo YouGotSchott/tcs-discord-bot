@@ -10,13 +10,16 @@ class VoiceClear(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        voice_text = discord.utils.get(self.bot.get_all_channels(), name='voice-text')
+        voice_text = discord.utils.get(self.bot.get_all_channels(), name="voice-text")
 
         while True:
             sleep_time = await self.every_fifteen_minutes()
             await asyncio.sleep(sleep_time)
             msgs = await self.get_expired_messages(voice_text)
-            await voice_text.delete_messages(msgs)
+            if len(msgs) >= 100:
+                await voice_text.delete_messages(msgs[:100])
+            else:
+                await voice_text.delete_messages(msgs)
 
     async def every_fifteen_minutes(self):
         while True:
@@ -28,8 +31,12 @@ class VoiceClear(commands.Cog):
             await asyncio.sleep(1)
 
     async def get_expired_messages(self, channel):
-        msgs_all = await channel.history(limit=1000).flatten()
-        return [x for x in msgs_all if (dt.datetime.now() - x.created_at).total_seconds() >= 86400]
+        msgs_all = await channel.history(limit=5000).flatten()
+        return [
+            x
+            for x in msgs_all
+            if (dt.datetime.now() - x.created_at).total_seconds() >= 86400
+        ]
 
 
 def setup(bot):
