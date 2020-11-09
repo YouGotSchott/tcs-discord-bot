@@ -6,7 +6,7 @@ class HowTall(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
+    @commands.command(aliases=['whosefault'])
     async def whosfault(self, ctx, *args):
         helpers = discord.utils.get(self.bot.get_all_channels(), name="helpers")
         tcs_management = discord.utils.get(
