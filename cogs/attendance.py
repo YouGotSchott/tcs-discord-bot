@@ -28,6 +28,16 @@ class Attendance(commands.Cog):
         self.uid_list.clear()
 
     @commands.command()
+    @commands.has_any_role("admin", "moderator")
+    async def pausesignup(self, ctx):
+        self.toggle = False
+
+    @commands.command()
+    @commands.has_any_role("admin", "moderator")
+    async def resumesignup(self, ctx):
+        self.toggle = True
+
+    @commands.command(aliases=['signup'])
     async def role(self, ctx, *args):
         if self.bot.fake_toggle == True:
             await self.fake_signup(ctx)
