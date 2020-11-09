@@ -17,6 +17,7 @@ class HowTall(commands.Cog):
             yes, no = await self.find_voters(username)
             if not yes:
                 await ctx.message.add_reaction("\U0001f44e")
+                return
             em = await self.make_shame_message(yes, no, username)
             await ctx.send(embed=em)
 
