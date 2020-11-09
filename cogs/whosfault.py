@@ -46,11 +46,11 @@ class HowTall(commands.Cog):
         no_msg = ""
         em = discord.Embed(title="Why is **{}** here?".format(username), color=0x5DBCD2)
         for x in yes:
-            yes_msg = "{}\n".format(x)
+            yes_msg += "{}\n".format(x)
         em.add_field(name="Blame these people:", value=yes_msg, inline=False)
         if no:
             for x in no:
-                no_msg = "{}\n".format(x)
+                no_msg += "{}\n".format(x)
             em.add_field(name="These people knew better:", value=no_msg, inline=False)
             return em
         em.add_field(
