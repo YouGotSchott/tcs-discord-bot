@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 
 
-class HowTall(commands.Cog):
+class WhoseFault(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -63,4 +63,4 @@ class HowTall(commands.Cog):
 
 
 def setup(bot):
-    bot.add_cog(HowTall(bot))
+    bot.add_cog(WhoseFault(bot))
