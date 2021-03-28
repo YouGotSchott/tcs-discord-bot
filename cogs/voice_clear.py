@@ -12,7 +12,7 @@ class VoiceClear(commands.Cog):
     async def on_ready(self):
         managed_channels = []
         managed_channels.append(discord.utils.get(self.bot.get_all_channels(), name="voice-text"))
-        managed_channels.append(discord.utils.get(self.bot.get_all_channels(), name="politics"))
+        # managed_channels.append(discord.utils.get(self.bot.get_all_channels(), name="politics"))
 
         while True:
             sleep_time = await self.every_fifteen_minutes()
