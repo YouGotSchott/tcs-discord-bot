@@ -11,6 +11,7 @@ class Downloader(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.cache = PurePath('cogs/data/pbo_cache/')
+        self.folder = '~/serverfiles/mpmissions'
 
     @commands.group()
     @commands.has_any_role('upload', 'admin', 'moderator')
@@ -20,12 +21,12 @@ class Downloader(commands.Cog):
 
     @upload.command()
     async def main(self, ctx):
-        self.folder = PurePath('\\MissionUpload\\Main\\')
+        self.sftp_user = secret_sftp['user_main']
         await self.downloader(ctx)
 
     @upload.command()
     async def test(self, ctx):
-        self.folder = PurePath('\\MissionUpload\\Test\\')
+        self.sftp_user = secret_sftp['user_test']
         await self.downloader(ctx)
 
     async def downloader(self, ctx):
@@ -76,7 +77,7 @@ class Downloader(commands.Cog):
     async def sftp_to_server(self, new_path, temp_name):
         async with asyncssh.connect(host=secret_sftp['host'], 
                                     port=secret_sftp['port'], 
-                                    username=secret_sftp['user'],
+                                    username=self.sftp_user,
                                     client_keys=secret_sftp['client_key']) as conn:
             async with conn.start_sftp_client() as sftp:
                 await sftp.put(new_path, remotepath=self.folder)
