@@ -11,7 +11,7 @@ class Downloader(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.cache = PurePath('cogs/data/pbo_cache/')
-        self.folder = '~/serverfiles/mpmissions'
+        self.folder = PurePath('~/serverfiles/mpmissions/')
 
     @commands.group()
     @commands.has_any_role('upload', 'admin', 'moderator')
