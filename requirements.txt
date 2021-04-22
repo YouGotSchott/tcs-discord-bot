@@ -2,7 +2,7 @@ aiohttp==3.7.4
 appdirs==1.4.4
 astroid==2.0.4
 async-timeout==3.0.1
-asyncpg==0.20.1
+asyncpg==0.21.0
 asyncssh==2.2.0
 attrs==19.1.0
 beautifulsoup4==4.8.2
