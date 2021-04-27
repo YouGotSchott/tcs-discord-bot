@@ -20,14 +20,12 @@ class Downloader(commands.Cog):
 
     @upload.command()
     async def main(self, ctx):
-        self.folder = PurePath(secret_sftp['path_main'])
-        self.sftp_user = secret_sftp['user_main']
+        self.folder = PurePath('\\MissionUpload\\Main\\')
         await self.downloader(ctx)
 
     @upload.command()
     async def test(self, ctx):
-        self.folder = PurePath(secret_sftp['path_test'])
-        self.sftp_user = secret_sftp['user_test']
+        self.folder = PurePath('\\MissionUpload\\Test\\')
         await self.downloader(ctx)
 
     async def downloader(self, ctx):
@@ -78,7 +76,7 @@ class Downloader(commands.Cog):
     async def sftp_to_server(self, new_path, temp_name):
         async with asyncssh.connect(host=secret_sftp['host'], 
                                     port=secret_sftp['port'], 
-                                    username=self.sftp_user,
+                                    username=secret_sftp['user'], 
                                     client_keys=secret_sftp['client_key']) as conn:
             async with conn.start_sftp_client() as sftp:
                 await sftp.put(new_path, remotepath=self.folder)
