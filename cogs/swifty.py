@@ -25,6 +25,10 @@ class Swifty(commands.Cog):
     async def ww2(self, ctx):
         await self.embeder(ctx, "ww2")
 
+    @swifty.command()
+    async def sog(self, ctx):
+        await self.embeder(ctx, "sog")
+
     async def embeder(self, ctx, repo):
         repo_url = "http://mods.thecoolerserver.com/"
         if "unsung" in repo:
@@ -33,6 +37,8 @@ class Swifty(commands.Cog):
         if "ww2" in repo:
             await self.silence_user(ctx)
             return
+        if "sog" in repo:
+            repo_url = "http://sog.thecoolerserver.com/"
         swifty_guide = "https://www.thecoolerserver.com/wiki/m/39575060/page/Swifty#Mod_Installation"
         em = discord.Embed(
         title="Swifty Installation Guide", description="**__Repo URL__:**```{}```".format(repo_url), url=swifty_guide, color=0x29b585)
