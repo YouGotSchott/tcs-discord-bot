@@ -3,6 +3,7 @@ from discord.ext import commands
 from random import randint
 from pathlib import Path
 import json
+import asyncio
 
 
 class Eject(commands.Cog):
@@ -40,12 +41,11 @@ class Eject(commands.Cog):
         await self.closer(roles)
 
     async def invite_maker(self, message):
-        from discord.errors import Forbidden
         invite = await message.channel.create_invite(max_age=24, max_uses=1)
         dm = await message.author.create_dm()
         try:
             await dm.send(invite)
-        except Forbidden:
+        except discord.errors.Forbidden:
             print("{} has the bot blocked!".format(message.author.display_name))
 
     @commands.Cog.listener()
@@ -61,7 +61,10 @@ class Eject(commands.Cog):
             if role == '@everyone':
                 continue
             role_add = discord.utils.get(member.guild.roles, name=role)
-            await member.add_roles(role_add)
+            try:
+                await member.add_roles(role_add)
+            except discord.errors.Forbidden:
+                print(f"Role giver failed to give {role} to {member.display_name}")
         del roles[str(member.id)]
         await self.closer(roles)
 
