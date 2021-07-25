@@ -36,7 +36,7 @@ class Cooldown(commands.Cog):
 
         em = discord.Embed(
             title="Debrief Cooldown - ON",
-            description="`Channel will open for discussion in 9 Hours (6 AM Eastern Time)`",
+            description="`Channel will open for discussion in 9 Hours (6 AM Eastern Time)`\n\nReview the mission on [OCAP](https://ocap.thecoolerserver.com/)",
             color=0xFF0000
         )
 
@@ -60,7 +60,7 @@ class Cooldown(commands.Cog):
 
         em = discord.Embed(
             title="Debrief Cooldown - OFF",
-            description="`Channel is now open to discuss last night's mission`",
+            description="`Channel is now open to discuss last night's mission`\n\nReview the mission on [OCAP](https://ocap.thecoolerserver.com/)",
             color=0x008000
         )
 
