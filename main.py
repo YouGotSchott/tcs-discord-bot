@@ -43,7 +43,8 @@ extensions = [
     'cogs.cooldown',
     'cogs.voice_clear',
     'cogs.whosfault',
-    'cogs.info'
+    'cogs.info',
+    'cogs.chance'
 ]
 
 if __name__ == '__main__':
