@@ -155,7 +155,7 @@ class Butler(commands.Cog):
             ('description', '''
             ```Accepting this agreement is MANDATORY for entry into our Discord. By clicking ACCEPT, you acknowledge that you have read and understand the below rules.```
             '''),
-            ('thumbnail', 'https://s3.amazonaws.com/files.enjin.com/1015535/site_logo/2019_logo.png'
+            ('thumbnail', 'https://s3.amazonaws.com/files.enjin.com/1015535/site_logo/2020_logo.png'
         )])
         self.rule_list = OrderedDict([
             ('title_1', OrderedDict([

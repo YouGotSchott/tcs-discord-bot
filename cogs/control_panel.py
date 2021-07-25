@@ -36,7 +36,7 @@ class ControlPanel(commands.Cog):
         server = OrderedDict([
             ('instructions', OrderedDict([
                 ('title', 'INSTRUCTIONS'),
-                ('url', 'https://s3.amazonaws.com/files.enjin.com/1015535/site_logo/2019_logo.png'),
+                ('url', 'https://s3.amazonaws.com/files.enjin.com/1015535/site_logo/2020_logo.png'),
                 ('color', 0x008080)])
             ),
             ('arma', OrderedDict([
@@ -51,7 +51,7 @@ class ControlPanel(commands.Cog):
             ),
             ('minecraft', OrderedDict([
                 ('title', 'MINECRAFT'),
-                ('url', 'https://s3.amazonaws.com/files.enjin.com/1015535/site_logo/2019_logo.png'),
+                ('url', 'https://s3.amazonaws.com/files.enjin.com/1015535/site_logo/2020_logo.png'),
                 ('color', 0xF4D03F)])
             )
         ])

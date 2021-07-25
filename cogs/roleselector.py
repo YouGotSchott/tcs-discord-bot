@@ -127,7 +127,7 @@ class RoleSelector(commands.Cog):
             ('description', '''Use this tool to select optional Discord roles.\n\n'''
             '''**DO NOT ABUSE THE BOT!**\n'''
             '''\u200B'''),
-            ('thumbnail', 'https://s3.amazonaws.com/files.enjin.com/1015535/site_logo/2019_logo.png')
+            ('thumbnail', 'https://s3.amazonaws.com/files.enjin.com/1015535/site_logo/2020_logo.png')
         ])
         self.field_dict = OrderedDict([
             ('mission_maker', OrderedDict([

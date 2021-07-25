@@ -18,7 +18,7 @@ class Giveaway(commands.Cog):
         await ctx.send(embed=msg)
 
     async def embeder(self, winner):
-        server_url = "https://s3.amazonaws.com/files.enjin.com/1015535/site_logo/2019_logo.png"
+        server_url = "https://s3.amazonaws.com/files.enjin.com/1015535/site_logo/2020_logo.png"
         em = discord.Embed(
             title="**__TCS GIVEAWAY WINNER__**", description="*for the random garbage giveaway...*", color=0x008080)
         em.set_thumbnail(url=server_url)
