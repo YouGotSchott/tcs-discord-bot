@@ -37,6 +37,14 @@ class Attendance(commands.Cog):
     async def resumesignup(self, ctx):
         self.toggle = True
 
+    @commands.command()
+    async def roll(self, ctx):
+        if self.toggle == False:
+            return
+        with open('cogs/data/stupid_town.gif', 'rb') as f:
+            stupid_town = discord.File(f)
+            await ctx.send(f"{ctx.message.author.mention}", file=stupid_town)
+
     @commands.command(aliases=['signup'])
     async def role(self, ctx, *args):
         if self.bot.fake_toggle == True:
