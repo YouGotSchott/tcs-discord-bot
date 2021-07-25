@@ -42,7 +42,8 @@ extensions = [
     'cogs.whitelist',
     'cogs.cooldown',
     'cogs.voice_clear',
-    'cogs.whosfault'
+    'cogs.whosfault',
+    'cogs.info'
 ]
 
 if __name__ == '__main__':
