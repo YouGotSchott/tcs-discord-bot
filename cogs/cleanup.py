@@ -75,7 +75,7 @@ class Cleanup(commands.Cog):
     async def warning_message(self, user_id):
         warning_msg = {
             'description' : "```WARNING: We've noticed you haven't attended a mission yet. New members are expected to attend their first mission within 30 days of joining, per the New Member Requirements agreed upon in the #rules channel.```",
-            'thumbnail' : 'https://s3.amazonaws.com/files.enjin.com/1015535/site_logo/2019_logo.png',
+            'thumbnail' : 'https://s3.amazonaws.com/files.enjin.com/1015535/site_logo/2020_logo.png',
             'field_1' : "If you have any scheduling issues preventing you from attending your first mission, please contact a **Moderator** or **Admin** letting us know when you plan on being able to attend. We understand life comes first, don't worry.",
             'field_2' : "If you neglect to contact a Staff member and fail to attend a mission within the next 15 days, you will be automatically banned. If you would like to play with us in the future, you will be required to submit another application on our website."
         }
@@ -96,7 +96,7 @@ class Cleanup(commands.Cog):
     async def ban_message(self, user_id):
         ban_msg = {
             'description' : "```ATTENTION: You have been automatically banned from The Cooler Server due to failing to attend your first mission within the first 30 days.```If you would like to try playing with us again, please wait 24 hours and [submit another application](https://www.thecoolerserver.com/login/do/register).",
-            'thumbnail' : 'https://s3.amazonaws.com/files.enjin.com/1015535/site_logo/2019_logo.png',
+            'thumbnail' : 'https://s3.amazonaws.com/files.enjin.com/1015535/site_logo/2020_logo.png',
             'image' : 'https://i.redd.it/kfc2fd0kpnp21.jpg'
         }
 
