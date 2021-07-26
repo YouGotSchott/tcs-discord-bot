@@ -92,7 +92,7 @@ class Applications(commands.Cog):
                 thumbs_up_count = await ReactionHandler(
                     self.bot
                 ).thumbs_up_reaction_add(msg, payload)
-                if thumbs_up_count >= 11:
+                if thumbs_up_count >= 10:
                     message_sent = await ReactionHandler(
                         self.bot
                     ).check_if_message_sent(msg)
@@ -117,7 +117,7 @@ class Applications(commands.Cog):
                 thumbs_down_count = await ReactionHandler(
                     self.bot
                 ).thumbs_down_reaction_add(msg, payload)
-                if thumbs_down_count >= 11:
+                if thumbs_down_count >= 10:
                     message_sent = await ReactionHandler(
                         self.bot
                     ).check_if_message_sent(msg)
