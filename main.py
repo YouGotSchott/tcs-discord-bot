@@ -44,7 +44,8 @@ extensions = [
     'cogs.voice_clear',
     'cogs.whosfault',
     'cogs.info',
-    'cogs.chance'
+    'cogs.chance',
+    'cogs.unit_patch'
 ]
 
 if __name__ == '__main__':
