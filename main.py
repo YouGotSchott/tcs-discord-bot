@@ -25,7 +25,6 @@ extensions = [
     'cogs.baconbuster',
     'cogs.swatter',
     'cogs.roleselector',
-    'cogs.whichrepo',
     'cogs.tasker',
     'cogs.attendance',
     'cogs.howtall',
