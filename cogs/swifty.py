@@ -21,7 +21,7 @@ class Swifty(commands.Cog):
         modern_url = "http://modern.thecoolerserver.com/"
         coldwar_url = "http://cwr.thecoolerserver.com/"
         ww2_url = "http://ww2.thecoolerserver.com/"
-        swifty_guide = "https://wiki.thecoolerserver.com/en/startup/swifty#Mod_Installation"
+        swifty_guide = "https://wiki.thecoolerserver.com/en/startup/swifty"
         em = discord.Embed(
             title="Swifty Installation Guide",
             description="**__Modern URL__:**```{}```\n**__Cold War URL__:**```{}```\n**__WW2 URL__:**```{}```".format(
@@ -38,7 +38,7 @@ class Swifty(commands.Cog):
             "description": "```Swifty requires extra steps to uninstall correctly, please complete all steps before re-installing.```",
             "step 1": "Uninstall Swifty like any other program with *Programs and Features* in Windows.",
             "step 2": """Delete the Swifty Folders from `%appdata%` and `%localappdata%`. *(You can copy and paste these values into "Run" `⊞Win + R` to find them quicker.*)""",
-            "step 3": "[Re-download and install Swifty](https://wiki.thecoolerserver.com/en/startup/swifty#Mod_Installation)",
+            "step 3": "[Re-download and install Swifty](https://wiki.thecoolerserver.com/en/startup/swifty)",
         }
         em = discord.Embed(
             title="How to Uninstall Swifty 2.2.1",
