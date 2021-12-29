@@ -100,7 +100,8 @@ class RoleSelector(commands.Cog):
                 ('4x', '\U0001f3ed'),
                 ('rts', 'smoothbrain:592115163390410783'),
                 ('destiny-2', '\U0001f47e'),
-                ('squad', 'CplChad:409868955239579649')
+                ('squad', 'CplChad:409868955239579649'),
+                ('zomboid', 'the_devil:663562931681624081')
             ])
         else:
             emojis = OrderedDict([
@@ -117,7 +118,8 @@ class RoleSelector(commands.Cog):
                 ('4x', '\U0001f3ed'),
                 ('rts', 'fast_uncle:567728565525807104'),
                 ('destiny-2', '\U0001f47e'),
-                ('squad', 'uncle_uncle:567728565785985025')
+                ('squad', 'uncle_uncle:567728565785985025'),
+                ('zomboid', 'uncle_hacker:567728565798567940')
             ])
         return emojis
 
@@ -209,7 +211,13 @@ class RoleSelector(commands.Cog):
                 ('name', '<:{}> @squad'.format(emojis['squad'])),
                 ('value', '''Allows other members to ping you to play *Squad*.\n\n'''
             )])
-        )])
+            ),
+            ('zomboid', OrderedDict([
+                ('name', '<:{}> @zomboid'.format(emojis['zomboid'])),
+                ('value', '''Allows other members to ping you to play organized *Project Zomboid*.\n\n'''
+            )])
+            )
+        ])
         self.footer = OrderedDict([
             ('footer', '''React to toggle role on/off''')
         ])
