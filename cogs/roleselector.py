@@ -101,7 +101,8 @@ class RoleSelector(commands.Cog):
                 ('rts', 'smoothbrain:592115163390410783'),
                 ('destiny-2', '\U0001f47e'),
                 ('squad', 'CplChad:409868955239579649'),
-                ('zomboid', 'the_devil:663562931681624081')
+                ('zomboid', 'the_devil:663562931681624081'),
+                ('tabletop', '\U0001f9d9\U0000200d\U00002642\U0000fe0f')
             ])
         else:
             emojis = OrderedDict([
@@ -119,7 +120,8 @@ class RoleSelector(commands.Cog):
                 ('rts', 'fast_uncle:567728565525807104'),
                 ('destiny-2', '\U0001f47e'),
                 ('squad', 'uncle_uncle:567728565785985025'),
-                ('zomboid', 'uncle_hacker:567728565798567940')
+                ('zomboid', 'uncle_hacker:567728565798567940'),
+                ('tabletop', '\U0001f9d9\U0000200d\U00002642\U0000fe0f')
             ])
         return emojis
 
@@ -215,6 +217,11 @@ class RoleSelector(commands.Cog):
             ('zomboid', OrderedDict([
                 ('name', '<:{}> @zomboid'.format(emojis['zomboid'])),
                 ('value', '''Allows other members to ping you to play organized *Project Zomboid*.\n\n'''
+            )])
+            ),
+            ('tabletop', OrderedDict([
+                ('name', '{} @tabletop'.format(emojis['tabletop'])),
+                ('value', '''Gain access to the **Tabletop** channels to play organized tabletop games and DnD sessions.\n\n'''
             )])
             )
         ])
