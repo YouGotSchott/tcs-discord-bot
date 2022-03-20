@@ -102,7 +102,8 @@ class RoleSelector(commands.Cog):
                 ('destiny-2', '\U0001f47e'),
                 ('squad', 'CplChad:409868955239579649'),
                 ('zomboid', 'the_devil:663562931681624081'),
-                ('tabletop', '\U0001f9d9\U0000200d\U00002642\U0000fe0f')
+                ('tabletop', '\U0001f9d9\U0000200d\U00002642\U0000fe0f'),
+                ('insurgency', 'jamsheed:713592883332251648')
             ])
         else:
             emojis = OrderedDict([
@@ -121,7 +122,8 @@ class RoleSelector(commands.Cog):
                 ('destiny-2', '\U0001f47e'),
                 ('squad', 'uncle_uncle:567728565785985025'),
                 ('zomboid', 'uncle_hacker:567728565798567940'),
-                ('tabletop', '\U0001f9d9\U0000200d\U00002642\U0000fe0f')
+                ('tabletop', '\U0001f9d9\U0000200d\U00002642\U0000fe0f'),
+                ('insurgency', 'evil_uncle:567728565148450844')
             ])
         return emojis
 
@@ -222,6 +224,11 @@ class RoleSelector(commands.Cog):
             ('tabletop', OrderedDict([
                 ('name', '{} @tabletop'.format(emojis['tabletop'])),
                 ('value', '''Gain access to the **Tabletop** channels to play organized tabletop games and DnD sessions.\n\n'''
+            )])
+            ),
+            ('insurgency', OrderedDict([
+                ('name', '<:{}> @insurgency'.format(emojis['insurgency'])),
+                ('value', '''Allows other members to ping you to play organized [*Insurgency: Sandstorm*](https://store.steampowered.com/app/581320/Insurgency_Sandstorm/).\n\n'''
             )])
             )
         ])
