@@ -98,7 +98,6 @@ class Applications(commands.Cog):
                     ).check_if_message_sent(msg)
                     if message_sent is None:
                         await ReactionHandler(self.bot).add_vote(msg)
-                        await ReactionHandler(self.bot).send_ts3_invite(msg.id)
                         await ReactionHandler(self.bot).set_message_status(
                             msg.id, approved=True
                         )
