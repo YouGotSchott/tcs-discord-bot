@@ -4,6 +4,7 @@ from pytz import timezone
 from datetime import datetime
 from config import bot
 import asyncio
+from gspread_api import GoogleHelperSheet
 
 
 class Attendance(commands.Cog):
@@ -17,9 +18,11 @@ class Attendance(commands.Cog):
         self.bot.fake_toggle = False
         self.toggle = True
         self.uid_list = []
+        await self.send_signup_message(ctx)
         await asyncio.sleep(5400)
         self.toggle = False
         self.uid_list.clear()
+        await self.send_shutdown_message(ctx)
 
     @commands.command()
     @commands.has_any_role("admin", "moderator")
@@ -41,11 +44,11 @@ class Attendance(commands.Cog):
     async def roll(self, ctx):
         if self.toggle == False:
             return
-        with open('cogs/data/stupid_town.gif', 'rb') as f:
+        with open("cogs/data/stupid_town.gif", "rb") as f:
             stupid_town = discord.File(f)
             await ctx.send(f"{ctx.message.author.mention}", file=stupid_town)
 
-    @commands.command(aliases=['signup'])
+    @commands.command(aliases=["signup"])
     async def role(self, ctx, *args):
         if self.bot.fake_toggle == True:
             await self.fake_signup(ctx)
@@ -74,6 +77,7 @@ class Attendance(commands.Cog):
             "roles": roles,
         }
         await self.writer(user_data)
+        await self.write_to_sheet(user_data["nickname"], roles)
         self.uid_list.append(uid)
         await ctx.message.add_reaction("👍")
 
@@ -98,6 +102,11 @@ class Attendance(commands.Cog):
                 user_data["date"],
                 role,
             )
+
+    async def write_to_sheet(self, user_name, roles):
+        roles.insert(0, user_name)
+        roles.insert(0, "0")
+        await GoogleHelperSheet().update_roster(roles)
 
     @commands.command()
     @commands.has_any_role("admin", "moderator")
@@ -129,6 +138,33 @@ class Attendance(commands.Cog):
         await user.add_roles(role)
         await asyncio.sleep(30)
         await user.remove_roles(role)
+
+    async def send_signup_message(self, ctx):
+        em = discord.Embed(
+            title="Saturday Signup Started!",
+            description="[Link to Roster](https://docs.google.com/spreadsheets/d/1ObWkVSrXvUjron4Q9hK6Fy_sYWE1b-w135A7CPGfwBs)",
+            color=0x008080,
+        )
+        em.set_thumbnail(
+            url="https://s3.amazonaws.com/files.enjin.com/1015535/site_logo/2020_logo.png"
+        )
+        em.add_field(
+            name="How to Sign Up",
+            value="> The **!role** command parses on spaces; __replace your spaces with underscores!__\n```!role Squad_Lead, Team_Lead, Marksman```",
+        )
+        em.set_footer(text="Please respect the bot and sign up slowly!")
+        await ctx.send(embed=em)
+
+    async def send_shutdown_message(self, ctx):
+        em = discord.Embed(
+            title="Saturday Signup Ended",
+            description="> Signup has concluded; no more roles will be accepted.",
+            color=0xFF0000,
+        )
+        em.set_thumbnail(
+            url="https://s3.amazonaws.com/files.enjin.com/1015535/site_logo/2020_logo.png"
+        )
+        await ctx.send(embed=em)
 
     @commands.command()
     async def joined(self, ctx):

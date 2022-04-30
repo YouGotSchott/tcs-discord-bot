@@ -1,6 +1,6 @@
 import gspread_asyncio
 from oauth2client.service_account import ServiceAccountCredentials
-from config import helper_sheet
+from config import helper_sheet, roster_sheet
 
 
 class GoogleHelperSheet:
@@ -24,3 +24,9 @@ class GoogleHelperSheet:
         ws = await ss.worksheet('Sheet1')
         await ws.append_row(data)
 
+    async def update_roster(self, data):
+        agcm = gspread_asyncio.AsyncioGspreadClientManager(self.get_creds)
+        agc = await agcm.authorize()
+        ss = await agc.open_by_key(roster_sheet)
+        ws = await ss.worksheet('Signup List2')
+        await ws.append_row(data)
