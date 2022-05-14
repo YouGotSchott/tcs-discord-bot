@@ -79,7 +79,7 @@ class Attendance(commands.Cog):
             "date": self.date,
             "roles": roles,
         }
-        # await self.writer(user_data)
+        await self.writer(user_data)
         await self.write_to_sheet(user_data["nickname"], roles)
         self.uid_list.append(uid)
         await ctx.message.author.add_roles(self.attending_role)
