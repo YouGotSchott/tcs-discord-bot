@@ -153,7 +153,7 @@ class Attendance(commands.Cog):
             value="> The **!role** command parses on spaces; __replace your spaces with underscores!__\n```!role Squad_Lead, Team_Lead, Marksman```",
         )
         em.set_footer(text="Please respect the bot and sign up slowly!")
-        await ctx.send(embed=em)
+        await ctx.send("@everyone", embed=em)
 
     async def send_shutdown_message(self, ctx):
         em = discord.Embed(
