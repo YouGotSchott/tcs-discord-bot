@@ -201,6 +201,15 @@ class Attendance(commands.Cog):
         else:
             await ctx.send("Saturday Op Count: {}".format(result["count"]))
 
+    @commands.command()
+    async def roster(self, ctx):
+        em = discord.Embed(
+            title="Command Roster 2 Electric Boogaloo(oo)",
+            description="[Link to Roster](https://docs.google.com/spreadsheets/d/1ObWkVSrXvUjron4Q9hK6Fy_sYWE1b-w135A7CPGfwBs)",
+            color=0x2A8947,
+        )
+        await ctx.send(embed=em)
+
 
 def setup(bot):
     bot.add_cog(Attendance(bot))
