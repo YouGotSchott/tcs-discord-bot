@@ -15,6 +15,10 @@ class Attendance(commands.Cog):
     @commands.command()
     @commands.has_any_role("admin", "moderator")
     async def startsignup(self, ctx):
+        self.guild = self.bot.get_guild(self.bot.guilds[0].id)
+        self.attending_role = await self.guild.create_role(
+            name="attending", mentionable=True
+        )
         self.bot.fake_toggle = False
         self.toggle = True
         self.uid_list = []
@@ -54,8 +58,7 @@ class Attendance(commands.Cog):
             await self.fake_signup(ctx)
         if self.toggle == False:
             return
-        guild = self.bot.get_guild(self.bot.guilds[0].id)
-        fng = discord.utils.get(guild.roles, name="fng")
+        fng = discord.utils.get(self.guild.roles, name="fng")
         if fng in ctx.message.author.roles:
             await ctx.message.add_reaction("👎")
             return
@@ -76,9 +79,10 @@ class Attendance(commands.Cog):
             "date": self.date,
             "roles": roles,
         }
-        await self.writer(user_data)
+        # await self.writer(user_data)
         await self.write_to_sheet(user_data["nickname"], roles)
         self.uid_list.append(uid)
+        await ctx.message.author.add_roles(self.attending_role)
         await ctx.message.add_reaction("👍")
 
     async def writer(self, user_data):
@@ -130,6 +134,9 @@ class Attendance(commands.Cog):
             self.date,
         )
         self.uid_list.remove(user_id)
+        member = self.guild.get_member(user_id)
+        if self.attending_role in member.roles:
+            await member.remove_roles(self.attending_role)
         await ctx.message.add_reaction("👍")
 
     async def fake_signup(self, ctx):
