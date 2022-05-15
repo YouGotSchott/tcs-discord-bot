@@ -5,6 +5,7 @@ from datetime import datetime
 from config import bot
 import asyncio
 from gspread_api import GoogleHelperSheet
+from cogs.briefing import Briefing
 
 
 class Attendance(commands.Cog):
@@ -20,8 +21,8 @@ class Attendance(commands.Cog):
             name="attending", mentionable=True
         )
         self.bot.fake_toggle = False
-        self.toggle = True
         self.uid_list = []
+        self.toggle = True
         await self.send_signup_message(ctx)
         await asyncio.sleep(5400)
         self.toggle = False
@@ -149,7 +150,9 @@ class Attendance(commands.Cog):
     async def send_signup_message(self, ctx):
         em = discord.Embed(
             title="Saturday Signup Started!",
-            description="[Link to Roster](https://docs.google.com/spreadsheets/d/1ObWkVSrXvUjron4Q9hK6Fy_sYWE1b-w135A7CPGfwBs)",
+            description="[Link to Roster](https://docs.google.com/spreadsheets/d/1ObWkVSrXvUjron4Q9hK6Fy_sYWE1b-w135A7CPGfwBs) | [Link to Briefing]({})".format(
+                await Briefing(self.bot).url_grab()
+            ),
             color=0x008080,
         )
         em.set_thumbnail(
@@ -205,7 +208,9 @@ class Attendance(commands.Cog):
     async def roster(self, ctx):
         em = discord.Embed(
             title="Command Roster 2 Electric Boogaloo(oo)",
-            description="[Link to Roster](https://docs.google.com/spreadsheets/d/1ObWkVSrXvUjron4Q9hK6Fy_sYWE1b-w135A7CPGfwBs)",
+            description="[Link to Roster](https://docs.google.com/spreadsheets/d/1ObWkVSrXvUjron4Q9hK6Fy_sYWE1b-w135A7CPGfwBs) | [Link to Briefing]({})".format(
+                await Briefing(self.bot).url_grab()
+            ),
             color=0x2A8947,
         )
         await ctx.send(embed=em)

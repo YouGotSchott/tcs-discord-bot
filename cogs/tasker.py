@@ -4,6 +4,7 @@ from pytz import timezone
 from datetime import datetime, timedelta
 import asyncio
 from config import bot
+from cogs.briefing import Briefing
 
 
 class Tasker(commands.Cog):
@@ -68,7 +69,9 @@ class Tasker(commands.Cog):
             )
             em.add_field(
                 name="\u200b",
-                value="[Link to Roster](https://docs.google.com/spreadsheets/d/1ObWkVSrXvUjron4Q9hK6Fy_sYWE1b-w135A7CPGfwBs/edit#gid=652948312)",
+                value="[Link to Roster](https://docs.google.com/spreadsheets/d/1ObWkVSrXvUjron4Q9hK6Fy_sYWE1b-w135A7CPGfwBs/edit#gid=652948312) | [Link to Briefing]({})".format(
+                    await Briefing(self.bot).url_grab()
+                ),
             )
             channel = discord.utils.get(
                 self.bot.get_all_channels(), name="bot-commands"
