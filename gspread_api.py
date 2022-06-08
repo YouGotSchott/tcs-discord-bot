@@ -28,5 +28,5 @@ class GoogleHelperSheet:
         agcm = gspread_asyncio.AsyncioGspreadClientManager(self.get_creds)
         agc = await agcm.authorize()
         ss = await agc.open_by_key(roster_sheet)
-        ws = await ss.worksheet('Signup List2')
+        ws = await ss.worksheet('Signup List')
         await ws.append_row(data)
