@@ -232,7 +232,7 @@ class Applications(commands.Cog):
             )
         else:
             em.add_field(
-                name="Why do you want to join?", value=user_data["reason"], inline=False
+                name="Tell us about yourself.", value=user_data["reason"], inline=False
             )
         return em
 
