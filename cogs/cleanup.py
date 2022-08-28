@@ -25,19 +25,19 @@ class Cleanup(commands.Cog):
     async def attendance_tracker(self):
         while True:
             await self.daily(12, 0)
-            fng_list = await self.fng_finder()
+            untrained_list = await self.untrained_finder()
             banned_nicknames = []
             banned_usernames = []
             warned_nicknames = []
             warned_usernames = []
-            for fng in fng_list:
-                diff, warned_date = await self.day_counter(fng)
+            for untrained in untrained_list:
+                diff, warned_date = await self.day_counter(untrained)
                 if diff.days > 30:
                     today_date = datetime.now(timezone('US/Eastern')).date()
                     if warned_date:
                         days_since_warned = today_date - warned_date
                         if days_since_warned.days > 15:
-                            nickname, username = await self.ban_message(fng)
+                            nickname, username = await self.ban_message(untrained)
                             banned_nicknames.append(nickname)
                             banned_usernames.append(username)
                             continue
@@ -46,8 +46,8 @@ class Cleanup(commands.Cog):
                         await self.bot.conn.execute("""
                         UPDATE date_joined SET warned_date = $1
                         WHERE date_joined.user_id = $2;
-                        """, warned, fng)
-                        nickname, username = await self.warning_message(fng)
+                        """, warned, untrained)
+                        nickname, username = await self.warning_message(untrained)
                         warned_nicknames.append(nickname)
                         warned_usernames.append(username)
             await self.warned_admin_notification(warned_nicknames, warned_usernames)
@@ -61,16 +61,16 @@ class Cleanup(commands.Cog):
         today_date = datetime.now(timezone('US/Eastern')).date()
         return today_date - join_date, warned_date
 
-    async def fng_finder(self):
+    async def untrained_finder(self):
         guild = self.bot.get_guild(self.bot.guilds[0].id)
-        fng = discord.utils.get(guild.roles, name="fng")
+        untrained = discord.utils.get(guild.roles, name="untrained")
         safe = discord.utils.get(guild.roles, name="safe")
-        fng_list = []
+        untrained_list = []
         for member in guild.members:
-            if fng in member.roles and \
+            if untrained in member.roles and \
                 safe not in member.roles:
-                fng_list.append(member.id)
-        return fng_list
+                untrained_list.append(member.id)
+        return untrained_list
 
     async def warning_message(self, user_id):
         warning_msg = {

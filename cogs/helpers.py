@@ -8,17 +8,17 @@ class Helpers(commands.Cog):
 
     @commands.command()
     @commands.has_any_role('admin', 'moderator', 'helper')
-    async def removefng(self, ctx):
+    async def trained(self, ctx):
         guild = self.bot.get_guild(self.bot.guilds[0].id)
-        fng = discord.utils.get(guild.roles, name="fng")
+        untrained = discord.utils.get(guild.roles, name="untrained")
         if not ctx.message.mentions:
             await ctx.message.add_reaction('👎')
             return
         for user in ctx.message.mentions:
             member = guild.get_member(user.id)
-            if fng not in member.roles:
+            if untrained not in member.roles:
                 continue
-            await member.remove_roles(fng)
+            await member.remove_roles(untrained)
         await ctx.message.add_reaction('👍')
 
 def setup(bot):

@@ -140,10 +140,11 @@ class Butler(commands.Cog):
 
     async def accept(self, member, role):
         await member.remove_roles(role)
+        untrained = discord.utils.get(member.guild.roles, name='untrained')
         fng = discord.utils.get(member.guild.roles, name='fng')
         if await self.db_check(member.id):
             return
-        await member.add_roles(fng)
+        await member.add_roles(untrained, fng)
         await self.join_message(member)
 
     async def decline(self, member):

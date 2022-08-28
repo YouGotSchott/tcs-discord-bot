@@ -59,8 +59,8 @@ class Attendance(commands.Cog):
             await self.fake_signup(ctx)
         if self.toggle == False:
             return
-        fng = discord.utils.get(self.guild.roles, name="fng")
-        if fng in ctx.message.author.roles:
+        untrained = discord.utils.get(self.guild.roles, name="untrained")
+        if untrained in ctx.message.author.roles:
             await ctx.message.add_reaction("👎")
             return
         uid = ctx.message.author.id
