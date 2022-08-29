@@ -32,11 +32,11 @@ class Cleanup(commands.Cog):
             warned_usernames = []
             for untrained in untrained_list:
                 diff, warned_date = await self.day_counter(untrained)
-                if diff.days > 30:
+                if diff.days > 23:
                     today_date = datetime.now(timezone('US/Eastern')).date()
                     if warned_date:
                         days_since_warned = today_date - warned_date
-                        if days_since_warned.days > 15:
+                        if days_since_warned.days > 7:
                             nickname, username = await self.ban_message(untrained)
                             banned_nicknames.append(nickname)
                             banned_usernames.append(username)
@@ -77,7 +77,7 @@ class Cleanup(commands.Cog):
             'description' : "```WARNING: We've noticed you haven't attended a mission yet. New members are expected to attend their first mission within 30 days of joining, per the New Member Requirements agreed upon in the #rules channel.```",
             'thumbnail' : 'https://s3.amazonaws.com/files.enjin.com/1015535/site_logo/2020_logo.png',
             'field_1' : "If you have any scheduling issues preventing you from attending your first mission, please contact a **Moderator** or **Admin** letting us know when you plan on being able to attend. We understand life comes first, don't worry.",
-            'field_2' : "If you neglect to contact a Staff member and fail to attend a mission within the next 15 days, you will be automatically banned. If you would like to play with us in the future, you will be required to submit another application on our website."
+            'field_2' : "If you neglect to contact a Staff member or fail to attend a mission within the next 7 days, you will be automatically banned. If you would like to play with us in the future, you will be required to submit another application on our website."
         }
 
         em = discord.Embed(description=warning_msg['description'], color=0xFFA500)
