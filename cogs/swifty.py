@@ -23,7 +23,7 @@ class Swifty(commands.Cog):
         swifty_guide = "https://wiki.thecoolerserver.com/en/startup/swifty"
         em = discord.Embed(
             title="Swifty Installation Guide",
-            description="**__Modern URL__:**```{}```\n**__WW2 URL__:**```{}```".format(
+            description="**__Main URL__:**```{}```".format(
                 modern_url, ww2_url
             ),
             url=swifty_guide,
