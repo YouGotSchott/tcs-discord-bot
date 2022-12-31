@@ -15,5 +15,5 @@ class Signup(commands.Cog):
         await ctx.send("{} Roster signup for tonight's operation is now live!  Please use the !role command to submit your desired roles to the roster. https://docs.google.com/spreadsheets/d/1ObWkVSrXvUjron4Q9hK6Fy_sYWE1b-w135A7CPGfwBs".format(evreyone.mention))
 
 
-def setup(bot):
-    bot.add_cog(Signup(bot))
+async def setup(bot):
+    await bot.add_cog(Signup(bot))

@@ -36,5 +36,5 @@ class Briefing(commands.Cog):
                 return link
 
 
-def setup(bot):
-    bot.add_cog(Briefing(bot))
+async def setup(bot):
+    await bot.add_cog(Briefing(bot))

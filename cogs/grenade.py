@@ -21,7 +21,7 @@ class Grenade(commands.Cog):
         self.post_messages = []
         self.toggle = True
         self.dive_toggle = True
-        zone = await ctx.channel.history(limit=self.blast).flatten()
+        zone = [msg async for msg in ctx.channel.history(limit=self.blast)]
         count_msg = await ctx.send('\U0001f4a3 \U0001f55b')
         await self.countdown(count_msg)
         if self.dive_messages:
@@ -72,5 +72,5 @@ class Grenade(commands.Cog):
             self.dive_messages.append(ctx.message)
 
 
-def setup(bot):
-    bot.add_cog(Grenade(bot))
+async def setup(bot):
+    await bot.add_cog(Grenade(bot))

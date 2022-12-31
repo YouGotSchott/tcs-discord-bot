@@ -72,5 +72,5 @@ class Countdown(commands.Cog):
             op_name, days, plur_day, hours, plur_hour, minutes, plur_minute))
 
 
-def setup(bot):
-    bot.add_cog(Countdown(bot))
+async def setup(bot):
+    await bot.add_cog(Countdown(bot))

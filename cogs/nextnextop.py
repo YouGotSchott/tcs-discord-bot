@@ -62,5 +62,5 @@ class NextNextOp(commands.Cog):
         await self.output(out, index, out_date, channel)
 
 
-def setup(bot):
-    bot.add_cog(NextNextOp(bot))
+async def setup(bot):
+    await bot.add_cog(NextNextOp(bot))

@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 import asyncio
 import datetime as dt
+import pytz
 
 
 class VoiceClear(commands.Cog):
@@ -27,21 +28,21 @@ class VoiceClear(commands.Cog):
 
     async def every_fifteen_minutes(self):
         while True:
-            current = dt.datetime.now()
-            output = current + (dt.datetime.min - current) % dt.timedelta(minutes=15)
+            current = discord.utils.utcnow()
+            output = current + (dt.datetime.min.replace(tzinfo=pytz.UTC) - current) % dt.timedelta(minutes=15)
             next_check = (output - current).seconds
             if next_check > 0:
                 return next_check
             await asyncio.sleep(1)
 
     async def get_expired_messages(self, channel):
-        msgs_all = await channel.history(limit=5000).flatten()
+        msgs_all = [msg async for msg in channel.history(limit=5000)]
         return [
             x
             for x in msgs_all
-            if (dt.datetime.now() - x.created_at).total_seconds() >= 86400
+            if (discord.utils.utcnow() - x.created_at).total_seconds() >= 300 #86400
         ]
 
 
-def setup(bot):
-    bot.add_cog(VoiceClear(bot))
+async def setup(bot):
+    await bot.add_cog(VoiceClear(bot))

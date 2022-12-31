@@ -30,5 +30,5 @@ class Chance(commands.Cog):
             await ctx.send(f"{ctx.message.author.display_name} rolled {indef} {roll}")
 
 
-def setup(bot):
-    bot.add_cog(Chance(bot))
+async def setup(bot):
+    await bot.add_cog(Chance(bot))

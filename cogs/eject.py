@@ -69,5 +69,5 @@ class Eject(commands.Cog):
         await self.closer(roles)
 
 
-def setup(bot):
-    bot.add_cog(Eject(bot))
+async def setup(bot):
+    await bot.add_cog(Eject(bot))

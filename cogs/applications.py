@@ -391,7 +391,7 @@ class ReactionHandler:
         session_id = await SessionHanlder(self.bot).test_session_id()
         title = "Application Received!"
         body = """In the meantime come join our TeamSpeak and say hello.
-        It’s not required, but highly encouraged.\n\n
+        It's not required, but highly encouraged.\n\n
         TS Address: ts3.thecoolerserver.com
         """
         await EnjinWrapper().send_message(
@@ -527,5 +527,5 @@ class Approver:
         await ctx.message.add_reaction("👍")
 
 
-def setup(bot):
-    bot.add_cog(Applications(bot))
+async def setup(bot):
+    await bot.add_cog(Applications(bot))

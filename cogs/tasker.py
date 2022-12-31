@@ -14,9 +14,10 @@ class Tasker(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
         guild = self.bot.guilds[0]
-        bot.loop.create_task(self.purge(guild))
-        bot.loop.create_task(self.mission_alert_message(guild))
-        bot.loop.create_task(self.delete_attending_role(guild))
+        async with bot:
+            bot.loop.create_task(self.purge(guild))
+            bot.loop.create_task(self.mission_alert_message(guild))
+            bot.loop.create_task(self.delete_attending_role(guild))
 
     async def daily(self, hour, minute):
         date = datetime.now(timezone("US/Eastern"))
@@ -86,5 +87,5 @@ class Tasker(commands.Cog):
             await role.delete()
 
 
-def setup(bot):
-    bot.add_cog(Tasker(bot))
+async def setup(bot):
+    await bot.add_cog(Tasker(bot))

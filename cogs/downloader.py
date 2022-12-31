@@ -120,5 +120,5 @@ class Downloader(commands.Cog):
                 await sftp.rename(self.folder / temp_name, self.folder / self.end_file)
 
 
-def setup(bot):
-    bot.add_cog(Downloader(bot))
+async def setup(bot):
+    await bot.add_cog(Downloader(bot))

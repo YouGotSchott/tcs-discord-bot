@@ -62,5 +62,5 @@ class Whitelist(commands.Cog):
         await self.ctx.send(f'Removing "{username}" from Whitelist => {output}')
 
 
-def setup(bot):
-    bot.add_cog(Whitelist(bot))
+async def setup(bot):
+    await bot.add_cog(Whitelist(bot))

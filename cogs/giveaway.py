@@ -26,5 +26,5 @@ class Giveaway(commands.Cog):
         em.set_footer(text="Terms and Conditions Apply")
         return em
 
-def setup(bot):
-    bot.add_cog(Giveaway(bot))
+async def setup(bot):
+    await bot.add_cog(Giveaway(bot))

@@ -12,7 +12,8 @@ class Cleanup(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        bot.loop.create_task(self.attendance_tracker())
+        async with bot:
+            bot.loop.create_task(self.attendance_tracker())
 
     async def daily(self, hour, minute):
         date = datetime.now(timezone('US/Eastern'))
@@ -142,5 +143,5 @@ class Cleanup(commands.Cog):
         await channel.send(embed=em)
 
 
-def setup(bot):
-    bot.add_cog(Cleanup(bot))
+async def setup(bot):
+    await bot.add_cog(Cleanup(bot))

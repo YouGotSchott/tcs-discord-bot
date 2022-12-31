@@ -14,5 +14,5 @@ class HowTall(commands.Cog):
     async def dunkaccino(self, ctx):
         await ctx.send("https://tenor.com/view/beating-horse-south-dead-park-gif-3899971")
 
-def setup(bot):
-    bot.add_cog(HowTall(bot))
+async def setup(bot):
+    await bot.add_cog(HowTall(bot))

@@ -195,5 +195,5 @@ class Butler(commands.Cog):
         ])
 
 
-def setup(bot):
-    bot.add_cog(Butler(bot))
+async def setup(bot):
+    await bot.add_cog(Butler(bot))

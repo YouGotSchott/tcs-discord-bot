@@ -24,5 +24,5 @@ class Swatter(commands.Cog):
             await message.add_reaction('\U0001f5de')
 
 
-def setup(bot):
-    bot.add_cog(Swatter(bot))
+async def setup(bot):
+    await bot.add_cog(Swatter(bot))

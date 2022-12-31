@@ -43,5 +43,5 @@ class Deploy(commands.Cog):
             else:
                 await asyncio.sleep(1)
 
-def setup(bot):
-    bot.add_cog(Deploy(bot))
+async def setup(bot):
+    await bot.add_cog(Deploy(bot))

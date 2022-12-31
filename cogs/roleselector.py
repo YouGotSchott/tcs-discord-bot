@@ -35,7 +35,7 @@ class RoleSelector(commands.Cog):
         messages['role_message']['id'] = self.msg.id
         await self.closer(messages)
         for emoji in emojis.values():
-            await self.msg.add_reaction(emoji=emoji)
+            await self.msg.add_reaction(emoji)
 
     @commands.Cog.listener(name='on_raw_reaction_add')
     async def role_reaction_add(self, payload):
@@ -236,5 +236,5 @@ class RoleSelector(commands.Cog):
             ('footer', '''React to toggle role on/off''')
         ])
 
-def setup(bot):
-    bot.add_cog(RoleSelector(bot))
+async def setup(bot):
+    await bot.add_cog(RoleSelector(bot))

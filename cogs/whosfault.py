@@ -62,5 +62,5 @@ class WhoseFault(commands.Cog):
         return em
 
 
-def setup(bot):
-    bot.add_cog(WhoseFault(bot))
+async def setup(bot):
+    await bot.add_cog(WhoseFault(bot))

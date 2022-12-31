@@ -21,5 +21,5 @@ class Helpers(commands.Cog):
             await member.remove_roles(untrained)
         await ctx.message.add_reaction('👍')
 
-def setup(bot):
-    bot.add_cog(Helpers(bot))
+async def setup(bot):
+    await bot.add_cog(Helpers(bot))

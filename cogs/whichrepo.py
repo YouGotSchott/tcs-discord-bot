@@ -44,5 +44,5 @@ class WhichRepo(commands.Cog):
             "{} We're using the {} repo you {}.".format(dummy, repo, choice(insults)))
 
 
-def setup(bot):
-    bot.add_cog(WhichRepo(bot))
+async def setup(bot):
+    await bot.add_cog(WhichRepo(bot))
