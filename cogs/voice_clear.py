@@ -40,7 +40,7 @@ class VoiceClear(commands.Cog):
         return [
             x
             for x in msgs_all
-            if (discord.utils.utcnow() - x.created_at).total_seconds() >= 300 #86400
+            if (discord.utils.utcnow() - x.created_at).total_seconds() >= 86400
         ]
 
 
