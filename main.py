@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from config import bot, TOKEN, secret_db, intents
+from config import TOKEN, secret_db, intents
 import asyncpg
 import asyncio
 import aiohttp
@@ -21,7 +21,8 @@ class MyBot(commands.Bot):
     def __init__(self):
         super().__init__(command_prefix='!',
                         case_insensitive=True,
-                        intents=intents)
+                        intents=intents,
+                        help_command=None)
         self.initial_extensions = [
             'cogs.applications',
             'cogs.downloader',
