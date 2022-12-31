@@ -3,7 +3,6 @@ from discord.ext import commands
 from pytz import timezone
 from datetime import datetime, timedelta
 import asyncio
-from config import bot
 from cogs.briefing import Briefing
 
 
@@ -14,10 +13,10 @@ class Tasker(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
         guild = self.bot.guilds[0]
-        async with bot:
-            bot.loop.create_task(self.purge(guild))
-            bot.loop.create_task(self.mission_alert_message(guild))
-            bot.loop.create_task(self.delete_attending_role(guild))
+        async with self.bot:
+            self.bot.loop.create_task(self.purge(guild))
+            self.bot.loop.create_task(self.mission_alert_message(guild))
+            self.bot.loop.create_task(self.delete_attending_role(guild))
 
     async def daily(self, hour, minute):
         date = datetime.now(timezone("US/Eastern"))

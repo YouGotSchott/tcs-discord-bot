@@ -3,7 +3,6 @@ from discord.ext import commands
 from pytz import timezone
 from datetime import datetime, timedelta
 import asyncio
-from config import bot
 
 
 class Cleanup(commands.Cog):
@@ -12,8 +11,8 @@ class Cleanup(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        async with bot:
-            bot.loop.create_task(self.attendance_tracker())
+        async with self.bot:
+            self.bot.loop.create_task(self.attendance_tracker())
 
     async def daily(self, hour, minute):
         date = datetime.now(timezone('US/Eastern'))

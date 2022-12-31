@@ -2,7 +2,6 @@ import discord
 from discord.ext import commands
 from pytz import timezone
 from datetime import datetime
-from config import bot
 import asyncio
 from gspread_api import GoogleHelperSheet
 from cogs.briefing import Briefing

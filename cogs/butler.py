@@ -1,7 +1,6 @@
 import discord
 from discord.ext import commands
 from pathlib import Path
-from config import bot
 from pytz import timezone
 from datetime import datetime
 from collections import OrderedDict
