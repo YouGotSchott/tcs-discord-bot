@@ -13,19 +13,6 @@ class Butler(commands.Cog):
         self.bot = bot
         self.agreement_path = str(Path('cogs/data/agreement.json'))
 
-    def wait(self, conn):
-        import select
-        while True:
-            state = conn.poll()
-            if state == psycopg2.extensions.POLL_OK:
-                break
-            elif state == psycopg2.extensions.POLL_WRITE:
-                select.select([], [conn.fileno()], [])
-            elif state == psycopg2.extensions.POLL_READ:
-                select.select([conn.fileno()], [], [])
-            else:
-                raise psycopg2.OperationalError("poll() returned %s" % state)
-
     @commands.Cog.listener()
     async def on_ready(self):
         agreement = await self.opener()
