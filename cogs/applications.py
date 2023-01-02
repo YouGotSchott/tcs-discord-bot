@@ -335,16 +335,6 @@ class ReactionHandler:
             await msg.remove_reaction("\U0001f44d", user)
         return thumbs_down.count
 
-    async def removed_reaction(self):
-        await self.bot.conn.execute(
-            """
-        DELETE FROM roles WHERE attendance_id = (SELECT id FROM attendance WHERE attendance.user_id = $1 
-        AND attendance.date = $2)
-        """,
-            user_id,
-            self.date,
-        )
-
     async def add_vote(self, msg):
         thumbs_up = [x for x in msg.reactions if str(x.emoji) == "\U0001f44d"][0]
         thumbs_up_user_list = [usr async for usr in thumbs_up.users()]
