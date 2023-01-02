@@ -318,9 +318,8 @@ class ReactionHandler:
     async def thumbs_up_reaction_add(self, msg, payload):
         thumbs_up = [x for x in msg.reactions if str(x.emoji) == "\U0001f44d"][0]
         thumbs_down = [x for x in msg.reactions if str(x.emoji) == "\U0001f44e"][0]
-        thumbs_down_users = [
-            x.id for x in await thumbs_down.users().flatten() if not x.bot
-        ]
+        thumbs_down_user_list = [usr async for usr in thumbs_down.users()]
+        thumbs_down_users = [x.id for x in thumbs_down_user_list if not x.bot]
         if payload.user_id in thumbs_down_users:
             user = self.bot.guilds[0].get_member(payload.user_id)
             await msg.remove_reaction("\U0001f44e", user)
@@ -329,7 +328,8 @@ class ReactionHandler:
     async def thumbs_down_reaction_add(self, msg, payload):
         thumbs_down = [x for x in msg.reactions if str(x.emoji) == "\U0001f44e"][0]
         thumbs_up = [x for x in msg.reactions if str(x.emoji) == "\U0001f44d"][0]
-        thumbs_up_users = [x.id for x in await thumbs_up.users().flatten() if not x.bot]
+        thumbs_up_user_list = [usr async for usr in thumbs_up.users()]
+        thumbs_up_users = [x.id for x in thumbs_up_user_list if not x.bot]
         if payload.user_id in thumbs_up_users:
             user = self.bot.guilds[0].get_member(payload.user_id)
             await msg.remove_reaction("\U0001f44d", user)
@@ -347,14 +347,14 @@ class ReactionHandler:
 
     async def add_vote(self, msg):
         thumbs_up = [x for x in msg.reactions if str(x.emoji) == "\U0001f44d"][0]
-        thumbs_up_users = [x.id for x in await thumbs_up.users().flatten() if not x.bot]
+        thumbs_up_user_list = [usr async for usr in thumbs_up.users()]
+        thumbs_up_users = [x.id for x in thumbs_up_user_list if not x.bot]
         val = True
         for user in thumbs_up_users:
             await self.write_votes_to_db(msg, user, val)
         thumbs_down = [x for x in msg.reactions if str(x.emoji) == "\U0001f44e"][0]
-        thumbs_down_users = [
-            x.id for x in await thumbs_down.users().flatten() if not x.bot
-        ]
+        thumbs_down_user_list = [usr async for usr in thumbs_down.users()]
+        thumbs_down_users = [x.id for x in thumbs_down_user_list if not x.bot]
         val = False
         for user in thumbs_down_users:
             await self.write_votes_to_db(msg, user, val)
