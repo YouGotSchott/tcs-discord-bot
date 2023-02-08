@@ -15,7 +15,7 @@ cffi==1.15.1
 chardet==3.0.4
 charset-normalizer==2.1.1
 click==7.1.2
-cryptography==3.3.2
+cryptography==39.0.1
 dill==0.3.5.1
 discord==1.0.1
 discord.py==2.1.0
