@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 import aiohttp
-from config import secret_sftp
+from config import secret_sftp, sftp_users, secret_paths
 from pathlib import Path, PurePath
 import asyncssh
 import os
@@ -26,12 +26,14 @@ class Downloader(commands.Cog):
 
     @modern.command(name="main")
     async def modern_main(self, ctx):
-        self.folder = PurePath("\\MissionUpload\\Modern\\Main\\")
+        self.folder = PurePath(secret_paths["path"])
+        self.sftp_user = sftp_users["modern"]
         await self.downloader(ctx)
 
     @modern.command(name="test")
     async def modern_test(self, ctx):
-        self.folder = PurePath("\\MissionUpload\\Modern\\Test\\")
+        self.folder = PurePath(secret_paths["path"])
+        self.sftp_user = sftp_users["modern_test"]
         await self.downloader(ctx)
 
     # Upload commands for the Cold War Repo
@@ -42,12 +44,14 @@ class Downloader(commands.Cog):
 
     @coldwar.command(name="main")
     async def coldwar_main(self, ctx):
-        self.folder = PurePath("\\MissionUpload\\ColdWar\\Main\\")
+        self.folder = PurePath(secret_paths["path"])
+        self.sftp_user = sftp_users["cwr"]
         await self.downloader(ctx)
 
     @coldwar.command(name="test")
     async def coldwar_test(self, ctx):
-        self.folder = PurePath("\\MissionUpload\\ColdWar\\Test\\")
+        self.folder = PurePath(secret_paths["path"])
+        self.sftp_user = sftp_users["cwr_test"]
         await self.downloader(ctx)
 
     # Upload commands for the WW2 Repo
@@ -58,12 +62,14 @@ class Downloader(commands.Cog):
 
     @ww2.command(name="main")
     async def ww2_main(self, ctx):
-        self.folder = PurePath("\\MissionUpload\\WW2\\Main\\")
+        self.folder = PurePath(secret_paths["path"])
+        self.sftp_user = sftp_users["ww2"]
         await self.downloader(ctx)
 
     @ww2.command(name="test")
     async def ww2_test(self, ctx):
-        self.folder = PurePath("\\MissionUpload\\WW2\\Test\\")
+        self.folder = PurePath(secret_paths["path"])
+        self.sftp_user = sftp_users["ww2_test"]
         await self.downloader(ctx)
 
     async def downloader(self, ctx):
@@ -112,7 +118,7 @@ class Downloader(commands.Cog):
         async with asyncssh.connect(
             host=secret_sftp["host"],
             port=secret_sftp["port"],
-            username=secret_sftp["user"],
+            username=self.sftp_user,
             client_keys=secret_sftp["client_key"],
         ) as conn:
             async with conn.start_sftp_client() as sftp:
