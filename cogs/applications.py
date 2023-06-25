@@ -1,11 +1,14 @@
 import discord
 from discord.ext import commands
-from enjin_api import EnjinWrapper
+from formio_api import FormioWrapper
 import textwrap
-from datetime import datetime, timedelta
-import pytz
+from datetime import datetime, timedelta, timezone
 import asyncio
 from gspread_api import GoogleHelperSheet
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail, Email, To, Content
+import urllib
+from config import sendgrid
 
 
 class ApplicationException(Exception):
@@ -56,30 +59,31 @@ class Applications(commands.Cog):
         while True:
             sleep_time = await self.every_five_minutes(datetime.now())
             await asyncio.sleep(sleep_time)
-            await self.app_hanlder()
+            await self.app_handler()
 
     async def every_five_minutes(self, current):
         while True:
             output = current + (datetime.min - current) % timedelta(minutes=5)
             return (output - current).seconds
 
-    async def app_hanlder(self):
-        session_id = await SessionHanlder(self.bot).test_session_id()
-        app_ids = await EnjinWrapper().get_application_list(session_id, "open")
+    async def app_handler(self):
+        token = await FormioWrapper().login()
+        app_ids = await FormioWrapper().get_application_list(token)
         app_ids = await self.compare_app_lists(app_ids)
         if app_ids:
             for app in app_ids:
-                user_data = await EnjinWrapper().get_application_info(session_id, app)
+                user_data = await FormioWrapper().get_application_info(token, app)
                 if user_data is None:
                     continue
                 await self.write_to_database(user_data)
-                db_user_data = await self.get_user_data(app=int(app))
+                db_user_data = await self.get_user_data(app=app)
                 msg = await self.app_channel.send(
                     embed=await self.generate_app_message(db_user_data)
                 )
-                await self.update_msg_id(msg, int(app))
+                await self.update_msg_id(msg, app)
                 await msg.add_reaction("👍")
                 await msg.add_reaction("👎")
+        await FormioWrapper().logout()
 
     @commands.Cog.listener(name="on_raw_reaction_add")
     async def app_reaction_add(self, payload):
@@ -108,7 +112,7 @@ class Applications(commands.Cog):
                             )
                         )
                         await GoogleHelperSheet().update_helper_sheet(
-                            [user_data["enjin_username"]]
+                            [user_data["formio_username"]]
                         )
 
             if str(payload.emoji) == "\U0001f44e":
@@ -133,18 +137,18 @@ class Applications(commands.Cog):
     async def compare_app_lists(self, app_ids):
         result = await self.bot.conn.fetch(
             """
-        SELECT enjin_app_id FROM applications;
+        SELECT formio_app_id FROM applications;
         """
         )
-        result_vals = [x["enjin_app_id"] for x in result]
-        app_ids = [x for x in app_ids if int(x) not in result_vals]
+        result_vals = [x["formio_app_id"] for x in result]
+        app_ids = [x for x in app_ids if x not in result_vals]
         return app_ids
 
     async def update_msg_id(self, msg, app):
         await self.bot.conn.execute(
             """
             UPDATE applications SET message_id = $1
-            WHERE enjin_app_id = $2;
+            WHERE formio_app_id = $2;
             """,
             msg.id,
             app,
@@ -154,7 +158,7 @@ class Applications(commands.Cog):
         if app:
             result = await self.bot.conn.fetchrow(
                 """
-            SELECT * FROM applications WHERE enjin_app_id = $1;
+            SELECT * FROM applications WHERE formio_app_id = $1;
             """,
                 app,
             )
@@ -173,12 +177,11 @@ class Applications(commands.Cog):
         wed, fri, sat = await self.availability_convert(user_data["availability"])
         await self.bot.conn.execute(
             """
-                INSERT INTO applications (enjin_app_id, time_created, enjin_user_id, user_ip, enjin_username, age, time_zone, is_wednesday, is_friday, is_saturday, steam_profile, referral, reason)
-                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+                INSERT INTO applications (formio_app_id, time_created, user_ip, formio_username, age, time_zone, is_wednesday, is_friday, is_saturday, steam_profile, referral, reason, member_referral, other_referral, email)
+                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
                 """,
             user_data["application_id"],
             user_data["created"],
-            user_data["user_id"],
             user_data["user_ip"],
             user_data["username"],
             user_data["age"],
@@ -189,16 +192,24 @@ class Applications(commands.Cog):
             user_data["steam_account"],
             user_data["referral"],
             user_data["reason"],
+            user_data["member_referral"],
+            user_data["other_referral"],
+            user_data["email"],
         )
 
     async def generate_app_message(self, user_data, approved=False, declined=False):
+        referral = user_data["referral"]
+        if user_data["member_referral"]:
+            referral = user_data["member_referral"]
+        if user_data["other_referral"]:
+            referral = user_data["other_referral"]
         em_color = 0xDBA51F
         if approved:
             em_color = 0x0A6003
         if declined:
             em_color = 0x991313
         em = discord.Embed(
-            title=str(user_data["enjin_username"]),
+            title=str(user_data["formio_username"]),
             description="**Created:** {}\n**Age:** {}\n**Time Zone:** {}\n\n[Steam Account]({})\n".format(
                 await self.localize_time(user_data["time_created"]),
                 user_data["age"],
@@ -206,9 +217,6 @@ class Applications(commands.Cog):
                 user_data["steam_profile"],
             ),
             color=em_color,
-            url="https://www.thecoolerserver.com/dashboard/applications/application?app_id={}".format(
-                user_data["enjin_app_id"]
-            ),
         )
         em.add_field(
             name="Availability",
@@ -219,9 +227,7 @@ class Applications(commands.Cog):
             ),
             inline=False,
         )
-        em.add_field(
-            name="How did you find us?", value=user_data["referral"], inline=False
-        )
+        em.add_field(name="How did you find us?", value=referral, inline=False)
         if len(user_data["reason"]) > 1024:
             em.add_field(
                 name="Why do you want to join?",
@@ -254,61 +260,18 @@ class Applications(commands.Cog):
         wed = False
         fri = False
         sat = False
-        if "Wednesday" in availability:
+        if availability["wednesday"]:
             wed = True
-        if "Friday" in availability:
+        if availability["friday"]:
             fri = True
-        if "Saturday" in availability:
+        if availability["saturday"]:
             sat = True
         return wed, fri, sat
 
     async def localize_time(self, utc_dt):
-        tz = pytz.timezone("America/New_York")
-        return utc_dt.astimezone(tz).strftime("%Y-%m-%d @ %I:%M %p (ET)")
-
-
-class SessionHanlder:
-    def __init__(self, bot):
-        self.bot = bot
-
-    async def test_session_id(self):
-        result = await self.bot.conn.fetchrow(
-            """
-        SELECT session_id, date_created FROM enjin WHERE id = 1;
-        """
-        )
-        if not result:
-            session_id = await EnjinWrapper().login()
-            await self.update_record(session_id, created=False)
-            return session_id
-        session_id, date_created = result
-        date_today = datetime.now().date()
-        if (date_today - date_created).days > 7:
-            session_id = await EnjinWrapper().login()
-            await self.update_record(session_id)
-            return session_id
-        return session_id
-
-    async def update_record(self, session_id, created=True):
-        date_today = datetime.now().date()
-        if not created:
-            await self.bot.conn.execute(
-                """
-                INSERT INTO enjin (session_id, date_created)
-                VALUES ($1, $2)
-                """,
-                session_id,
-                date_today,
-            )
-            return
-        await self.bot.conn.execute(
-            """
-            UPDATE enjin SET session_id = $1, date_created = $2
-            WHERE id = 1;
-            """,
-            session_id,
-            date_today,
-        )
+        utc_time = utc_dt.replace(tzinfo=timezone.utc)
+        utc_timestamp = round(utc_time.timestamp())
+        return f"<t:{utc_timestamp}:F>"
 
 
 class ReactionHandler:
@@ -371,23 +334,6 @@ class ReactionHandler:
         )
         return result["is_message_sent"]
 
-    async def send_ts3_invite(self, message_id):
-        result = await self.bot.conn.fetchrow(
-            """
-        SELECT enjin_user_id FROM applications WHERE message_id = $1;
-        """,
-            message_id,
-        )
-        session_id = await SessionHanlder(self.bot).test_session_id()
-        title = "Application Received!"
-        body = """In the meantime come join our TeamSpeak and say hello.
-        It's not required, but highly encouraged.\n\n
-        TS Address: ts3.thecoolerserver.com
-        """
-        await EnjinWrapper().send_message(
-            session_id, title, body, [result["enjin_user_id"]]
-        )
-
     async def set_message_status(self, message_id, approved=False):
         val = False
         if approved:
@@ -411,9 +357,9 @@ class Approver:
         approved_names = ""
         denied_names = ""
         for user in approved:
-            approved_names += "\n{}".format(user["enjin_username"])
+            approved_names += "\n{}".format(user["formio_username"])
         for user in denied:
-            denied_names += "\n{}".format(user["enjin_username"])
+            denied_names += "\n{}".format(user["formio_username"])
         return ".\nTo be Approved:\n{}\n\nTo be Denied:\n{}".format(
             approved_names, denied_names
         )
@@ -421,7 +367,7 @@ class Approver:
     async def check_approved_status(self):
         results = await self.bot.conn.fetch(
             """
-        SELECT enjin_user_id, enjin_username, is_message_sent, is_staged FROM applications
+        SELECT formio_app_id, formio_username, is_message_sent, is_staged FROM applications
         WHERE is_approved IS NULL;
         """
         )
@@ -432,7 +378,7 @@ class Approver:
 
         results = await self.bot.conn.fetch(
             """
-        SELECT enjin_user_id, enjin_username, enjin_app_id, is_staged FROM applications
+        SELECT formio_app_id, formio_username, is_staged, email FROM applications
         WHERE is_approved IS NULL;
         """
         )
@@ -448,10 +394,10 @@ class Approver:
         await self.bot.conn.execute(
             """
         UPDATE applications SET is_staged = $1
-        WHERE enjin_user_id = $2;
+        WHERE formio_app_id = $2;
         """,
             value,
-            result["enjin_user_id"],
+            result["formio_app_id"],
         )
 
     async def fill_is_approved(self, result):
@@ -462,17 +408,17 @@ class Approver:
         await self.bot.conn.execute(
             """
         UPDATE applications SET is_approved = $1
-        WHERE enjin_user_id = $2;
+        WHERE formio_app_id = $2;
         """,
             value,
-            result["enjin_user_id"],
+            result["formio_app_id"],
         )
 
     async def set_approved(self, ctx, arg):
         await self.bot.conn.execute(
             """
         UPDATE applications SET is_staged = $1
-        WHERE enjin_username = $2
+        WHERE formio_username = $2
         AND is_approved IS NULL;
         """,
             True,
@@ -484,7 +430,7 @@ class Approver:
         await self.bot.conn.execute(
             """
         UPDATE applications SET is_staged = $1
-        WHERE enjin_username = $2
+        WHERE formio_username = $2
         AND is_approved IS NULL;
         """,
             False,
@@ -493,28 +439,44 @@ class Approver:
         await ctx.message.add_reaction("👍")
 
     async def start_approval(self, ctx):
-        with open("approved_message.txt", "r") as f:
-            approval_message = f.read()
-        session_id = await SessionHanlder(self.bot).test_session_id()
-
         approved, denied = await self.check_approved_status()
-        denied_apps = [x["enjin_app_id"] for x in denied]
-        await EnjinWrapper().decline_applications(session_id, denied_apps)
         for user in denied:
+            with open("declined_msg.html", "r") as f:
+                message = f.read()
+            await self.send_email(user["email"], message)
             await self.fill_is_approved(user)
         for user in approved:
-            await EnjinWrapper().approve_applications(
-                session_id, [user["enjin_app_id"]]
-            )
-            await EnjinWrapper().send_message(
-                session_id,
-                "Welcome to The Cooler Server!",
-                approval_message,
-                [user["enjin_user_id"]],
-            )
+            invite_link = await self.generate_invite(user["formio_username"])
+            with open("approved_msg.html", "r") as f:
+                message = f.read()
+            message = message.replace(r"{{discord_invite}}", str(invite_link))
+            await self.send_email(user["email"], message)
             await self.fill_is_approved(user)
-            await asyncio.sleep(30)
+
         await ctx.message.add_reaction("👍")
+
+    async def send_email(self, email, message):
+        sendgrid_client = SendGridAPIClient(api_key=sendgrid["key"])
+
+        from_email = Email(sendgrid["sender"])
+        to_email = To(email)
+        subject = "Welcome to The Cooler Server!"
+        content = Content("text/html", message)
+
+        mail = Mail(from_email, to_email, subject, content)
+        mail_json = mail.get()
+        try:
+            response = sendgrid_client.client.mail.send.post(request_body=mail_json)
+            if response.status_code < 300:
+                print(f"Email sent to {email}: {response.status_code}")
+        except urllib.error.HTTPError as e:
+            e.read()
+
+    async def generate_invite(self, username):
+        channel_rules = discord.utils.get(self.bot.get_all_channels(), name="rules")
+        return await channel_rules.create_invite(
+            reason=f"Created invite link for {username}", max_age=2_592_000, max_uses=0
+        )
 
 
 async def setup(bot):

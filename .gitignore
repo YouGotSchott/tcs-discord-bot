@@ -9,4 +9,5 @@ logs/*
 .devcontainer/docker-compose.yml
 .docker
 client_secret.json
-approved_message.txt
+approved_msg.html
+declined_msg.html
