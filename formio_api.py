@@ -25,7 +25,7 @@ class FormioWrapper:
         return token
 
     async def get_application_list(self, token):
-        api_url = self.base_url + "/tcsapplication/submission"
+        api_url = self.base_url + "/tcsapplication/submission?limit=20&sort=-created"
         headers = {
             "Content-Type": "application/json",
             "User-Agent": "TCS Discord Bot",
