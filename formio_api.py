@@ -63,7 +63,7 @@ class FormioWrapper:
             "email": json_resp["data"]["email"],
         }
         try:
-            user_data["member_name"] = json_resp["data"]["memberName"]
+            user_data["member_referral"] = json_resp["data"]["memberName"]
         except KeyError:
             pass
         try:
