@@ -26,7 +26,7 @@ class WhoseFault(commands.Cog):
             """
         SELECT applications_id, discord_user_id, is_yes
         FROM application_votes
-        WHERE applications_id = (SELECT id FROM applications WHERE enjin_username = $1 );
+        WHERE applications_id = (SELECT id FROM applications WHERE formio_username = $1 );
         """,
             username,
         )
