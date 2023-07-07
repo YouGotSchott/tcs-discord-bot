@@ -199,6 +199,14 @@ class Applications(commands.Cog):
 
     async def generate_app_message(self, user_data, approved=False, declined=False):
         referral = user_data["referral"]
+        ref = {
+            'reddit' : 'Reddit',
+            'youtube': 'YouTube',
+            'arma3Units' : 'Arma 3 Units',
+            'currentMember': 'currentMember',
+            'other': 'other'
+        }
+        referral = ref[referral]
         if user_data["member_referral"]:
             referral = user_data["member_referral"]
         if user_data["other_referral"]:
