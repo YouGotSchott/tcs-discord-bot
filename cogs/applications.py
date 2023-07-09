@@ -451,7 +451,7 @@ class Approver:
         for user in denied:
             with open("declined_msg.html", "r") as f:
                 message = f.read()
-            await self.send_email(user["email"], message)
+            await self.send_email(user["email"], message, is_approved=False)
             await self.fill_is_approved(user)
         for user in approved:
             invite_link = await self.generate_invite(user["formio_username"])
@@ -463,12 +463,14 @@ class Approver:
 
         await ctx.message.add_reaction("👍")
 
-    async def send_email(self, email, message):
+    async def send_email(self, email, message, is_approved=True):
         sendgrid_client = SendGridAPIClient(api_key=sendgrid["key"])
 
         from_email = Email(sendgrid["sender"])
         to_email = To(email)
         subject = "Welcome to The Cooler Server!"
+        if not is_approved:
+            subject = "A message from The Cooler Server"
         content = Content("text/html", message)
 
         mail = Mail(from_email, to_email, subject, content)
