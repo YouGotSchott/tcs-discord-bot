@@ -42,7 +42,7 @@ class Cooldown(commands.Cog):
 
         lock_message = await channel.send(embed=em)
         await channel.set_permissions(channel.guild.default_role, send_messages=False, add_reactions=False)
-        await asyncio.sleep(32400) # Waits 9 hours before unlocking channel
+        await asyncio.sleep(10800) # Waits 3 hours before unlocking channel
         await lock_message.delete()
         await self.remove_lock(channel)
 
