@@ -28,7 +28,6 @@ class MyBot(commands.Bot):
             'cogs.downloader',
             'cogs.nextnextop',
             'cogs.danceit',
-            'cogs.briefing',
             'cogs.eject',
             'cogs.baconbuster',
             'cogs.swatter',
