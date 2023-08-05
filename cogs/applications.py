@@ -222,7 +222,7 @@ class Applications(commands.Cog):
                 await self.localize_time(user_data["time_created"]),
                 user_data["age"],
                 user_data["time_zone"],
-                user_data["steam_profile"],
+                user_data["steam_profile"].replace('_', r'\_').strip(),
             ),
             color=em_color,
         )
