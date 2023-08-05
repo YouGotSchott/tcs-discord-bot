@@ -204,6 +204,7 @@ class Applications(commands.Cog):
             'youtube': 'YouTube',
             'arma3Units' : 'Arma 3 Units',
             'currentMember': 'currentMember',
+            'unitCommander': 'Unit Commander',
             'other': 'other'
         }
         referral = ref[referral]
