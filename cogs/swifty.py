@@ -19,12 +19,12 @@ class Swifty(commands.Cog):
 
     async def embeder(self, ctx):
         modern_url = "http://modern.thecoolerserver.com/"
-        ww2_url = "http://ww2.thecoolerserver.com/"
+        scifi_url = "http://scifi.thecoolerserver.com/"
         swifty_guide = "https://wiki.thecoolerserver.com/en/startup/swifty"
         em = discord.Embed(
             title="Swifty Installation Guide",
-            description="**__Main URL__:**```{}```".format(
-                modern_url, ww2_url
+            description="**__Main URL__:**```{}```\n**__Sci-fi URL__:**```{}```".format(
+                modern_url, scifi_url
             ),
             url=swifty_guide,
             color=0x29B585,
